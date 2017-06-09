@@ -1,0 +1,31 @@
+PODS:
+  - OMKit (1.0.0):
+    - SDWebImage (~> 4.0)
+    - XZKit
+  - SDWebImage (4.0.0):
+    - SDWebImage/Core (= 4.0.0)
+  - SDWebImage/Core (4.0.0)
+  - XZKit (2.0.0)
+
+DEPENDENCIES:
+  - OMKit (from `https://github.com/mlibai/OMKit.git`)
+  - SDWebImage
+  - XZKit
+
+EXTERNAL SOURCES:
+  OMKit:
+    :git: https://github.com/mlibai/OMKit.git
+
+CHECKOUT OPTIONS:
+  OMKit:
+    :commit: 900a6935623c6baafa1eb0964283a774cd8ec204
+    :git: https://github.com/mlibai/OMKit.git
+
+SPEC CHECKSUMS:
+  OMKit: 416b625b060044b5a3fd50695b024e80607ad444
+  SDWebImage: 76a6348bdc74eb5a55dd08a091ef298e56b55e41
+  XZKit: 0a32013192d8656aedd38b535576ab0260ac1170
+
+PODFILE CHECKSUM: c00aad8dc3cf4272cbf1b95d6489970a596333f5
+
+COCOAPODS: 1.2.1

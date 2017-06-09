@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />   
+	<title>测试</title> 
+	<script type="text/javascript" src="OMApp.js"></script>
+</head>
+<style type="text/css">
+	body {
+		margin: 0;
+		padding: 10px;
+	}
+	td table {
+		width: 96%;
+		margin: 2%;
+        font-size:14px;
+	}
+	tr:first-child {
+		color: white;
+		background-color: black;
+	}
+	tr td:first-child {
+		width: 50px;
+		text-align: center;
+	}
+    body>table {
+    	width: 100%;
+    	max-width: 100%;
+    	overflow: hidden;
+    }
+    a {
+    	text-decoration: none;
+    }
+    .title {
+    	width: 50px;
+    }
+    pre {
+    	overflow: hidden;
+    	max-width: 100%;
+    }
+    .url {
+    	color: red;
+    }
+</style>
+<script type="text/javascript">
+    onload = function() {
+        omApp.navigation.bar.title              = "OnemenaAppBridge";
+        omApp.navigation.bar.titleColor         = "#FFFFFF";
+        omApp.navigation.bar.backgroundColor    = "#3e84e0";
+    }
+</script>
+<body> 
+	<table cellpadding="5" cellspacing="0" border="1">
+		<tbody>
+			<tr bgcolor="black" style="color: white;"> 
+				<th colspan="2">OMApp API Manual</th> 
+			</tr> 
+			<tr> 
+				<td>URL</td> 
+				<td>通过 URL 方式交互所使用的 URL 。</td> 
+			</tr> 
+			<tr> 
+				<td>JS</td> 
+				<td>JS 接口。</td> 
+			</tr> 
+		</tbody>
+	</table> 
+	<br />
+
+	<table cellpadding="5" cellspacing="0" border="1"> 
+		<tbody>
+			<tr> 
+				<th class="title">Name</th> 
+				<th align="left">登录</th> 
+			</tr> 
+			<tr> 
+				<td>URL</td> 
+				<td><a href="app://login/">app://login/</a></td> 
+			</tr>  
+			<tr> 
+				<td>JS</td> 
+				<script type="text/javascript">
+					var loginTaskID = null;
+					function doLogin() {
+					 	loginTaskID = omApp.login(function(result) {
+					 		document.getElementById("login_result").innerHTML = result.userToken;
+						});
+					}
+				</script>
+				<td><a href="javascript:doLogin();">omApp.login</a>&nbsp;<span id="login_result">未登录</span></td>
+			</tr> 
+		</tbody>
+	</table> 
+	<br />
+
+	<table cellpadding="5" cellspacing="0" border="1"> 
+		<tbody>
+			<tr> 
+				<th class="title">Name</th> 
+				<th align="left">登录回调（APP用）</th> 
+			</tr> 
+			<tr> 
+				<td>Swift</td> 
+				<script type="text/javascript">
+					// 模拟原生代码触发回调
+					function loginback() {
+						omApp.didFinishLogining(loginTaskID, {
+							"userToken": "a_test_user_token."
+						});
+					}
+				</script>
+				<td><a href="javascript:loginback();">App finished logining.</a></td> 
+			</tr> 
+			<tr> 
+				<td>备注</td> 
+				<td>通过 URL 方式交互的 App ，必须执行此方法触发 HTML 的登陆回调。</td> 
+			</tr> 
+		</tbody>
+	</table> 
+	<br />
+
+	<table cellpadding="5" cellspacing="0" border="1" width="100%"> 
+		<tbody>
+			<tr> 
+				<th class="title">Name</th> 
+				<th align="left">导航</th> 
+			</tr> 
+			<tr> 
+				<td>URL</td> 
+				<td><a href="app://navigationBar/?title=%E5%AF%BC%E8%88%AA%E6%A0%87%E9%A2%98">app://navigationBar/?title=%E5%AF%BC%E8%88%AA%E6%A0%87%E9%A2%98</a></td> 
+			</tr> 
+			<tr> 
+				<td>JS</td>
+				<td> <a href="javascript:omApp.navigation.bar.title = '导航标题2';void(0);">omApp.navigation.bar.title = '导航标题2'</a></td> 
+			</tr> 
+
+		</tbody>
+	</table> 
+	<br />
+
+	<table cellpadding="5" cellspacing="0" border="1"> 
+		<tbody>
+			<tr>
+				<th class="title">Name</th> 
+				<th align="left">导航到下级页面</th> 
+			</tr> 
+			<tr> 
+				<td>URL</td> 
+				<td><a href="app://push/?url=https%3a%2f%2fwww.baidu.com%2f">app://push/?url=https%3a%2f%2fwww.baidu.com%2f</a></td> 
+			</tr> 
+			<tr>
+				<td>JS</td>
+				<td><a href="javascript:omApp.navigation.push('https%3a%2f%2fwww.baidu.com%2f');">omApp.navigation.push('https%3a%2f%2fwww.baidu.com%2f')</a></td> 
+			</tr> 
+		</tbody>
+	</table> 
+	<br />
+
+
+	<table cellpadding="5" cellspacing="0" border="1"> 
+		<tbody>
+			<tr>
+				<th class="title">Name</th> 
+				<th align="left">导航返回到上级页面</th> 
+			</tr> 
+			<tr> 
+				<td>URL</td> 
+				<td><a href="app://pop/">app://pop/</a></td> 
+			</tr> 
+			<tr>
+				<td>JS</td>
+				<td> <a href="javascript:omApp.navigation.pop();">omApp.navigation.pop()</a></td> 
+			</tr> 
+
+		</tbody>
+	</table> 
+	<br />
+
+	<table cellpadding="5" cellspacing="0" border="1" width="100%"> 
+		<tbody>
+			<tr>
+				<th class="title">Name</th> 
+				<th align="left">导航返回页面到指定级</th> 
+			</tr> 
+			<tr> 
+				<td>URL</td> 
+				<td><a href="app://popTo/?index=0">app://popTo/?index=0</a></td> 
+			</tr> 
+			<tr>
+				<td>JS</td>
+				<td> <a href="javascript:omApp.navigation.popTo(0);">omApp.navigation.popTo(0)</a></td> 
+			</tr> 
+
+		</tbody>
+	</table> 
+	<br />
+
+	<table cellpadding="5" cellspacing="0" border="1"> 
+		<tbody>
+			<tr>
+				<th class="title">Name</th> 
+				<th align="left">页面跳转</th> 
+			</tr> 
+			<tr>
+				<td colspan="2">跳转金币商城</td>
+			</tr>
+			<tr> 
+				<td>URL</td> 
+				<td><a href="app://open/?page=mall">app://open/?page=mall</a></td> 
+			</tr> 
+			<tr>
+				<td>JS</td>
+				<td> <a href="javascript:omApp.open(OMAppPage.mall);">omApp.open(OMAppPage.mall)</a></td> 
+			</tr> 
+			<tr>
+				<td colspan="2">跳转金币任务</td>
+			</tr>
+			<tr>
+				<td>URL</td> 
+				<td><a href="app://open/?page=task">app://open/?page=task</a></td> 
+			</tr> 
+			<tr>
+				<td>JS</td> 
+				<td> <a href="javascript:omApp.open(OMAppPage.task);">omApp.open(OMAppPage.task)</a></td> 
+			</tr> 
+			<tr>
+				<td colspan="2">跳转新闻列表</td>
+			</tr>
+			<tr>
+				<td>URL</td> 
+				<td><a href="app://open/?page=newsList">app://open/?page=newsList</a></td> 
+			</tr> 
+			<tr>
+				<td>JS</td> 
+				<td><a href="javascript:omApp.open(OMAppPage.newsList);">omApp.open(OMAppPage.newsList)</a></td> 
+			</tr>
+			<tr>
+				<td colspan="2">跳转到指定栏目新闻列表</td>
+			</tr> 
+			<tr>
+				<td>URL</td> 
+				<td><a href="app://open/?page=newsList&id=12">app://open/?page=newsList&id=12</a></td> 
+			</tr> 
+			<tr>
+				<td>JS</td> 
+				<td> <a href="javascript:omApp.open(OMAppPage.newsList, '12');">omApp.open(OMAppPage.newsList, '12')</a></td> 
+			</tr>
+
+		</tbody>
+	</table> 
+	<br />
+
+	<table cellpadding="5" cellspacing="0" border="1" width="100%"> 
+		<tbody>
+			<tr>
+				<th class="title">Name</th> 
+				<th align="left">设置主题</th> 
+			</tr> 
+			<tr> 
+				<td>URL</td> 
+				<td><a href="app://theme/?name=day">app://theme/?name=day</a></td> 
+			</tr> 
+			<tr>
+				<td>JS</td>
+				<td>【<a href="javascript:omApp.theme = OMAppTheme.night;">Night</a>】&nbsp;【<a href="javascript:omApp.theme = OMAppTheme.day;">Day</a>】</td>
+			</tr> 
+
+		</tbody>
+	</table> 
+	<br />
+
+	<table cellpadding="5" cellspacing="0" border="1" width="100%"> 
+		<tbody>
+			<tr>
+				<th class="title">Name</th> 
+				<th align="left">获取主题</th> 
+			</tr> 
+			<tr>
+				<td>JS</td>
+				<td><a href="javascript:document.getElementById('theme_result').innerHTML=omApp.theme;">获取主题</a>&nbsp;<span id="theme_result"></span></td>
+			</tr> 
+
+		</tbody>
+	</table> 
+	<br />
+    
+    <!--
+		<tr bgcolor="black" style="color: white;">
+			<td>window.location</td>
+			<td>Value</td>
+			<td></td>
+		</tr>
+
+ 		<script type="text/javascript">
+			for(key in window.location) {
+				document.write("<tr><td>" + key + "</td><td>" + window.location[key] + "</td><td></td></tr>")
+			}
+		</script> 
+	-->
+    
+</body>
+</html>
