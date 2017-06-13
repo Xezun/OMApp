@@ -422,6 +422,7 @@
 | omApp.theme               | app://theme/?name=...                     |                 |
 | omApp.statistic           | app://statistic/?key1=...&key2=...        |                 |
 
+
 ### 2. URL 方式回调的处理
     
 #### 2.1 omApp.didFinishLogining(*taskID*, *resultObject*)
