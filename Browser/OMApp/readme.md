@@ -272,22 +272,38 @@
     
     | **Name**        | **Type**    | **Description** |
     | :-------------- | :---------- | :-------------- |
+    | isOnline        | Bool        | 是否已登录        |
     | id              | String      | 用户ID           |
     | name            | String      | 用户名           |
+    | type            | String      | 见 [OMUserType枚举](#OMUserType)    |
     | coin            | Int         | 用户金币数        |
 
+- <a name="OMUserType">***OMUserType*枚举**</a>
+
+    | **Name**                            | **Type**    | **Description** |
+    | :---------------------------------- | :---------- | :-------------- |
+    | *OMStatisticType.**visitor***       | String      | 游客用户       |
+    | *OMStatisticType.**google***        | String      | Google 登录用户           |
+    | *OMStatisticType.**facebook***      | String      | Facebook 登录用户  |
+    | *OMStatisticType.**twitter***       | String      | Twitter 登录用户  |
 
 - 代码示例：
     ``` javascript
-    var userName = omApp.currentUser.name;
-    var userToken = omApp.currentUser.token;
+    // 判断用户是否登录
+    if (omApp.currentUser.isOnline) {
+        // do something when user is logged.
+    } else {
+        // do something
+    }
+    // get the user name
+    var userName = omApp.currentUser.name;
     ```
 
 #### 7. http
 
 - 接口说明：
 
-    Object，负责网络请求的对象。
+    Object，负责网络请求的对象。H5 页面不负责和保持用户登录状态，App 应该在次接口中提供用户状态并发送请求。
 
 ##### 7.1 http.get(url, parameters, callback)
 
