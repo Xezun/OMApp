@@ -251,6 +251,8 @@ var _omApp = (function() {
 	
 	var _theme = OMAppTheme.day;
 
+	var _currentUser = null;
+
 	var object = {};
 	Object.defineProperties(object, {
 		navigation: {get: function() {return _navigation;}},
