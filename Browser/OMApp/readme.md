@@ -266,7 +266,7 @@
 
 - 接口说明：
 
-    Object，用于获取当前登录的用户。
+    OMApp 属性，只读。Object，当前登录的用户。
 
 - 属性说明：
     
@@ -300,31 +300,33 @@
     var userName = omApp.currentUser.name;
     ```
 
-#### 7. http
+#### 7. http(*requestObject*, *callback*)
 
 - 接口说明：
 
     Object，负责网络请求的对象。H5 页面不负责和保持用户登录状态，App 应该在次接口中提供用户状态并发送请求。
 
-##### 7.1 http.get(url, parameters, callback)
-
-- 接口说明：
-
-    发送 GET 网络请求。
-
 - 参数说明：
 
     | **Name**       | **Type**    | **Description** |
     | :------------- | :---------- | :-------------- |
-    | url            | String      | 网络请求的地址 |
-    | parameters     | Object      | 参数，与直接拼接到 url 中结果一样 |
-    | callback       | Function    | 网络请求的回调 |
+    | requestObject  | Object      | 网络请求信息。     |
+    | callback       | Function    | 网络请求的回调    |
+
+    - requestObject 对象属性：
+    
+    | **Name**       | **Type**    | **Description** |
+    | :------------- | :---------- | :-------------- |
+    | url            | Object      | 必选。url             |
+    | method         | String      | 必选。GET/POST/PUT.. |
+    | params         | Object      | 可选。网络请求参数。     |
+    | headers        | Object      | 可选。网络请求的header  |
 
     - callback 函数参数：
     
     | **Name**       | **Type**    | **Description** |
     | :------------- | :---------- | :-------------- |
-    | success.       | Bool.       | 网络请求是否成功   |
+    | success        | Bool        | 网络请求是否成功   |
     | resultObject   | Any         | 网络请求返回的数据（如果有） |
 
 
@@ -332,55 +334,18 @@
 
     ``` javascript
     // 如非特殊声明，所有示例代码均为 Javascript
-    omApp.http.get("http://api.onemena.com", null, function(success, resultObject) {
-        if (success) {
-            // do suceess actions.
-        } else {
+    omApp.http({
+        url: "http://api.onemena.com/",
+        method: "GET",
+        params: {"name": "John"}
+    }, function(success, resultObject) {
+        if (!success) {
             // do something when failed.
+            return;
         }
+        // do suceess actions.
     });
     ```
-
-##### 7.2 http.post(url, parameters, callback)
-
-- 接口说明：
-
-    发送 POST 网络请求。
-
-- 参数说明：
-
-    | **Name**       | **Type**    | **Description** |
-    | :------------- | :---------- | :-------------- |
-    | url            | String      | 网络请求的地址 |
-    | parameters     | Object      | 参数，与直接拼接到 url 中结果一样 |
-    | callback       | Function    | 网络请求的回调 |
-
-    - callback 函数参数：
-    
-    | **Name**       | **Type**    | **Description** |
-    | :------------- | :---------- | :-------------- |
-    | success.       | Bool.       | 网络请求是否成功   |
-    | resultObject   | Any         | 网络请求返回的数据（如果有） |
-
-
-- 代码示例：
-
-    ``` javascript
-    // 如非特殊声明，所有示例代码均为 Javascript
-    var parameters = {
-        "name": "John", 
-        "message": "Hello"
-    };
-    omApp.http.post("http://api.onemena.com", parameters, function(success, resultObject) {
-        if (success) {
-            // do suceess actions.
-        } else {
-            // do something when failed.
-        }
-    });
-    ```
-
-
 
 
 
