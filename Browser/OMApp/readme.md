@@ -280,12 +280,12 @@
 
 - <a name="OMUserType">***OMUserType*枚举**</a>
 
-    | **Name**                            | **Type**    | **Description** |
-    | :---------------------------------- | :---------- | :-------------- |
-    | *OMStatisticType.**visitor***       | String      | 游客用户          |
-    | *OMStatisticType.**google***        | String      | Google 登录用户   |
-    | *OMStatisticType.**facebook***      | String      | Facebook 登录用户  |
-    | *OMStatisticType.**twitter***       | String      | Twitter 登录用户  |
+    | **Name**                       | **Type**    | **Description** |
+    | :----------------------------- | :---------- | :-------------- |
+    | *OMUserType.**visitor***       | String      | 游客用户          |
+    | *OMUserType.**google***        | String      | Google 登录用户   |
+    | *OMUserType.**facebook***      | String      | Facebook 登录用户  |
+    | *OMUserType.**twitter***       | String      | Twitter 登录用户  |
 
 - 代码示例：
 
