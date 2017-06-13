@@ -203,6 +203,7 @@
     omApp.navigation.bar.backgroundColor = '#0000FF';
     ```
 
+
 #### 4. theme
 
 - 接口说明：
@@ -261,7 +262,25 @@
     omApp.statistic(OMStatisticType.openMall, {"type": 3});
     ```
 
+#### 6. currentUser
 
+- 接口说明：
+    Object，用于获取当前登录的用户。
+
+- 属性说明：
+    
+    | **Name**        | **Type**    | **Description** |
+    | :-------------- | :---------- | :-------------- |
+    | id              | String      | user id         |
+    | name            | String      | user name       |
+    | token           | String      | user token      |
+
+
+- 代码示例：
+    ``` javascript
+    var userName = omApp.currentUser.name;
+    var userToken = omApp.currentUser.token;
+    ```
 
 
 ***
