@@ -272,7 +272,7 @@
     
     | **Name**        | **Type**    | **Description** |
     | :-------------- | :---------- | :-------------- |
-    | isOnline        | Bool        | 是否已登录        |
+    | isOnline        | Bool        | 是否已登录        |
     | id              | String      | 用户ID           |
     | name            | String      | 用户名           |
     | type            | String      | 见 [OMUserType枚举](#OMUserType)    |
@@ -280,14 +280,15 @@
 
 - <a name="OMUserType">***OMUserType*枚举**</a>
 
-    | **Name**                            | **Type**    | **Description** |
+    | **Name**                            | **Type**    | **Description** |
     | :---------------------------------- | :---------- | :-------------- |
-    | *OMStatisticType.**visitor***       | String      | 游客用户       |
-    | *OMStatisticType.**google***        | String      | Google 登录用户           |
+    | *OMStatisticType.**visitor***       | String      | 游客用户          |
+    | *OMStatisticType.**google***        | String      | Google 登录用户   |
     | *OMStatisticType.**facebook***      | String      | Facebook 登录用户  |
     | *OMStatisticType.**twitter***       | String      | Twitter 登录用户  |
 
 - 代码示例：
+
     ``` javascript
     // 判断用户是否登录
     if (omApp.currentUser.isOnline) {
