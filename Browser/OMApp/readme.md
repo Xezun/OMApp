@@ -282,7 +282,7 @@
 
     | **Name**                            | **Type**    | **Description** |
     | :---------------------------------- | :---------- | :-------------- |
-    | *OMStatisticType.**visitor***       | String      | 游客用户          |
+    | *OMStatisticType.**visitor***       | String      | 游客用户          |
     | *OMStatisticType.**google***        | String      | Google 登录用户   |
     | *OMStatisticType.**facebook***      | String      | Facebook 登录用户  |
     | *OMStatisticType.**twitter***       | String      | Twitter 登录用户  |
