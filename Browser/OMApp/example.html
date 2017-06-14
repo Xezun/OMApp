@@ -53,15 +53,7 @@
 	<table cellpadding="5" cellspacing="0" border="1">
 		<tbody>
 			<tr bgcolor="black" style="color: white;"> 
-				<th colspan="2">OMApp API Manual</th> 
-			</tr> 
-			<tr> 
-				<td>URL</td> 
-				<td>通过 URL 方式交互所使用的 URL 。</td> 
-			</tr> 
-			<tr> 
-				<td>JS</td> 
-				<td>JS 接口。</td> 
+				<th colspan="2">OMApp API Example</th> 
 			</tr> 
 		</tbody>
 	</table> 
@@ -74,46 +66,16 @@
 				<th align="left">登录</th> 
 			</tr> 
 			<tr> 
-				<td>URL</td> 
-				<td><a href="app://login/">app://login/</a></td> 
-			</tr>  
-			<tr> 
 				<td>JS</td> 
 				<script type="text/javascript">
 					var loginTaskID = null;
 					function doLogin() {
 					 	loginTaskID = omApp.login(function(result) {
-					 		document.getElementById("login_result").innerHTML = result.userToken;
+					 		document.getElementById("login_result").innerHTML = omApp.currentUser.name;
 						});
 					}
 				</script>
-				<td><a href="javascript:doLogin();">omApp.login</a>&nbsp;<span id="login_result">未登录</span></td>
-			</tr> 
-		</tbody>
-	</table> 
-	<br />
-
-	<table cellpadding="5" cellspacing="0" border="1"> 
-		<tbody>
-			<tr> 
-				<th class="title">Name</th> 
-				<th align="left">登录回调（APP用）</th> 
-			</tr> 
-			<tr> 
-				<td>Swift</td> 
-				<script type="text/javascript">
-					// 模拟原生代码触发回调
-					function loginback() {
-						omApp.didFinishLogining(loginTaskID, {
-							"userToken": "a_test_user_token."
-						});
-					}
-				</script>
-				<td><a href="javascript:loginback();">App finished logining.</a></td> 
-			</tr> 
-			<tr> 
-				<td>备注</td> 
-				<td>通过 URL 方式交互的 App ，必须执行此方法触发 HTML 的登陆回调。</td> 
+				<td><button name="login" value="点击登录" onclick="doLogin()">点击登录</button>&nbsp;<span id="login_result" style="color: gray; font-size: 12px;">未登录</span></td>
 			</tr> 
 		</tbody>
 	</table> 
@@ -126,12 +88,15 @@
 				<th align="left">导航</th> 
 			</tr> 
 			<tr> 
-				<td>URL</td> 
-				<td><a href="app://navigationBar/?title=%E5%AF%BC%E8%88%AA%E6%A0%87%E9%A2%98">app://navigationBar/?title=%E5%AF%BC%E8%88%AA%E6%A0%87%E9%A2%98</a></td> 
-			</tr> 
-			<tr> 
 				<td>JS</td>
-				<td> <a href="javascript:omApp.navigation.bar.title = '导航标题2';void(0);">omApp.navigation.bar.title = '导航标题2'</a></td> 
+				<script type="text/javascript">
+					function setNavigationBarTitle(newTitle) {
+						var oldTitle = omApp.navigation.bar.title;
+						window.omApp.navigation.bar.title = newTitle;
+						document.getElementById("navbar_result").innerHTML = "修改前：" + oldTitle + " 修改后：" + newTitle;
+					}
+				</script>
+				<td> <button onclick="setNavigationBarTitle(Math.random())">设置导航标题</button>&nbsp;<span id="navbar_result" style="color: gray; font-size: 12px;"></span></td> 
 			</tr> 
 
 		</tbody>
@@ -144,14 +109,16 @@
 				<th class="title">Name</th> 
 				<th align="left">导航到下级页面</th> 
 			</tr> 
-			<tr> 
-				<td>URL</td> 
-				<td><a href="app://push/?url=https%3a%2f%2fwww.baidu.com%2f">app://push/?url=https%3a%2f%2fwww.baidu.com%2f</a></td> 
-			</tr> 
 			<tr>
 				<td>JS</td>
-				<td><a href="javascript:omApp.navigation.push('https%3a%2f%2fwww.baidu.com%2f');">omApp.navigation.push('https%3a%2f%2fwww.baidu.com%2f')</a></td> 
-			</tr> 
+				<script type="text/javascript">
+					function navigationPush() {
+						var href = window.location.href + "?rand=" + Math.random();
+						omApp.navigation.push(href);
+					}
+				</script>
+				<td><button onclick="navigationPush()">导航到下级页面</button></td> 
+			</tr>
 		</tbody>
 	</table> 
 	<br />
@@ -163,13 +130,9 @@
 				<th class="title">Name</th> 
 				<th align="left">导航返回到上级页面</th> 
 			</tr> 
-			<tr> 
-				<td>URL</td> 
-				<td><a href="app://pop/">app://pop/</a></td> 
-			</tr> 
 			<tr>
 				<td>JS</td>
-				<td> <a href="javascript:omApp.navigation.pop();">omApp.navigation.pop()</a></td> 
+				<td><button onclick="javascript:omApp.navigation.pop()">返回上级界面</button></td> 
 			</tr> 
 
 		</tbody>
@@ -182,13 +145,9 @@
 				<th class="title">Name</th> 
 				<th align="left">导航返回页面到指定级</th> 
 			</tr> 
-			<tr> 
-				<td>URL</td> 
-				<td><a href="app://popTo/?index=0">app://popTo/?index=0</a></td> 
-			</tr> 
 			<tr>
 				<td>JS</td>
-				<td> <a href="javascript:omApp.navigation.popTo(0);">omApp.navigation.popTo(0)</a></td> 
+				<td><button onclick="javascript:omApp.navigation.popTo(0);">返回到第0页</button></td> 
 			</tr> 
 
 		</tbody>
@@ -202,48 +161,20 @@
 				<th align="left">页面跳转</th> 
 			</tr> 
 			<tr>
-				<td colspan="2">跳转金币商城</td>
-			</tr>
-			<tr> 
-				<td>URL</td> 
-				<td><a href="app://open/?page=mall">app://open/?page=mall</a></td> 
-			</tr> 
-			<tr>
 				<td>JS</td>
-				<td> <a href="javascript:omApp.open(OMAppPage.mall);">omApp.open(OMAppPage.mall)</a></td> 
-			</tr> 
-			<tr>
-				<td colspan="2">跳转金币任务</td>
-			</tr>
-			<tr>
-				<td>URL</td> 
-				<td><a href="app://open/?page=task">app://open/?page=task</a></td> 
+				<td> <button onclick="javascript:omApp.open(OMAppPage.mall);">跳转金币商城</button></td> 
 			</tr> 
 			<tr>
 				<td>JS</td> 
-				<td> <a href="javascript:omApp.open(OMAppPage.task);">omApp.open(OMAppPage.task)</a></td> 
-			</tr> 
-			<tr>
-				<td colspan="2">跳转新闻列表</td>
-			</tr>
-			<tr>
-				<td>URL</td> 
-				<td><a href="app://open/?page=newsList">app://open/?page=newsList</a></td> 
+				<td> <button onclick="javascript:omApp.open(OMAppPage.task);">跳转金币任务</button></td> 
 			</tr> 
 			<tr>
 				<td>JS</td> 
-				<td><a href="javascript:omApp.open(OMAppPage.newsList);">omApp.open(OMAppPage.newsList)</a></td> 
+				<td><button onclick="javascript:omApp.open(OMAppPage.newsList);">跳转新闻列表</button></td> 
 			</tr>
 			<tr>
-				<td colspan="2">跳转到指定栏目新闻列表</td>
-			</tr> 
-			<tr>
-				<td>URL</td> 
-				<td><a href="app://open/?page=newsList&id=12">app://open/?page=newsList&id=12</a></td> 
-			</tr> 
-			<tr>
 				<td>JS</td> 
-				<td> <a href="javascript:omApp.open(OMAppPage.newsList, '12');">omApp.open(OMAppPage.newsList, '12')</a></td> 
+				<td> <button onclick="javascript:omApp.open(OMAppPage.newsList, '12');">跳转到指定栏目新闻列表</button></td> 
 			</tr>
 
 		</tbody>
@@ -256,13 +187,9 @@
 				<th class="title">Name</th> 
 				<th align="left">设置主题</th> 
 			</tr> 
-			<tr> 
-				<td>URL</td> 
-				<td><a href="app://theme/?name=day">app://theme/?name=day</a></td> 
-			</tr> 
 			<tr>
 				<td>JS</td>
-				<td>【<a href="javascript:omApp.theme = OMAppTheme.night;">Night</a>】&nbsp;【<a href="javascript:omApp.theme = OMAppTheme.day;">Day</a>】</td>
+				<td><button onclick="javascript:omApp.theme = OMAppTheme.night;">切换到夜间模式</button>&nbsp;<button onclick="javascript:omApp.theme = OMAppTheme.day;">切换到白头模式</button>&nbsp;<button onclick="javascript:document.getElementById('theme_result').innerHTML=omApp.theme;">显示当前主题</button>&nbsp;<span id="theme_result"></span></td>
 			</tr> 
 
 		</tbody>
@@ -273,11 +200,36 @@
 		<tbody>
 			<tr>
 				<th class="title">Name</th> 
-				<th align="left">获取主题</th> 
+				<th align="left">网络请求</th> 
 			</tr> 
 			<tr>
 				<td>JS</td>
-				<td><a href="javascript:document.getElementById('theme_result').innerHTML=omApp.theme;">获取主题</a>&nbsp;<span id="theme_result"></span></td>
+				<script type="text/javascript">
+					function httpRequest() {
+						var url = document.request.url.value;
+						if (!url) {
+							alert("url 不能为空");
+							return;
+						}
+						omApp.http({
+							url: url,
+							method: "GET",
+							headers: {
+								"access-token": "Test"
+							}
+						}, function(success, resultObject){
+							if (success) {
+								document.getElementById("navbar_result").innerHTML = resultObject;
+							} else {
+								document.getElementById("navbar_result").innerHTML = "请求失败！"
+							}
+						});
+					}
+				</script>
+				<td><form name="request"><input type="text" name="url" value="http://api.test.wekoora.com/ar_AE/api/article_categories"><button onclick="httpRequest();" type="button">发送网络请求</button></form></td>
+			</tr> 
+			<tr>
+				<td colspan="2" id="http_result"></td>
 			</tr> 
 
 		</tbody>

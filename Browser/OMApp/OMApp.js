@@ -236,7 +236,7 @@ var _omApp = (function() {
 			return _theme; 
 		},
 		set: function(newValue) {
-			_theme = theme;
+			_theme = newValue;
 			native_message_send(OMAppMessage.theme, {"name": newValue});
 		}
 	});
@@ -306,8 +306,16 @@ if (!(/Onemena/i.test(navigator.userAgent))) {
 		// 2.1 HTML 调用原生的登录。
 		function _login(callback) {
 			if (confirm("点击确定登录成功，取消登录失败")) {
+				window.omApp.currentUser.name = "已登录";
+				window.omApp.currentUser.coin = 100;
+				window.omApp.currentUser.id = 1;
+				window.omApp.currentUser.type = OMUserType.google;	
 				callback(true);
 			} else {
+				window.omApp.currentUser.name = "未登录";
+				window.omApp.currentUser.coin = 0;
+				window.omApp.currentUser.id = 0;
+				window.omApp.currentUser.type = OMUserType.vistor;
 				callback(false);
 			}
 		}
@@ -326,12 +334,13 @@ if (!(/Onemena/i.test(navigator.userAgent))) {
 
 			// 推出当前页面，使栈内页面数量 -1。
 			var _pop = function () {
-				window.location.history.go(-1);
+				window.history.back();
 			}
 
 			// 移除栈内索引大于 index 的所有页面，即将 index 页面所显示的内容展示出来。
 			var _popTo = function (index) {
-				window.location.history.go(window.location.history.length * (-1));
+				index = index - window.history.length + 1;
+				window.history.go(index);
 			}
 
 			var _bar = (function(){
@@ -380,7 +389,7 @@ if (!(/Onemena/i.test(navigator.userAgent))) {
 				return _theme; 
 			},
 			set: function(newValue) {
-				_theme = theme;
+				_theme = newValue;
 			}
 		});
 
@@ -428,12 +437,12 @@ if (!(/Onemena/i.test(navigator.userAgent))) {
 				}
 				callback(xmlhttp.status == 200, xmlhttp.responseText);
 			}
+			xmlhttp.open(requestObject.method, requestObject.url, true);
 			if (requestObject.headers) {
 				for (key in requestObject.headers) {
 					xmlhttp.setRequestHeader(key, requestObject.headers[key]);
 				}
 			}
-			xmlhttp.open(requestObject.method, requestObject.url, true);
 			var data = null;
 			if (requestObject.params) {
 				for (key in requestObject.params) {
@@ -444,7 +453,7 @@ if (!(/Onemena/i.test(navigator.userAgent))) {
 					}
 				}
 			}
-			xmlhttp.send(requestObject.params);
+			xmlhttp.send(data);
 		}
 		Object.defineProperty(_object, 'http', { get: function() { return _http; }});	
 
