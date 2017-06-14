@@ -29,12 +29,15 @@ class OnemenaBrowser: WebViewController, NavigationBarCustomizable, NavigationGe
             UIWebView.userAgent = ua + " Onemena/" + Bundle.main.shortVersionString
         }
         
-         guard let url = Bundle.main.url(forResource: "OMApp", withExtension: "js") else { return }
-         guard let js = try? String(contentsOf: url) else { return }
-         _ = webView.stringByEvaluatingJavaScript(from: js)
+        guard let url = Bundle.main.url(forResource: "OMApp", withExtension: "js") else { return }
+        guard let js = try? String(contentsOf: url) else { return }
+        _ = webView.stringByEvaluatingJavaScript(from: js)
     }
     
     override func didRecevie(_ event: WebViewEvent, parameters: [String : Any]?) {
+        #if DEBUG
+            print("WebViewEvent: \(event.rawValue)")
+        #endif
         switch event {
         case WebViewEvent.login:
             loginHandler(parameters)
@@ -62,26 +65,13 @@ class OnemenaBrowser: WebViewController, NavigationBarCustomizable, NavigationGe
     var taskID: String?
     
     func handleHTTPEvents(_ paramters: [String: Any]) {
-        let url: String = paramters["url"] as! String
-        let method: String = paramters["method"] as! String
+        guard let data = (paramters["request"] as? String)?.data(using: .utf8) else { return }
+        guard let requestObject = (try? JSONSerialization.jsonObject(with: data, options: .allowFragments)) as? [String: Any] else { return }
         
-        var request = URLRequest(url: URL(string: url)!)
-        request.httpMethod = method
-        if let params = paramters["params"] as? [String: Any] {
-            let string = params.map({ (item) -> String in
-                return "\(item.key)=\(item.value)"
-            }).joined(separator: "&")
-            request.httpBody = string.data(using: .utf8)
-        }
-        if let headers = paramters["headers"] as? [String: Any] {
-            for item in headers {
-                request.addValue(String.init(forceCast: item.value), forHTTPHeaderField: item.key)
-            }
-        }
-        
-        URLSession.shared.dataTask(with: request) { (data, response, error) in
-            // TODO: 
-        }.resume()
+        self.taskID = paramters["taskID"] as? String
+        let viewController = HTTPViewController.viewController(requestObject: requestObject)
+        viewController.delegate = self
+        navigationController?.pushViewController(viewController, animated: true)
     }
     
     func loginHandler(_ parameters: [String : Any]?) -> Void {
@@ -109,12 +99,15 @@ class OnemenaBrowser: WebViewController, NavigationBarCustomizable, NavigationGe
         self.tabBarController?.selectedIndex = 1
         
         guard let rootVC = self.navigationController?.viewControllers.first else { return }
+        
         self.navigationController?.setViewControllers([rootVC], animated: false)
     }
 
     
     override func webViewDidFinishLoad(_ webView: UIWebView) {
         super.webViewDidFinishLoad(webView)
+        
+        
     }
 }
 
@@ -123,6 +116,25 @@ extension OnemenaBrowser: LoginTableViewControllerDelegate {
     func loginViewController(_ viewController: LoginTableViewController, didFinishLoginingWith result: String) {
         guard let taskID = self.taskID else { return }
         _ = webView.stringByEvaluatingJavaScript(from: "omApp.didFinishLogining('\(taskID)', \(result))")
+        self.taskID = nil
+    }
+    
+}
+
+extension OnemenaBrowser: HTTPViewControllerDelegate {
+    
+    func httpViewController(success: Bool, with result: String?) {
+        // didFinishHTTPRequesting
+        guard let taskID = self.taskID else { return }
+        
+        let string: String = {
+            if let result = result?.addingPercentEncoding(withAllowedCharacters: CharacterSet.alphanumerics) {
+                return "JSON.parse(decodeURIComponent('\(result)'))"
+            }
+            return "null"
+        }()
+        let js = "omApp.didFinishHTTPRequesting('\(taskID)', \(success), \(string))"
+        _ = webView.stringByEvaluatingJavaScript(from: js)
         self.taskID = nil
     }
     

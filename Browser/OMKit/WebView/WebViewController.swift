@@ -205,6 +205,9 @@ extension WebViewController: UIWebViewDelegate {
     
     open func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebViewNavigationType) -> Bool {
         guard let url = request.url else { return true }
+        #if DEBUG
+            print("UIWebView.shouldStart:" + url.absoluteString)
+        #endif
         guard let scheme = url.scheme else { return true }
         guard scheme == eventScheme else { return true }
         

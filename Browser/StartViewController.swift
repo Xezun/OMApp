@@ -36,7 +36,7 @@ class StartViewController: UIViewController, NavigationBarCustomizable, Navigati
             url = URL(string: urlString)
         }
         if url == nil {
-            var path: String = Bundle.main.path(forResource: "example", ofType: "html", inDirectory:nil)!
+            var path: String = Bundle.main.path(forResource: "example-app", ofType: "html", inDirectory:nil)!
             path = "file://" + path
             path = path.addingPercentEncoding(withAllowedCharacters: .urlFragmentAllowed)!
             url  =  URL(string: path)

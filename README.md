@@ -310,8 +310,8 @@
 
     | **Name**       | **Type**    | **Description** |
     | :------------- | :---------- | :-------------- |
-    | requestObject  | Object      | 网络请求         |
-    | callback       | Function    | 网络请求的回调    |
+    | requestObject  | Object      | 必选。网络请求         |
+    | callback       | Function    | 可选。网络请求的回调    |
 
     - requestObject 对象属性：
     

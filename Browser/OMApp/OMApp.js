@@ -62,7 +62,6 @@ Object.defineProperties(window, {
 
 /* OMAppMessage 消息类型枚举定义 */
 var _OMAppMessage = (function() {
-
 	var _navigation = (function(){
 		var _object = {};
 		Object.defineProperties(_object, {
@@ -71,6 +70,7 @@ var _OMAppMessage = (function() {
 			push: {get: function () {return "navigation.push";}},
 			bar: {get: function () {return "navigation.bar";}}
 		});
+		return _object;
 	})();
 
 	var _object = {};
@@ -101,7 +101,7 @@ var _omApp = (function() {
 	/* 向App发送消息：（消息类型，消息参数，回调）。*/
 	function native_message_send(message, parameterObject, callback) {
         if (!message) { return; }
-        var url = kScheme + '://' + encodeURIComponent(message);
+        var url = OMAppMessage.scheme + '://' + encodeURIComponent(message);
         
         var query = null;
         var taskID = null;
@@ -114,16 +114,8 @@ var _omApp = (function() {
         function toQueryValue(value) {
         	if (typeof value == 'string') {
         		return value;
-        	} else if (typeof parameterObject[key] == 'object') {
-        		var string = null;
-        		for (key in value) {
-        			if (string) {
-        				string = string + "&" + key + "=" + value[key];
-        			} else {
-        				string = key + "=" + value[key];
-        			}
-        		}
-        		return string;
+        	} else if (typeof value == 'object') {
+        		return JSON.stringify(value);
         	}
         	return value.toString();
         }
@@ -294,11 +286,19 @@ var _omApp = (function() {
 	})();
 	Object.defineProperty(_object, 'currentUser', { get: function() { return _currentUser; }});
 
-	// 7. HTTP
+	// 7.1 HTTP
 	function _http(requestObject, callback) {
         native_message_send(OMAppMessage.http, {"request": requestObject}, callback);
 	}
 	Object.defineProperty(_object, 'http', { get: function() { return _http; }});	
+	// 7.2 
+	function _didFinishHTTPRequesting(taskID, success, resultObject) {
+		if (_allCallbacks[taskID]) {
+			_allCallbacks[taskID](success, resultObject);
+		}
+		_allCallbacks[taskID] = null;
+	}
+ 	Object.defineProperty(_object, 'didFinishHTTPRequesting', { get: function() { return _didFinishHTTPRequesting; }});
 
 	return _object;
 })();

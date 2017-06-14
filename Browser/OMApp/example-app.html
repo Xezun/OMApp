@@ -3,7 +3,6 @@
 <head>
 	<meta charset="utf-8" />   
 	<title>测试</title> 
-	<script type="text/javascript" src="OMApp.js"></script>
 </head>
 <style type="text/css">
 	body {
@@ -43,7 +42,7 @@
     }
 </style>
 <script type="text/javascript">
-    onload = function() {
+    window.onload = function() {
         omApp.navigation.bar.title              = "OnemenaAppBridge";
         omApp.navigation.bar.titleColor         = "#FFFFFF";
         omApp.navigation.bar.backgroundColor    = "#3e84e0";
@@ -213,20 +212,17 @@
 						}
 						omApp.http({
 							url: url,
-							method: "GET",
-							headers: {
-								"access-token": "Test"
-							}
+							method: "GET"
 						}, function(success, resultObject){
 							if (success) {
-								document.getElementById("navbar_result").innerHTML = resultObject;
+								document.getElementById("http_result").innerHTML = resultObject;
 							} else {
-								document.getElementById("navbar_result").innerHTML = "请求失败！"
+								document.getElementById("http_result").innerHTML = "请求失败！"
 							}
 						});
 					}
 				</script>
-				<td><form name="request"><input type="text" name="url" value="http://api.test.wekoora.com/ar_AE/api/article_categories"><button onclick="httpRequest();" type="button">发送网络请求</button></form></td>
+				<td><form name="request"><input type="text" name="url" value="http://api.wekoora.com/ar_AE/api/article_details/167372"><button onclick="httpRequest();" type="button">发送网络请求</button></form></td>
 			</tr> 
 			<tr>
 				<td colspan="2" id="http_result"></td>
