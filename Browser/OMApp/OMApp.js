@@ -282,7 +282,7 @@ var _omApp = (function() {
 	}
 	Object.defineProperty(_object, 'http', { get: function() { return _http; }});	
 
-	return object;
+	return _object;
 })();
 
 Object.defineProperties(window, {
@@ -448,7 +448,7 @@ if (!(/Onemena/i.test(navigator.userAgent))) {
 		}
 		Object.defineProperty(_object, 'http', { get: function() { return _http; }});	
 
-		return object;
+		return _object;
 	})();
 }
 

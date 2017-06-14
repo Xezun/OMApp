@@ -8,14 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		68B6E83159BC834105D495CF /* Pods_Browser.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DD76948908E20B75B09E087 /* Pods_Browser.framework */; };
+		DDB7A3161EF1103C00BA986F /* example.html in Resources */ = {isa = PBXBuildFile; fileRef = DDB7A3141EF1103C00BA986F /* example.html */; };
+		DDB7A3171EF1103C00BA986F /* OMApp.js in Resources */ = {isa = PBXBuildFile; fileRef = DDB7A3151EF1103C00BA986F /* OMApp.js */; };
 		DDC1049A1EEA44F00075C41F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC104991EEA44F00075C41F /* AppDelegate.swift */; };
 		DDC1049C1EEA44F00075C41F /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC1049B1EEA44F00075C41F /* StartViewController.swift */; };
 		DDC1049F1EEA44F00075C41F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DDC1049D1EEA44F00075C41F /* Main.storyboard */; };
 		DDC104A11EEA44F00075C41F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DDC104A01EEA44F00075C41F /* Assets.xcassets */; };
 		DDC104A41EEA44F00075C41F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DDC104A21EEA44F00075C41F /* LaunchScreen.storyboard */; };
-		DDC104B01EEA454C0075C41F /* example.html in Resources */ = {isa = PBXBuildFile; fileRef = DDC104AC1EEA454C0075C41F /* example.html */; };
-		DDC104B11EEA454C0075C41F /* OMApp.js in Resources */ = {isa = PBXBuildFile; fileRef = DDC104AD1EEA454C0075C41F /* OMApp.js */; };
-		DDC104B31EEA454C0075C41F /* readme.md in Sources */ = {isa = PBXBuildFile; fileRef = DDC104AF1EEA454C0075C41F /* readme.md */; };
 		DDC104B81EEA46F90075C41F /* LoginTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC104B41EEA46F90075C41F /* LoginTableViewController.swift */; };
 		DDC104B91EEA46F90075C41F /* OpenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC104B51EEA46F90075C41F /* OpenViewController.swift */; };
 		DDC104BB1EEA46F90075C41F /* OnemenaBrowser.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC104B71EEA46F90075C41F /* OnemenaBrowser.swift */; };
@@ -25,6 +24,8 @@
 		21E4F79F714474D48638D1FF /* Pods-Browser.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Browser.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Browser/Pods-Browser.debug.xcconfig"; sourceTree = "<group>"; };
 		4DD76948908E20B75B09E087 /* Pods_Browser.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Browser.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4E4276848E5C739E30D8DAB3 /* Pods-Browser.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Browser.release.xcconfig"; path = "Pods/Target Support Files/Pods-Browser/Pods-Browser.release.xcconfig"; sourceTree = "<group>"; };
+		DDB7A3141EF1103C00BA986F /* example.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = example.html; sourceTree = "<group>"; };
+		DDB7A3151EF1103C00BA986F /* OMApp.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = OMApp.js; sourceTree = "<group>"; };
 		DDC104961EEA44F00075C41F /* Browser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Browser.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DDC104991EEA44F00075C41F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DDC1049B1EEA44F00075C41F /* StartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartViewController.swift; sourceTree = "<group>"; };
@@ -32,9 +33,6 @@
 		DDC104A01EEA44F00075C41F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DDC104A31EEA44F00075C41F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		DDC104A51EEA44F00075C41F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		DDC104AC1EEA454C0075C41F /* example.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = example.html; sourceTree = "<group>"; };
-		DDC104AD1EEA454C0075C41F /* OMApp.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = OMApp.js; sourceTree = "<group>"; };
-		DDC104AF1EEA454C0075C41F /* readme.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = readme.md; sourceTree = "<group>"; };
 		DDC104B41EEA46F90075C41F /* LoginTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginTableViewController.swift; sourceTree = "<group>"; };
 		DDC104B51EEA46F90075C41F /* OpenViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenViewController.swift; sourceTree = "<group>"; };
 		DDC104B71EEA46F90075C41F /* OnemenaBrowser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnemenaBrowser.swift; sourceTree = "<group>"; };
@@ -69,6 +67,15 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		DDB7A3131EF1103C00BA986F /* OMApp */ = {
+			isa = PBXGroup;
+			children = (
+				DDB7A3141EF1103C00BA986F /* example.html */,
+				DDB7A3151EF1103C00BA986F /* OMApp.js */,
+			);
+			path = OMApp;
+			sourceTree = "<group>";
+		};
 		DDC1048D1EEA44F00075C41F = {
 			isa = PBXGroup;
 			children = (
@@ -90,28 +97,18 @@
 		DDC104981EEA44F00075C41F /* Browser */ = {
 			isa = PBXGroup;
 			children = (
+				DDB7A3131EF1103C00BA986F /* OMApp */,
 				DDC104991EEA44F00075C41F /* AppDelegate.swift */,
 				DDC1049B1EEA44F00075C41F /* StartViewController.swift */,
 				DDC104B71EEA46F90075C41F /* OnemenaBrowser.swift */,
 				DDC104B41EEA46F90075C41F /* LoginTableViewController.swift */,
 				DDC104B51EEA46F90075C41F /* OpenViewController.swift */,
-				DDC104AB1EEA454C0075C41F /* OMApp */,
 				DDC1049D1EEA44F00075C41F /* Main.storyboard */,
 				DDC104A01EEA44F00075C41F /* Assets.xcassets */,
 				DDC104A21EEA44F00075C41F /* LaunchScreen.storyboard */,
 				DDC104A51EEA44F00075C41F /* Info.plist */,
 			);
 			path = Browser;
-			sourceTree = "<group>";
-		};
-		DDC104AB1EEA454C0075C41F /* OMApp */ = {
-			isa = PBXGroup;
-			children = (
-				DDC104AC1EEA454C0075C41F /* example.html */,
-				DDC104AD1EEA454C0075C41F /* OMApp.js */,
-				DDC104AF1EEA454C0075C41F /* readme.md */,
-			);
-			path = OMApp;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -179,8 +176,8 @@
 				DDC104A41EEA44F00075C41F /* LaunchScreen.storyboard in Resources */,
 				DDC104A11EEA44F00075C41F /* Assets.xcassets in Resources */,
 				DDC1049F1EEA44F00075C41F /* Main.storyboard in Resources */,
-				DDC104B11EEA454C0075C41F /* OMApp.js in Resources */,
-				DDC104B01EEA454C0075C41F /* example.html in Resources */,
+				DDB7A3171EF1103C00BA986F /* OMApp.js in Resources */,
+				DDB7A3161EF1103C00BA986F /* example.html in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -243,7 +240,6 @@
 				DDC104B91EEA46F90075C41F /* OpenViewController.swift in Sources */,
 				DDC1049C1EEA44F00075C41F /* StartViewController.swift in Sources */,
 				DDC104B81EEA46F90075C41F /* LoginTableViewController.swift in Sources */,
-				DDC104B31EEA454C0075C41F /* readme.md in Sources */,
 				DDC1049A1EEA44F00075C41F /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
