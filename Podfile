@@ -1,5 +1,5 @@
 # Uncomment the next line to define a global platform for your project
-# platform :ios, '9.0'
+platform :ios, '8.0'
 
 target 'Browser' do
     # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
@@ -9,7 +9,7 @@ target 'Browser' do
     pod 'SDWebImage'
 	
     pod 'XZKit'
-    pod 'OMKit', :path => ‘../../Frameworks/OMKit/’
+    pod 'OMKit', :path => '../../Work/ios_anaween/Frameworks/OMKit/'
     
     
 end

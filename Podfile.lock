@@ -8,24 +8,19 @@ PODS:
   - XZKit (2.0.0)
 
 DEPENDENCIES:
-  - OMKit (from `https://github.com/mlibai/OMKit.git`)
+  - OMKit (from `../../Work/ios_anaween/Frameworks/OMKit/`)
   - SDWebImage
   - XZKit
 
 EXTERNAL SOURCES:
   OMKit:
-    :git: https://github.com/mlibai/OMKit.git
-
-CHECKOUT OPTIONS:
-  OMKit:
-    :commit: 900a6935623c6baafa1eb0964283a774cd8ec204
-    :git: https://github.com/mlibai/OMKit.git
+    :path: ../../Work/ios_anaween/Frameworks/OMKit/
 
 SPEC CHECKSUMS:
-  OMKit: 416b625b060044b5a3fd50695b024e80607ad444
+  OMKit: 4e102e4e246b16cb24480bdf99e2e3a5b89c46fe
   SDWebImage: 76a6348bdc74eb5a55dd08a091ef298e56b55e41
-  XZKit: 0a32013192d8656aedd38b535576ab0260ac1170
+  XZKit: db8c7dc3e92589fa8cdd2a6623e78263bed328b8
 
-PODFILE CHECKSUM: c00aad8dc3cf4272cbf1b95d6489970a596333f5
+PODFILE CHECKSUM: 17ab1e84a126ad432a80fe3e6bbc9df79c1fbd07
 
 COCOAPODS: 1.2.1
