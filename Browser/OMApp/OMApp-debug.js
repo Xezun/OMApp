@@ -95,89 +95,29 @@ Object.defineProperties(window, {
 var _omApp = (function() {
 	var _object = {};
 
-	// 所有已保存的回调
-	var _allCallbacks = {};
-
-	/* 向App发送消息：（消息类型，消息参数，回调）。*/
-	function native_message_send(message, parameterObject, callback) {
-        if (!message) { return; }
-        var url = OMAppMessage.scheme + '://' + encodeURIComponent(message);
-        
-        var query = null;
-        var taskID = null;
-        if (callback) { //
-			taskID = Date.parse(new Date());
-	        _allCallbacks[taskID] = callback;
-	        query = "taskID=" + taskID;
-        }
-
-        function toQueryValue(value) {
-        	if (typeof value == 'string') {
-        		return value;
-        	} else if (typeof value == 'object') {
-        		return JSON.stringify(value);
-        	}
-        	return value.toString();
-        }
-
-        for (key in parameterObject) {
-        	var value = encodeURIComponent(toQueryValue(parameterObject[key]));
-        	if (query) {
-        		query = query + "&" + key + "=" + value;
-        	} else {
-        		query = key + "=" + value;
-        	}
-        }
-
-        if (query) {
-        	url += ("?" + query)
-        }
-
-        /* <iframe src='" + url + "' style='display: none;'></iframe> */
-        var iframe = document.createElement('iframe');
-        iframe.style.display = 'none';
-        iframe.setAttribute('src', url);
-        // $(iframe).ready(function() {
-        //     document.body.removeChild(iframe);
-        // });
-        document.body.appendChild(iframe);
-        setTimeout(function() {
-        	document.body.removeChild(iframe);
-        }, 1000);
-
-        return taskID;
-    }
-
 	// 1. 打开指定页面
 	function _open(page, id) {
-		var param = { "page": page };
-		if (id) { param.id = id; }
-		return native_message_send(OMAppMessage.open, param);
+		alert("跳转到指定页面 {page:" + page + ", id: " + id + "}");
 	}
 	Object.defineProperty(_object, 'open', { get: function() { return _open; }});
 
 	// 2.1 HTML 调用原生的登录。
 	function _login(callback) {
-		return native_message_send(OMAppMessage.login, null, callback);
+		if (confirm("点击确定登录成功，取消登录失败")) {
+			window.omApp.currentUser.name = "已登录";
+			window.omApp.currentUser.coin = 100;
+			window.omApp.currentUser.id = 1;
+			window.omApp.currentUser.type = OMUserType.google;	
+			callback(true);
+		} else {
+			window.omApp.currentUser.name = "未登录";
+			window.omApp.currentUser.coin = 0;
+			window.omApp.currentUser.id = 0;
+			window.omApp.currentUser.type = OMUserType.vistor;
+			callback(false);
+		}
 	}
 	Object.defineProperty(_object, 'login', { get: function() { return _login; }});
-
-	// 2.2 原生通知JS登录已完成。
-	function _didFinishLogining(taskID, resultObject) {
-		if (_allCallbacks[taskID]) {
-			_allCallbacks[taskID](resultObject);
-		}
-		_allCallbacks[taskID] = null;
-	}
- 	Object.defineProperty(_object, 'didFinishLogining', { get: function() { return _didFinishLogining; }});
-
- 	// 3. alert
-	function _alert(message) {
-		setTimeout(function(){
-			alert(message);
-		}, 100);
-	}
-	Object.defineProperty(_object, 'alert', { get: function() { return _alert; }});
 
 	// 4. navigation
 	var _navigation = (function() {
@@ -187,17 +127,18 @@ var _omApp = (function() {
    			if (url.search(/(http|https|file):\/\//i) != 0) {
    				url = window.location.protocol + "//" + window.location.host + url;
    			}
-   		 	return native_message_send(OMAppMessage.navigation.push, {"url": url});
+   			window.location.href = url;
 		}
 
 		// 推出当前页面，使栈内页面数量 -1。
 		var _pop = function () {
-			return native_message_send(OMAppMessage.navigation.pop);
+			window.history.back();
 		}
 
 		// 移除栈内索引大于 index 的所有页面，即将 index 页面所显示的内容展示出来。
 		var _popTo = function (index) {
-			return native_message_send(OMAppMessage.navigation.popTo, {"index": index});
+			index = index - window.history.length + 1;
+			window.history.go(index);
 		}
 
 		var _bar = (function(){
@@ -210,19 +151,19 @@ var _omApp = (function() {
 			Object.defineProperties(_object, {
 				title: {
 					get: function() { return _title; },
-					set: function(newValue) { _title = newValue; native_message_send(OMAppMessage.navigation.bar, {"title": newValue}); }
+					set: function(newValue) { _title = newValue; }
 				},
 				titleColor: {
 					get: function() { return _titleColor; },
-					set: function(newValue) { _titleColor = newValue; native_message_send(OMAppMessage.navigation.bar, {"titleColor": newValue}) }
+					set: function(newValue) { _titleColor = newValue; }
 				},
 				backgroundColor: {
 					get: function() { return _backgroundColor; },
-					set: function(newValue) { _backgroundColor = newValue; native_message_send(OMAppMessage.navigation.bar, {"backgroundColor": newValue})}
+					set: function(newValue) { _backgroundColor = newValue; }
 				},
 				isHidden: {
 					get: function() { return _isHidden; },
-					set: function(newValue) { _isHidden = newValue; native_message_send(OMAppMessage.navigation.bar, {"isHidden": newValue}) }
+					set: function(newValue) { _isHidden = newValue; }
 				}
 			});
 			return _object;
@@ -247,7 +188,6 @@ var _omApp = (function() {
 		},
 		set: function(newValue) {
 			_theme = newValue;
-			native_message_send(OMAppMessage.theme, {"name": newValue});
 		}
 	});
 
@@ -286,19 +226,34 @@ var _omApp = (function() {
 	})();
 	Object.defineProperty(_object, 'currentUser', { get: function() { return _currentUser; }});
 
-	// 7.1 HTTP
+	// 7. HTTP
 	function _http(requestObject, callback) {
-        native_message_send(OMAppMessage.http, {"request": requestObject}, callback);
+		var xmlhttp = new XMLHttpRequest();
+		xmlhttp.onreadystatechange = function() {
+			if (xmlhttp.readyState != 4) {
+				return;
+			}
+			callback(xmlhttp.status == 200, xmlhttp.responseText);
+		}
+		xmlhttp.open(requestObject.method, requestObject.url, true);
+		if (requestObject.headers) {
+			for (key in requestObject.headers) {
+				xmlhttp.setRequestHeader(key, requestObject.headers[key]);
+			}
+		}
+		var data = null;
+		if (requestObject.params) {
+			for (key in requestObject.params) {
+				if (data) {
+					data = data + "&" + key + "=" + encodeURIComponent(requestObject.params[key]);
+				} else {
+					data = key + "=" + encodeURIComponent(requestObject.params[key]);
+				}
+			}
+		}
+		xmlhttp.send(data);
 	}
 	Object.defineProperty(_object, 'http', { get: function() { return _http; }});	
-	// 7.2 
-	function _didFinishHTTPRequesting(taskID, success, resultObject) {
-		if (_allCallbacks[taskID]) {
-			_allCallbacks[taskID](success, resultObject);
-		}
-		_allCallbacks[taskID] = null;
-	}
- 	Object.defineProperty(_object, 'didFinishHTTPRequesting', { get: function() { return _didFinishHTTPRequesting; }});
 
 	return _object;
 })();
@@ -339,4 +294,10 @@ Object.defineProperties(window, {
                        
                        
                        
-   
+                       
+
+
+
+
+
+

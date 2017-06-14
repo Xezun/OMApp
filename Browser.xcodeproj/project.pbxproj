@@ -19,8 +19,9 @@
 		DDB7A3481EF12DF100BA986F /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB7A33F1EF12DF100BA986F /* WebViewController.swift */; };
 		DDB7A3491EF12DF100BA986F /* WebViewEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB7A3401EF12DF100BA986F /* WebViewEvent.swift */; };
 		DDB7A34B1EF1352000BA986F /* HTTPViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB7A34A1EF1352000BA986F /* HTTPViewController.swift */; };
-		DDB7A34E1EF1509900BA986F /* example-app.html in Resources */ = {isa = PBXBuildFile; fileRef = DDB7A34C1EF1509900BA986F /* example-app.html */; };
-		DDB7A34F1EF1509900BA986F /* example-web.html in Resources */ = {isa = PBXBuildFile; fileRef = DDB7A34D1EF1509900BA986F /* example-web.html */; };
+		DDB7A3531EF1665C00BA986F /* OMApp-debug.html in Resources */ = {isa = PBXBuildFile; fileRef = DDB7A3501EF1665C00BA986F /* OMApp-debug.html */; };
+		DDB7A3541EF1665C00BA986F /* OMApp-debug.js in Resources */ = {isa = PBXBuildFile; fileRef = DDB7A3511EF1665C00BA986F /* OMApp-debug.js */; };
+		DDB7A3551EF1665C00BA986F /* OMApp.html in Resources */ = {isa = PBXBuildFile; fileRef = DDB7A3521EF1665C00BA986F /* OMApp.html */; };
 		DDC1049A1EEA44F00075C41F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC104991EEA44F00075C41F /* AppDelegate.swift */; };
 		DDC1049C1EEA44F00075C41F /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC1049B1EEA44F00075C41F /* StartViewController.swift */; };
 		DDC1049F1EEA44F00075C41F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DDC1049D1EEA44F00075C41F /* Main.storyboard */; };
@@ -46,8 +47,9 @@
 		DDB7A33F1EF12DF100BA986F /* WebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 		DDB7A3401EF12DF100BA986F /* WebViewEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewEvent.swift; sourceTree = "<group>"; };
 		DDB7A34A1EF1352000BA986F /* HTTPViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPViewController.swift; sourceTree = "<group>"; };
-		DDB7A34C1EF1509900BA986F /* example-app.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = "example-app.html"; sourceTree = "<group>"; };
-		DDB7A34D1EF1509900BA986F /* example-web.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = "example-web.html"; sourceTree = "<group>"; };
+		DDB7A3501EF1665C00BA986F /* OMApp-debug.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = "OMApp-debug.html"; sourceTree = "<group>"; };
+		DDB7A3511EF1665C00BA986F /* OMApp-debug.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "OMApp-debug.js"; sourceTree = "<group>"; };
+		DDB7A3521EF1665C00BA986F /* OMApp.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = OMApp.html; sourceTree = "<group>"; };
 		DDC104961EEA44F00075C41F /* Browser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Browser.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DDC104991EEA44F00075C41F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DDC1049B1EEA44F00075C41F /* StartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartViewController.swift; sourceTree = "<group>"; };
@@ -92,8 +94,9 @@
 		DDB7A3131EF1103C00BA986F /* OMApp */ = {
 			isa = PBXGroup;
 			children = (
-				DDB7A34C1EF1509900BA986F /* example-app.html */,
-				DDB7A34D1EF1509900BA986F /* example-web.html */,
+				DDB7A3501EF1665C00BA986F /* OMApp-debug.html */,
+				DDB7A3511EF1665C00BA986F /* OMApp-debug.js */,
+				DDB7A3521EF1665C00BA986F /* OMApp.html */,
 				DDB7A3151EF1103C00BA986F /* OMApp.js */,
 			);
 			path = OMApp;
@@ -255,11 +258,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DDB7A34E1EF1509900BA986F /* example-app.html in Resources */,
 				DDC104A41EEA44F00075C41F /* LaunchScreen.storyboard in Resources */,
 				DDC104A11EEA44F00075C41F /* Assets.xcassets in Resources */,
+				DDB7A3541EF1665C00BA986F /* OMApp-debug.js in Resources */,
+				DDB7A3551EF1665C00BA986F /* OMApp.html in Resources */,
 				DDC1049F1EEA44F00075C41F /* Main.storyboard in Resources */,
-				DDB7A34F1EF1509900BA986F /* example-web.html in Resources */,
+				DDB7A3531EF1665C00BA986F /* OMApp-debug.html in Resources */,
 				DDB7A3171EF1103C00BA986F /* OMApp.js in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
