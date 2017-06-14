@@ -55,7 +55,7 @@
     
     | **Name**       | **Type**    | **Description** |
     | :------------- | :---------- | :-------------- |
-    | success        | Bool        | 是否登录成功。请通过 `omApp.currentUser` 来获取当前已登录用户信息。 |
+    | success        | Bool        | 是否登录成功。请通过 [omApp.currentUser](#currentUser) 来获取当前已登录用户信息。 |
 
 
 - 代码示例：
@@ -262,7 +262,7 @@
     omApp.statistic(OMStatisticType.openMall, {"type": 3});
     ```
 
-#### 6. currentUser
+#### 6. <a name="currentUser">currentUser</a>
 
 - 接口说明：
 
