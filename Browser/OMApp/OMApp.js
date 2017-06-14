@@ -91,17 +91,12 @@ Object.defineProperties(window, {
 });
 
 
-
-
 /* omApp 接口定义 */
 var _omApp = (function() {
 	var _object = {};
 
 	// 所有已保存的回调
-	var _allCallbacks = {}
-
-    // 检测是否是手机浏览器：/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
-	var _isApp = (/Onemena/i.test(navigator.userAgent));
+	var _allCallbacks = {};
 
 	/* 向App发送消息：（消息类型，消息参数，回调）。*/
 	function native_message_send(message, parameterObject, callback) {
@@ -149,13 +144,13 @@ var _omApp = (function() {
 		if (id) { param.id = id; }
 		return native_message_send(OMAppMessage.open, param);
 	}
-	Object.defineProperty(_object, 'open', { get: { function() { return _open; }} });
+	Object.defineProperty(_object, 'open', { get: function() { return _open; }});
 
 	// 2.1 HTML 调用原生的登录。
 	function _login(callback) {
 		return native_message_send(OMAppMessage.login, null, callback);
 	}
-	Object.defineProperty(_object, 'login', { get: { function() { return _login; }} });
+	Object.defineProperty(_object, 'login', { get: function() { return _login; }});
 
 	// 2.2 原生通知JS登录已完成。
 	function _didFinishLogining(taskID, resultObject) {
@@ -164,7 +159,7 @@ var _omApp = (function() {
 		}
 		_allCallbacks[taskID] = null;
 	}
- 	Object.defineProperty(_object, 'didFinishLogining', { get: { function() { return _didFinishLogining; }} });
+ 	Object.defineProperty(_object, 'didFinishLogining', { get: function() { return _didFinishLogining; }});
 
  	// 3. alert
 	function _alert(message) {
@@ -172,7 +167,7 @@ var _omApp = (function() {
 			alert(message);
 		}, 100);
 	}
-	Object.defineProperty(_object, 'alert', { get: { function() { return _alert; }} });
+	Object.defineProperty(_object, 'alert', { get: function() { return _alert; }});
 
 	// 4. navigation
 	var _navigation = (function() {
@@ -232,11 +227,19 @@ var _omApp = (function() {
 		});
 		return _object;
 	})();
-	Object.defineProperty(_object, 'navigation', { get: { function() { return _navigation; }} });
+	Object.defineProperty(_object, 'navigation', { get: function() { return _navigation; }});
 	
 	// 5. theme
 	var _theme = OMAppTheme.day;
-	Object.defineProperty(_object, 'theme', { get: { function() { return _theme; }} });
+	Object.defineProperty(_object, 'theme', { 
+		get: function() { 
+			return _theme; 
+		},
+		set: function(newValue) {
+			_theme = theme;
+			native_message_send(OMAppMessage.theme, {"name": newValue});
+		}
+	});
 
 	// 6. 当前用户
 	var _currentUser = (function(){
@@ -271,26 +274,183 @@ var _omApp = (function() {
 		});
 		return _object;
 	})();
-	Object.defineProperty(_object, 'currentUser', { get: { function() { return _currentUser; }} });
+	Object.defineProperty(_object, 'currentUser', { get: function() { return _currentUser; }});
 
 	// 7. HTTP
-	function _http(request, callback) {
-		native_message_send(OMAppMessage.http, request, callback);
+	function _http(requestObject, callback) {
+		native_message_send(OMAppMessage.http, requestObject, callback);
 	}
-	Object.defineProperty(_object, 'http', { get: { function() { return _http; }} });	
+	Object.defineProperty(_object, 'http', { get: function() { return _http; }});	
 
 	return object;
 })();
 
 Object.defineProperties(window, {
-	omApp: {
-		get: function () {
-			return _omApp;
-		}
-	}
+	omApp: { get: function () { return _omApp; } }
 });
 
 
+// 非 App 状态下调试用。
+
+// 检测是否是手机浏览器：/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+if (!(/Onemena/i.test(navigator.userAgent))) {
+	_omApp = (function() {
+		var _object = {};
+
+		// 1. 打开指定页面
+		function _open(page, id) {
+			alert("跳转到指定页面 {page:" + page + ", id: " + id + "}");
+		}
+		Object.defineProperty(_object, 'open', { get: function() { return _open; }});
+
+		// 2.1 HTML 调用原生的登录。
+		function _login(callback) {
+			if (confirm("点击确定登录成功，取消登录失败")) {
+				callback(true);
+			} else {
+				callback(false);
+			}
+		}
+		Object.defineProperty(_object, 'login', { get: function() { return _login; }});
+
+		// 4. navigation
+		var _navigation = (function() {
+			// 进入下级页面。
+			var _push = function (url) {
+				// 不是以 http、https 开头的，被视作为相对路径。
+	   			if (url.search(/(http|https|file):\/\//i) != 0) {
+	   				url = window.location.protocol + "//" + window.location.host + url;
+	   			}
+	   			window.location.href = url;
+			}
+
+			// 推出当前页面，使栈内页面数量 -1。
+			var _pop = function () {
+				window.location.history.go(-1);
+			}
+
+			// 移除栈内索引大于 index 的所有页面，即将 index 页面所显示的内容展示出来。
+			var _popTo = function (index) {
+				window.location.history.go(window.location.history.length * (-1));
+			}
+
+			var _bar = (function(){
+				var _title = null;
+				var _titleColor = null;
+				var _backgroundColor = null;
+				var _isHidden = false;
+
+				var _object = {};
+				Object.defineProperties(_object, {
+					title: {
+						get: function() { return _title; },
+						set: function(newValue) { _title = newValue; }
+					},
+					titleColor: {
+						get: function() { return _titleColor; },
+						set: function(newValue) { _titleColor = newValue; }
+					},
+					backgroundColor: {
+						get: function() { return _backgroundColor; },
+						set: function(newValue) { _backgroundColor = newValue; }
+					},
+					isHidden: {
+						get: function() { return _isHidden; },
+						set: function(newValue) { _isHidden = newValue; }
+					}
+				});
+				return _object;
+			})();
+
+			var _object = {};
+			Object.defineProperties(_object, {
+				push: { get: function() { return _push; } },
+				pop: { get: function() { return _pop; } },
+				popTo: { get: function() { return _popTo; } },
+				bar: { get: function() { return _bar; } }
+			});
+			return _object;
+		})();
+		Object.defineProperty(_object, 'navigation', { get: function() { return _navigation; }});
+		
+		// 5. theme
+		var _theme = OMAppTheme.day;
+		Object.defineProperty(_object, 'theme', { 
+			get: function() { 
+				return _theme; 
+			},
+			set: function(newValue) {
+				_theme = theme;
+			}
+		});
+
+		// 6. 当前用户
+		var _currentUser = (function(){
+			var _id = "";
+			var _name = "";
+			var _type = OMUserType.vistor;
+			var _coin = 0;
+			
+			var _object = {};
+			Object.defineProperties(_object, {
+				isOnline: {
+					get: function () {
+						return (_type != OMUserType.vistor)
+					}
+				},
+				id: {
+					get: function() { return _id; },
+					set: function(newValue) { _id = newValue; }
+				},
+				name: {
+					get: function() { return _name; },
+					set: function(newValue) { _name = newValue; }
+				},
+				type: {
+					get: function() { return _type; },
+					set: function(newValue) { _type = newValue; }
+				},
+				coin: {
+					get: function() { return _coin; },
+					set: function(newValue) { _coin = newValue; }
+				}
+			});
+			return _object;
+		})();
+		Object.defineProperty(_object, 'currentUser', { get: function() { return _currentUser; }});
+
+		// 7. HTTP
+		function _http(requestObject, callback) {
+			var xmlhttp = new XMLHttpRequest();
+			xmlhttp.onreadystatechange = function() {
+				if (xmlhttp.readyState != 4) {
+					return;
+				}
+				callback(xmlhttp.status == 200, xmlhttp.responseText);
+			}
+			if (requestObject.headers) {
+				for (key in requestObject.headers) {
+					xmlhttp.setRequestHeader(key, requestObject.headers[key]);
+				}
+			}
+			xmlhttp.open(requestObject.method, requestObject.url, true);
+			var data = null;
+			if (requestObject.params) {
+				for (key in requestObject.params) {
+					if (data) {
+						data = data + "&" + key + "=" + encodeURIComponent(requestObject.params[key]);
+					} else {
+						data = key + "=" + encodeURIComponent(requestObject.params[key]);
+					}
+				}
+			}
+			xmlhttp.send(requestObject.params);
+		}
+		Object.defineProperty(_object, 'http', { get: function() { return _http; }});	
+
+		return object;
+	})();
+}
 
 
 

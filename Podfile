@@ -9,7 +9,7 @@ target 'Browser' do
     pod 'SDWebImage'
 	
     pod 'XZKit'
-    pod 'OMKit', :git => 'https://github.com/mlibai/OMKit.git'
+    pod 'OMKit', :path => ‘../../Frameworks/OMKit/’
     
     
 end

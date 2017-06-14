@@ -15,7 +15,6 @@
 		DDC104A41EEA44F00075C41F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DDC104A21EEA44F00075C41F /* LaunchScreen.storyboard */; };
 		DDC104B01EEA454C0075C41F /* example.html in Resources */ = {isa = PBXBuildFile; fileRef = DDC104AC1EEA454C0075C41F /* example.html */; };
 		DDC104B11EEA454C0075C41F /* OMApp.js in Resources */ = {isa = PBXBuildFile; fileRef = DDC104AD1EEA454C0075C41F /* OMApp.js */; };
-		DDC104B21EEA454C0075C41F /* readme.html in Resources */ = {isa = PBXBuildFile; fileRef = DDC104AE1EEA454C0075C41F /* readme.html */; };
 		DDC104B31EEA454C0075C41F /* readme.md in Sources */ = {isa = PBXBuildFile; fileRef = DDC104AF1EEA454C0075C41F /* readme.md */; };
 		DDC104B81EEA46F90075C41F /* LoginTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC104B41EEA46F90075C41F /* LoginTableViewController.swift */; };
 		DDC104B91EEA46F90075C41F /* OpenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC104B51EEA46F90075C41F /* OpenViewController.swift */; };
@@ -35,7 +34,6 @@
 		DDC104A51EEA44F00075C41F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DDC104AC1EEA454C0075C41F /* example.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = example.html; sourceTree = "<group>"; };
 		DDC104AD1EEA454C0075C41F /* OMApp.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = OMApp.js; sourceTree = "<group>"; };
-		DDC104AE1EEA454C0075C41F /* readme.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = readme.html; sourceTree = "<group>"; };
 		DDC104AF1EEA454C0075C41F /* readme.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = readme.md; sourceTree = "<group>"; };
 		DDC104B41EEA46F90075C41F /* LoginTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginTableViewController.swift; sourceTree = "<group>"; };
 		DDC104B51EEA46F90075C41F /* OpenViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenViewController.swift; sourceTree = "<group>"; };
@@ -111,7 +109,6 @@
 			children = (
 				DDC104AC1EEA454C0075C41F /* example.html */,
 				DDC104AD1EEA454C0075C41F /* OMApp.js */,
-				DDC104AE1EEA454C0075C41F /* readme.html */,
 				DDC104AF1EEA454C0075C41F /* readme.md */,
 			);
 			path = OMApp;
@@ -183,7 +180,6 @@
 				DDC104A11EEA44F00075C41F /* Assets.xcassets in Resources */,
 				DDC1049F1EEA44F00075C41F /* Main.storyboard in Resources */,
 				DDC104B11EEA454C0075C41F /* OMApp.js in Resources */,
-				DDC104B21EEA454C0075C41F /* readme.html in Resources */,
 				DDC104B01EEA454C0075C41F /* example.html in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
