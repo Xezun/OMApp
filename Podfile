@@ -9,7 +9,7 @@ target 'Browser' do
     pod 'SDWebImage'
 	
     pod 'XZKit'
-    pod 'OMKit', :path => '../../Work/ios_anaween/Frameworks/OMKit/'
+    # pod 'OMKit', :path => '../../Work/ios_anaween/Frameworks/OMKit/'
     
     
 end

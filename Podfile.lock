@@ -1,26 +1,17 @@
 PODS:
-  - OMKit (1.0.0):
-    - SDWebImage (~> 4.0)
-    - XZKit
   - SDWebImage (4.0.0):
     - SDWebImage/Core (= 4.0.0)
   - SDWebImage/Core (4.0.0)
   - XZKit (2.0.0)
 
 DEPENDENCIES:
-  - OMKit (from `../../Work/ios_anaween/Frameworks/OMKit/`)
   - SDWebImage
   - XZKit
 
-EXTERNAL SOURCES:
-  OMKit:
-    :path: ../../Work/ios_anaween/Frameworks/OMKit/
-
 SPEC CHECKSUMS:
-  OMKit: 4e102e4e246b16cb24480bdf99e2e3a5b89c46fe
   SDWebImage: 76a6348bdc74eb5a55dd08a091ef298e56b55e41
   XZKit: db8c7dc3e92589fa8cdd2a6623e78263bed328b8
 
-PODFILE CHECKSUM: 17ab1e84a126ad432a80fe3e6bbc9df79c1fbd07
+PODFILE CHECKSUM: 3764d1946872c45aff0c73c5b7e1067bc75864e4
 
 COCOAPODS: 1.2.1

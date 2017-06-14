@@ -105,17 +105,35 @@ var _omApp = (function() {
         
         var query = null;
         var taskID = null;
-        if (callback) {
+        if (callback) { //
 			taskID = Date.parse(new Date());
 	        _allCallbacks[taskID] = callback;
 	        query = "taskID=" + taskID;
         }
 
+        function toQueryValue(value) {
+        	if (typeof value == 'string') {
+        		return value;
+        	} else if (typeof parameterObject[key] == 'object') {
+        		var string = null;
+        		for (key in value) {
+        			if (string) {
+        				string = string + "&" + key + "=" + value[key];
+        			} else {
+        				string = key + "=" + value[key];
+        			}
+        		}
+        		return string;
+        	}
+        	return value.toString();
+        }
+
         for (key in parameterObject) {
+        	var value = encodeURIComponent(toQueryValue(parameterObject[key]));
         	if (query) {
-        		query = query + "&" + encodeURIComponent(key) + "=" + encodeURIComponent(parameterObject[key]);
+        		query = query + "&" + key + "=" + value;
         	} else {
-        		query = encodeURIComponent(key) + "=" + encodeURIComponent(parameterObject[key]);
+        		query = key + "=" + value;
         	}
         }
 
@@ -278,7 +296,7 @@ var _omApp = (function() {
 
 	// 7. HTTP
 	function _http(requestObject, callback) {
-		native_message_send(OMAppMessage.http, requestObject, callback);
+        native_message_send(OMAppMessage.http, {"request": requestObject}, callback);
 	}
 	Object.defineProperty(_object, 'http', { get: function() { return _http; }});	
 
@@ -290,6 +308,40 @@ Object.defineProperties(window, {
 });
 
 
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
 // 非 App 状态下调试用。
 
 // 检测是否是手机浏览器：/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)

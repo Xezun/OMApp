@@ -8,7 +8,6 @@
 
 import UIKit
 import XZKit
-import OMKit
 
 class StartViewController: UIViewController, NavigationBarCustomizable, NavigationGestureDrivable {
 

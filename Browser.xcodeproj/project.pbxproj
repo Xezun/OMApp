@@ -10,6 +10,16 @@
 		68B6E83159BC834105D495CF /* Pods_Browser.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DD76948908E20B75B09E087 /* Pods_Browser.framework */; };
 		DDB7A3161EF1103C00BA986F /* example.html in Resources */ = {isa = PBXBuildFile; fileRef = DDB7A3141EF1103C00BA986F /* example.html */; };
 		DDB7A3171EF1103C00BA986F /* OMApp.js in Resources */ = {isa = PBXBuildFile; fileRef = DDB7A3151EF1103C00BA986F /* OMApp.js */; };
+		DDB7A3411EF12DF100BA986F /* CustomNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB7A3341EF12DF100BA986F /* CustomNavigationBar.swift */; };
+		DDB7A3421EF12DF100BA986F /* UIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB7A3361EF12DF100BA986F /* UIButton.swift */; };
+		DDB7A3431EF12DF100BA986F /* UIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB7A3371EF12DF100BA986F /* UIImageView.swift */; };
+		DDB7A3441EF12DF100BA986F /* MenuBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB7A3391EF12DF100BA986F /* MenuBar.swift */; };
+		DDB7A3451EF12DF100BA986F /* MenuBarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB7A33A1EF12DF100BA986F /* MenuBarItem.swift */; };
+		DDB7A3461EF12DF100BA986F /* MenuBarItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB7A33B1EF12DF100BA986F /* MenuBarItemView.swift */; };
+		DDB7A3471EF12DF100BA986F /* WebViewAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB7A33E1EF12DF100BA986F /* WebViewAction.swift */; };
+		DDB7A3481EF12DF100BA986F /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB7A33F1EF12DF100BA986F /* WebViewController.swift */; };
+		DDB7A3491EF12DF100BA986F /* WebViewEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB7A3401EF12DF100BA986F /* WebViewEvent.swift */; };
+		DDB7A34B1EF1352000BA986F /* HTTPViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB7A34A1EF1352000BA986F /* HTTPViewController.swift */; };
 		DDC1049A1EEA44F00075C41F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC104991EEA44F00075C41F /* AppDelegate.swift */; };
 		DDC1049C1EEA44F00075C41F /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC1049B1EEA44F00075C41F /* StartViewController.swift */; };
 		DDC1049F1EEA44F00075C41F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DDC1049D1EEA44F00075C41F /* Main.storyboard */; };
@@ -26,6 +36,16 @@
 		4E4276848E5C739E30D8DAB3 /* Pods-Browser.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Browser.release.xcconfig"; path = "Pods/Target Support Files/Pods-Browser/Pods-Browser.release.xcconfig"; sourceTree = "<group>"; };
 		DDB7A3141EF1103C00BA986F /* example.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = example.html; sourceTree = "<group>"; };
 		DDB7A3151EF1103C00BA986F /* OMApp.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = OMApp.js; sourceTree = "<group>"; };
+		DDB7A3341EF12DF100BA986F /* CustomNavigationBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomNavigationBar.swift; sourceTree = "<group>"; };
+		DDB7A3361EF12DF100BA986F /* UIButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIButton.swift; sourceTree = "<group>"; };
+		DDB7A3371EF12DF100BA986F /* UIImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIImageView.swift; sourceTree = "<group>"; };
+		DDB7A3391EF12DF100BA986F /* MenuBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuBar.swift; sourceTree = "<group>"; };
+		DDB7A33A1EF12DF100BA986F /* MenuBarItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuBarItem.swift; sourceTree = "<group>"; };
+		DDB7A33B1EF12DF100BA986F /* MenuBarItemView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuBarItemView.swift; sourceTree = "<group>"; };
+		DDB7A33E1EF12DF100BA986F /* WebViewAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewAction.swift; sourceTree = "<group>"; };
+		DDB7A33F1EF12DF100BA986F /* WebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
+		DDB7A3401EF12DF100BA986F /* WebViewEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewEvent.swift; sourceTree = "<group>"; };
+		DDB7A34A1EF1352000BA986F /* HTTPViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPViewController.swift; sourceTree = "<group>"; };
 		DDC104961EEA44F00075C41F /* Browser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Browser.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DDC104991EEA44F00075C41F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DDC1049B1EEA44F00075C41F /* StartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartViewController.swift; sourceTree = "<group>"; };
@@ -76,6 +96,62 @@
 			path = OMApp;
 			sourceTree = "<group>";
 		};
+		DDB7A3321EF12DE800BA986F /* OMKit */ = {
+			isa = PBXGroup;
+			children = (
+				DDB7A3331EF12DF100BA986F /* CustomNavigationBar */,
+				DDB7A3351EF12DF100BA986F /* Extension */,
+				DDB7A3381EF12DF100BA986F /* MenuBar */,
+				DDB7A33C1EF12DF100BA986F /* Social */,
+				DDB7A33D1EF12DF100BA986F /* WebView */,
+			);
+			path = OMKit;
+			sourceTree = "<group>";
+		};
+		DDB7A3331EF12DF100BA986F /* CustomNavigationBar */ = {
+			isa = PBXGroup;
+			children = (
+				DDB7A3341EF12DF100BA986F /* CustomNavigationBar.swift */,
+			);
+			path = CustomNavigationBar;
+			sourceTree = "<group>";
+		};
+		DDB7A3351EF12DF100BA986F /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				DDB7A3361EF12DF100BA986F /* UIButton.swift */,
+				DDB7A3371EF12DF100BA986F /* UIImageView.swift */,
+			);
+			path = Extension;
+			sourceTree = "<group>";
+		};
+		DDB7A3381EF12DF100BA986F /* MenuBar */ = {
+			isa = PBXGroup;
+			children = (
+				DDB7A3391EF12DF100BA986F /* MenuBar.swift */,
+				DDB7A33A1EF12DF100BA986F /* MenuBarItem.swift */,
+				DDB7A33B1EF12DF100BA986F /* MenuBarItemView.swift */,
+			);
+			path = MenuBar;
+			sourceTree = "<group>";
+		};
+		DDB7A33C1EF12DF100BA986F /* Social */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Social;
+			sourceTree = "<group>";
+		};
+		DDB7A33D1EF12DF100BA986F /* WebView */ = {
+			isa = PBXGroup;
+			children = (
+				DDB7A33E1EF12DF100BA986F /* WebViewAction.swift */,
+				DDB7A33F1EF12DF100BA986F /* WebViewController.swift */,
+				DDB7A3401EF12DF100BA986F /* WebViewEvent.swift */,
+			);
+			path = WebView;
+			sourceTree = "<group>";
+		};
 		DDC1048D1EEA44F00075C41F = {
 			isa = PBXGroup;
 			children = (
@@ -97,12 +173,14 @@
 		DDC104981EEA44F00075C41F /* Browser */ = {
 			isa = PBXGroup;
 			children = (
+				DDB7A3321EF12DE800BA986F /* OMKit */,
 				DDB7A3131EF1103C00BA986F /* OMApp */,
 				DDC104991EEA44F00075C41F /* AppDelegate.swift */,
 				DDC1049B1EEA44F00075C41F /* StartViewController.swift */,
 				DDC104B71EEA46F90075C41F /* OnemenaBrowser.swift */,
 				DDC104B41EEA46F90075C41F /* LoginTableViewController.swift */,
 				DDC104B51EEA46F90075C41F /* OpenViewController.swift */,
+				DDB7A34A1EF1352000BA986F /* HTTPViewController.swift */,
 				DDC1049D1EEA44F00075C41F /* Main.storyboard */,
 				DDC104A01EEA44F00075C41F /* Assets.xcassets */,
 				DDC104A21EEA44F00075C41F /* LaunchScreen.storyboard */,
@@ -236,10 +314,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DDB7A3431EF12DF100BA986F /* UIImageView.swift in Sources */,
+				DDB7A3471EF12DF100BA986F /* WebViewAction.swift in Sources */,
+				DDB7A3491EF12DF100BA986F /* WebViewEvent.swift in Sources */,
+				DDB7A3451EF12DF100BA986F /* MenuBarItem.swift in Sources */,
+				DDB7A3411EF12DF100BA986F /* CustomNavigationBar.swift in Sources */,
 				DDC104BB1EEA46F90075C41F /* OnemenaBrowser.swift in Sources */,
+				DDB7A3461EF12DF100BA986F /* MenuBarItemView.swift in Sources */,
 				DDC104B91EEA46F90075C41F /* OpenViewController.swift in Sources */,
+				DDB7A34B1EF1352000BA986F /* HTTPViewController.swift in Sources */,
 				DDC1049C1EEA44F00075C41F /* StartViewController.swift in Sources */,
+				DDB7A3441EF12DF100BA986F /* MenuBar.swift in Sources */,
+				DDB7A3421EF12DF100BA986F /* UIButton.swift in Sources */,
 				DDC104B81EEA46F90075C41F /* LoginTableViewController.swift in Sources */,
+				DDB7A3481EF12DF100BA986F /* WebViewController.swift in Sources */,
 				DDC1049A1EEA44F00075C41F /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

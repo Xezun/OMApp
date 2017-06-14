@@ -8,7 +8,6 @@
 
 import UIKit
 import XZKit
-import OMKit
 
 extension Notification.Name {
     static let OMHTMLOpenPageTest = Notification.Name(rawValue: "OMHTMLOpenPageTest")
@@ -51,12 +50,39 @@ class OnemenaBrowser: WebViewController, NavigationBarCustomizable, NavigationGe
             default:
                 view.brightness = 0.5
             }
+        case WebViewEvent.http:
+            guard let parameters = parameters else { return }
+            handleHTTPEvents(parameters)
+            
         default:
             super.didRecevie(event, parameters: parameters)
         }
     }
     
     var taskID: String?
+    
+    func handleHTTPEvents(_ paramters: [String: Any]) {
+        let url: String = paramters["url"] as! String
+        let method: String = paramters["method"] as! String
+        
+        var request = URLRequest(url: URL(string: url)!)
+        request.httpMethod = method
+        if let params = paramters["params"] as? [String: Any] {
+            let string = params.map({ (item) -> String in
+                return "\(item.key)=\(item.value)"
+            }).joined(separator: "&")
+            request.httpBody = string.data(using: .utf8)
+        }
+        if let headers = paramters["headers"] as? [String: Any] {
+            for item in headers {
+                request.addValue(String.init(forceCast: item.value), forHTTPHeaderField: item.key)
+            }
+        }
+        
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+            // TODO: 
+        }.resume()
+    }
     
     func loginHandler(_ parameters: [String : Any]?) -> Void {
         let viewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "login") as! LoginTableViewController
