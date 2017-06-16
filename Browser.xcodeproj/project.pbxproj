@@ -22,6 +22,7 @@
 		DDB7A3531EF1665C00BA986F /* OMApp-debug.html in Resources */ = {isa = PBXBuildFile; fileRef = DDB7A3501EF1665C00BA986F /* OMApp-debug.html */; };
 		DDB7A3541EF1665C00BA986F /* OMApp-debug.js in Resources */ = {isa = PBXBuildFile; fileRef = DDB7A3511EF1665C00BA986F /* OMApp-debug.js */; };
 		DDB7A3551EF1665C00BA986F /* OMApp.html in Resources */ = {isa = PBXBuildFile; fileRef = DDB7A3521EF1665C00BA986F /* OMApp.html */; };
+		DDB7A35B1EF28B1F00BA986F /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDB7A35A1EF28B1F00BA986F /* JavaScriptCore.framework */; };
 		DDC1049A1EEA44F00075C41F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC104991EEA44F00075C41F /* AppDelegate.swift */; };
 		DDC1049C1EEA44F00075C41F /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC1049B1EEA44F00075C41F /* StartViewController.swift */; };
 		DDC1049F1EEA44F00075C41F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DDC1049D1EEA44F00075C41F /* Main.storyboard */; };
@@ -36,6 +37,9 @@
 		21E4F79F714474D48638D1FF /* Pods-Browser.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Browser.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Browser/Pods-Browser.debug.xcconfig"; sourceTree = "<group>"; };
 		4DD76948908E20B75B09E087 /* Pods_Browser.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Browser.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4E4276848E5C739E30D8DAB3 /* Pods-Browser.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Browser.release.xcconfig"; path = "Pods/Target Support Files/Pods-Browser/Pods-Browser.release.xcconfig"; sourceTree = "<group>"; };
+		DD4FF4801EF3A7CD00DF3BE4 /* AppExport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppExport.h; path = OMApp/AppExport.h; sourceTree = "<group>"; };
+		DD4FF4811EF3A7D600DF3BE4 /* Browser-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Browser-Bridging-Header.h"; sourceTree = "<group>"; };
+		DD545C3C1EF3761000D3D119 /* Browser-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Browser-Bridging-Header.h"; sourceTree = "<group>"; };
 		DDB7A3151EF1103C00BA986F /* OMApp.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = OMApp.js; sourceTree = "<group>"; };
 		DDB7A3341EF12DF100BA986F /* CustomNavigationBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomNavigationBar.swift; sourceTree = "<group>"; };
 		DDB7A3361EF12DF100BA986F /* UIButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIButton.swift; sourceTree = "<group>"; };
@@ -50,6 +54,7 @@
 		DDB7A3501EF1665C00BA986F /* OMApp-debug.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = "OMApp-debug.html"; sourceTree = "<group>"; };
 		DDB7A3511EF1665C00BA986F /* OMApp-debug.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "OMApp-debug.js"; sourceTree = "<group>"; };
 		DDB7A3521EF1665C00BA986F /* OMApp.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = OMApp.html; sourceTree = "<group>"; };
+		DDB7A35A1EF28B1F00BA986F /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		DDC104961EEA44F00075C41F /* Browser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Browser.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DDC104991EEA44F00075C41F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DDC1049B1EEA44F00075C41F /* StartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartViewController.swift; sourceTree = "<group>"; };
@@ -67,6 +72,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DDB7A35B1EF28B1F00BA986F /* JavaScriptCore.framework in Frameworks */,
 				68B6E83159BC834105D495CF /* Pods_Browser.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -86,6 +92,7 @@
 		512CBC9796069FE31116F169 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DDB7A35A1EF28B1F00BA986F /* JavaScriptCore.framework */,
 				4DD76948908E20B75B09E087 /* Pods_Browser.framework */,
 			);
 			name = Frameworks;
@@ -179,6 +186,8 @@
 		DDC104981EEA44F00075C41F /* Browser */ = {
 			isa = PBXGroup;
 			children = (
+				DD4FF4811EF3A7D600DF3BE4 /* Browser-Bridging-Header.h */,
+				DD4FF4801EF3A7CD00DF3BE4 /* AppExport.h */,
 				DDB7A3321EF12DE800BA986F /* OMKit */,
 				DDB7A3131EF1103C00BA986F /* OMApp */,
 				DDC104991EEA44F00075C41F /* AppDelegate.swift */,
@@ -191,6 +200,7 @@
 				DDC104A01EEA44F00075C41F /* Assets.xcassets */,
 				DDC104A21EEA44F00075C41F /* LaunchScreen.storyboard */,
 				DDC104A51EEA44F00075C41F /* Info.plist */,
+				DD545C3C1EF3761000D3D119 /* Browser-Bridging-Header.h */,
 			);
 			path = Browser;
 			sourceTree = "<group>";
@@ -231,7 +241,8 @@
 					DDC104951EEA44F00075C41F = {
 						CreatedOnToolsVersion = 8.3.3;
 						DevelopmentTeam = CUAZ96XYKC;
-						ProvisioningStyle = Automatic;
+						LastSwiftMigration = 0830;
+						ProvisioningStyle = Manual;
 					};
 				};
 			};
@@ -461,11 +472,16 @@
 			baseConfigurationReference = 21E4F79F714474D48638D1FF /* Pods-Browser.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = CUAZ96XYKC;
 				INFOPLIST_FILE = Browser/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.onemena.test;
+				PRODUCT_BUNDLE_IDENTIFIER = com.onemena.browser;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "3bf7c036-db41-42ed-8c19-9a1e3c67d0b7";
+				PROVISIONING_PROFILE_SPECIFIER = "Browser Development";
+				SWIFT_OBJC_BRIDGING_HEADER = "Browser/Browser-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
@@ -475,11 +491,16 @@
 			baseConfigurationReference = 4E4276848E5C739E30D8DAB3 /* Pods-Browser.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				DEVELOPMENT_TEAM = CUAZ96XYKC;
 				INFOPLIST_FILE = Browser/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.onemena.test;
+				PRODUCT_BUNDLE_IDENTIFIER = com.onemena.browser;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "7f579e0c-8e6e-456c-b65e-5b774005c796";
+				PROVISIONING_PROFILE_SPECIFIER = "Browser Distribution";
+				SWIFT_OBJC_BRIDGING_HEADER = "Browser/Browser-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Release;

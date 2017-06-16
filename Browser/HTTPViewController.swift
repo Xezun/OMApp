@@ -9,11 +9,16 @@
 import UIKit
 import XZKit
 
+let kUserTokenDefaultsKey = "kHTTPHeadersDefaultsKey"
+let kAccessTokenDefaultsKey = "kHTTPParametersDefaultsKey"
+
+let kAutoRequestDefaultsKey = "kAutoRequestDefaultsKey"
+
 protocol HTTPViewControllerDelegate: class {
     func httpViewController(success: Bool, with result: String?)
 }
 
-class HTTPViewController: UIViewController, NavigationBarCustomizable, NavigationGestureDrivable {
+class HTTPViewController: UITableViewController, NavigationBarCustomizable, NavigationGestureDrivable {
     
     static func viewController(requestObject: [String: Any]) -> HTTPViewController {
         let viewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "http") as! HTTPViewController
@@ -21,12 +26,14 @@ class HTTPViewController: UIViewController, NavigationBarCustomizable, Navigatio
         return viewController
     }
     
-    var requestObject: [String: Any]!
+    lazy var requestObject: [String: Any] = [:]
     
     weak var delegate: HTTPViewControllerDelegate?
     
-    @IBOutlet weak var headersTextView: UITextView!
-    @IBOutlet weak var parametersTextView: UITextView!
+    @IBOutlet weak var requestLabel: UILabel!
+    @IBOutlet weak var accessTokenTextField: UITextField!
+    @IBOutlet weak var userTokenTextField: UITextField!
+    @IBOutlet weak var autoRequestSwitch: UISwitch!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,65 +42,49 @@ class HTTPViewController: UIViewController, NavigationBarCustomizable, Navigatio
             customNavigationBar.barTintColor = .red
             customNavigationBar.title = "HTTP 测试"
         }
+        
+        let string = requestObject.map { (item) -> String in
+            return "\(item.key): \(item.value)"
+        }.joined(separator: " \n")
+        requestLabel.text = string
+        
+        if let text = UserDefaults.standard.object(forKey: kUserTokenDefaultsKey) as? String {
+            userTokenTextField.text = text
+        }
+        if let text = UserDefaults.standard.object(forKey: kAccessTokenDefaultsKey) as? String {
+            accessTokenTextField.text = text
+        } else {
+            let uuid = UUID().uuidString
+            accessTokenTextField.text = uuid
+            UserDefaults.standard.setValue(uuid, forKey: kAccessTokenDefaultsKey)
+        }
+        
+        self.autoRequestSwitch.isOn = UserDefaults.standard.bool(forKey: kAutoRequestDefaultsKey)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        
+    }
+
+    @IBAction func autoRequestSwitchAction(_ sender: UISwitch) {
+        UserDefaults.standard.set(sender.isOn, forKey: kAutoRequestDefaultsKey)
     }
     
-    @IBAction func requestButtonAction(_ sender: Any) {
-        
-        let url: String = requestObject["url"] as! String
-        let method: String = requestObject["method"] as! String
-        
-        var request = URLRequest(url: URL(string: url)!)
-        request.httpMethod = method
-        
-        if let headers = requestObject["headers"] as? [String: Any] {
-            for item in headers {
-                request.addValue(String.init(forceCast: item.value), forHTTPHeaderField: item.key)
-            }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard indexPath.row == tableView.numberOfRows(inSection: 0) - 1 else {
+            return
         }
         
-        if let data = headersTextView.text.data(using: .utf8) {
-            guard let headers = (try? JSONSerialization.jsonObject(with: data, options: .allowFragments)) as? [String: Any] else { return }
-            for item in headers {
-                request.addValue(String.init(forceCast: item.value), forHTTPHeaderField: item.key)
-            }
+        sendHTTP(with: requestObject, accessToken: accessTokenTextField.text, userToken: userTokenTextField.text) { (success, result) in
+            self.delegate?.httpViewController(success: success, with: result)
+            self.navigationController?.popViewController(animated: true)
         }
-        
-        var params = [String: Any]()
-        if let tmp = requestObject["params"] as? [String: Any] {
-            for item in tmp {
-                params.updateValue(item.value, forKey: item.key)
-            }
-        }
-        if let data = parametersTextView.text.data(using: .utf8) {
-            if let parameters = (try? JSONSerialization.jsonObject(with: data, options: .allowFragments)) as? [String: Any] {
-                for item in parameters {
-                    params.updateValue(item.value, forKey: item.key)
-                }
-            }
-        }
-        let string = params.map({ (item) -> String in
-            return "\(item.key)=\(item.value)"
-        }).joined(separator: "&")
-        request.httpBody = string.data(using: .utf8)
-        
-        URLSession.shared.dataTask(with: request, completionHandler: { (data, response, error) -> Void in
-            var result: String? = nil
-            if let data = data {
-                result = String(data: data, encoding: .utf8)
-            }
-            DispatchQueue.main.async {
-                self.delegate?.httpViewController(success: (error == nil), with: result)
-                self.navigationController?.popViewController(animated: true)
-            }
-        }).resume()
-
     }
-
     
     /*
     // MARK: - Navigation
@@ -105,4 +96,59 @@ class HTTPViewController: UIViewController, NavigationBarCustomizable, Navigatio
     }
     */
 
+}
+
+
+func sendHTTP(with requestObject: [String: Any], accessToken: String?, userToken: String?, completion: @escaping ((Bool,String?)->Void)) {
+    guard let url: String = requestObject["url"] as? String else {
+        return
+    }
+    guard let method: String = requestObject["method"] as? String else {
+        return
+    }
+    
+    var request = URLRequest(url: URL(string: url)!)
+    request.httpMethod = method
+    
+    if let headers = requestObject["headers"] as? [String: Any] {
+        for item in headers {
+            request.addValue(String.init(forceCast: item.value), forHTTPHeaderField: item.key)
+        }
+    }
+    
+    if let userToken = userToken {
+        request.setValue(userToken, forHTTPHeaderField: "User-Token")
+    }
+    if let accessToken = accessToken {
+        request.setValue(accessToken, forHTTPHeaderField: "Access-Token")
+    }
+    
+    if let tmp = requestObject["params"] as? [String: Any] {
+        let string = tmp.map({ (item) -> String in
+            return "\(item.key)=\(item.value)"
+        }).joined(separator: "&")
+        request.httpBody = string.data(using: .utf8)
+    }
+    
+    let activity = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
+    activity.frame = UIScreen.main.bounds
+    activity.backgroundColor = UIColor.black.withAlphaComponent(0.7)
+    UIApplication.shared.keyWindow?.addSubview(activity)
+    
+    activity.startAnimating()
+    activity.hidesWhenStopped = true
+    URLSession.shared.dataTask(with: request, completionHandler: { (data, response, error) -> Void in
+        var result: String? = nil
+        if let data = data {
+            result = String(data: data, encoding: .utf8)
+        }
+        DispatchQueue.main.async {
+            activity.stopAnimating()
+            activity.removeFromSuperview()
+            completion(error == nil,  result)
+        }
+    }).resume()
+    
+    UserDefaults.standard.setValue(userToken, forKey: kUserTokenDefaultsKey)
+    UserDefaults.standard.setValue(accessToken, forKey: kAccessTokenDefaultsKey)
 }

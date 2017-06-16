@@ -42,11 +42,16 @@
     }
 </style>
 <script type="text/javascript">
+
+	window.onerror = function(error) {
+		alert(error);
+	}
     window.onload = function() {
         omApp.navigation.bar.title              = "OnemenaAppBridge";
         omApp.navigation.bar.titleColor         = "#FFFFFF";
         omApp.navigation.bar.backgroundColor    = "#3e84e0";
     }
+
 </script>
 <body> 
 	<table cellpadding="5" cellspacing="0" border="1">
@@ -90,6 +95,7 @@
 				<td>JS</td>
 				<script type="text/javascript">
 					function setNavigationBarTitle(newTitle) {
+                        //alert(omApp.navigation);
 						var oldTitle = omApp.navigation.bar.title;
 						window.omApp.navigation.bar.title = newTitle;
 						document.getElementById("navbar_result").innerHTML = "修改前：" + oldTitle + " 修改后：" + newTitle;

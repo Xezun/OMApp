@@ -17,6 +17,8 @@ extension WebViewEvent {
     static let theme = WebViewEvent(rawValue: "theme")
 }
 
+
+
 class OnemenaBrowser: WebViewController, NavigationBarCustomizable, NavigationGestureDrivable {
     
     override func viewDidLoad() {
@@ -69,9 +71,17 @@ class OnemenaBrowser: WebViewController, NavigationBarCustomizable, NavigationGe
         guard let requestObject = (try? JSONSerialization.jsonObject(with: data, options: .allowFragments)) as? [String: Any] else { return }
         
         self.taskID = paramters["taskID"] as? String
-        let viewController = HTTPViewController.viewController(requestObject: requestObject)
-        viewController.delegate = self
-        navigationController?.pushViewController(viewController, animated: true)
+        
+        if UserDefaults.standard.bool(forKey: kAutoRequestDefaultsKey) {
+            sendHTTP(with: requestObject, accessToken: UserDefaults.standard.string(forKey: kAccessTokenDefaultsKey), userToken: UserDefaults.standard.string(forKey: kUserTokenDefaultsKey), completion: { (success, result) in
+                self.httpViewController(success: success, with: result)
+            })
+        } else {
+            let viewController = HTTPViewController.viewController(requestObject: requestObject)
+            viewController.delegate = self
+            navigationController?.pushViewController(viewController, animated: true)
+        }
+        
     }
     
     func loginHandler(_ parameters: [String : Any]?) -> Void {
@@ -106,17 +116,20 @@ class OnemenaBrowser: WebViewController, NavigationBarCustomizable, NavigationGe
     
     override func webViewDidFinishLoad(_ webView: UIWebView) {
         super.webViewDidFinishLoad(webView)
-        
-        
     }
 }
 
 extension OnemenaBrowser: LoginTableViewControllerDelegate {
     
-    func loginViewController(_ viewController: LoginTableViewController, didFinishLoginingWith result: String) {
+    func loginViewController(_ viewController: LoginTableViewController, didFinishLoginingWith result: (id: String, name: String, type: String, coin: String, success: Bool)) {
+        _ = webView.stringByEvaluatingJavaScript(from: "omApp.currentUser.id = '\(result.id)'; omApp.currentUser.name = '\(result.name)'; omApp.currentUser.type = '\(result.type)'; omApp.currentUser.coin = \(result.coin);")
         guard let taskID = self.taskID else { return }
-        _ = webView.stringByEvaluatingJavaScript(from: "omApp.didFinishLogining('\(taskID)', \(result))")
+        
+        _ = webView.stringByEvaluatingJavaScript(from: "omApp.didFinishLogining('\(taskID)', \(result.success))")
         self.taskID = nil
+    }
+    func loginViewController(_ viewController: LoginTableViewController, didFinishLoginingWith result: String) {
+        
     }
     
 }

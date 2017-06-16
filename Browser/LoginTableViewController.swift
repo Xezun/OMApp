@@ -10,14 +10,20 @@ import UIKit
 import XZKit
 
 protocol LoginTableViewControllerDelegate: class {
-    func loginViewController(_ viewController: LoginTableViewController, didFinishLoginingWith result: String) -> Void
+    func loginViewController(_ viewController: LoginTableViewController, didFinishLoginingWith result: (id: String, name: String, type: String, coin: String, success: Bool)) -> Void
 }
 
 class LoginTableViewController: UITableViewController, NavigationBarCustomizable, NavigationGestureDrivable {
     
     weak var delegate: LoginTableViewControllerDelegate?
-
-    @IBOutlet weak var textView: UITextView!
+    
+    @IBOutlet weak var idTextField: UITextField!
+    @IBOutlet weak var nameTextField: UITextField!
+    @IBOutlet weak var coinTextField: UITextField!
+    @IBOutlet weak var typeTextField: UITextField!
+    @IBOutlet weak var userTokenTextField: UITextField!
+    @IBOutlet weak var successSwitch: UISwitch!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -26,11 +32,17 @@ class LoginTableViewController: UITableViewController, NavigationBarCustomizable
             customNavigationBar.title = "登录"
         }
         
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        if let userToken = UserDefaults.standard.object(forKey: kUserTokenDefaultsKey) as? String {
+            userTokenTextField.text = userToken
+        }
+    }
+    
+    @IBAction func successSwitchAction(_ sender: UISwitch) {
+        let isEnabled = sender.isOn
+        idTextField.isEnabled = isEnabled
+        nameTextField.isEnabled = isEnabled
+        coinTextField.isEnabled = isEnabled
+        typeTextField.isEnabled = isEnabled
     }
 
     override func didReceiveMemoryWarning() {
@@ -40,9 +52,24 @@ class LoginTableViewController: UITableViewController, NavigationBarCustomizable
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.item {
-        case 2:
+        case 7:
             view.resignFirstResponder()
-            delegate?.loginViewController(self, didFinishLoginingWith: textView.text)
+            if successSwitch.isOn {
+                let id = idTextField.text ?? "0"
+                let name = nameTextField.text ?? "no name"
+                let coin = coinTextField.text ?? "0"
+                let type = typeTextField.text ?? "facebook"
+                delegate?.loginViewController(self, didFinishLoginingWith: (id, name, type, coin, true))
+            } else {
+                delegate?.loginViewController(self, didFinishLoginingWith: ("", "未登录", "", "0", true))
+            }
+            
+            if let userToken = userTokenTextField.text {
+                if userToken.characters.count > 0 {
+                    UserDefaults.standard.setValue(userToken, forKey: kUserTokenDefaultsKey)
+                }
+            }
+            
             navigationController?.popViewController(animated: true)
         default:
             super.tableView(tableView, didSelectRowAt: indexPath)

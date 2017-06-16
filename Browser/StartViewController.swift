@@ -9,6 +9,8 @@
 import UIKit
 import XZKit
 
+let kStartUrlDefaultsKey = "kStartUrlDefaultsKey"
+
 class StartViewController: UIViewController, NavigationBarCustomizable, NavigationGestureDrivable {
 
     @IBOutlet weak var textField: UITextField!
@@ -23,6 +25,8 @@ class StartViewController: UIViewController, NavigationBarCustomizable, Navigati
         customNavigationBar.barTintColor = #colorLiteral(red: 0.8901960784, green: 0.8901960784, blue: 0.8901960784, alpha: 1)
         customNavigationBar.titleButton.setTitleColor(#colorLiteral(red: 0.7450980544, green: 0.1568627506, blue: 0.07450980693, alpha: 1), for: .normal)
         
+        self.textField.text = UserDefaults.standard.string(forKey: kStartUrlDefaultsKey)
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -31,8 +35,10 @@ class StartViewController: UIViewController, NavigationBarCustomizable, Navigati
     }
 
     @IBAction func openButtonAction(_ sender: UIButton) {
+        view.resignFirstResponder()
         var url: URL! = nil
         if let urlString = textField.text {
+            UserDefaults.standard.set(urlString, forKey: kStartUrlDefaultsKey)
             url = URL(string: urlString)
         }
         if url == nil {
