@@ -71,7 +71,7 @@
     });
     ```
 
-#### 2. open(*page*, *id*, ...)
+#### 2. open(*page*, *parameters*, ...)
 
 - 接口说明：
     当 HTML 页面需要跳转到其它（原生）界面时，调用此接口。
@@ -80,9 +80,8 @@
 
     | **Name**       | **Type**    | **Description** |
     | :------------- | :---------- | :-------------- |
-    | page           | OMAppPage   | 见 [OMAppPage枚举](#OMAppPage)  |
-    | id             | String      | 见 [OMAppPage枚举](#OMAppPage) |
-    | ...            | Any         | 未来可能增加的参数，见 [OMAppPage枚举](#OMAppPage) |
+    | page           | OMAppPage   | 必选。见 [OMAppPage枚举](#OMAppPage)  |
+    | parameters     | Object      | 可选。见 [OMAppPage枚举](#OMAppPage) |
 
 - <a name="OMAppPage">***OMAppPage*枚举**</a>
 
@@ -136,7 +135,7 @@
 
     | **Name**       | **Type**    | **Description** |
     | :------------- | :---------- | :-------------- |
-    | url            | String      | 下级页面的 URL   |
+    | url            | String      | 必须。下级页面的 URL   |
 
 - 代码示例：
 
@@ -171,7 +170,7 @@
 
     | **Name**       | **Type**    | **Description** |
     | :------------- | :---------- | :-------------- |
-    | index          | Int         | 目的页面所在的位置索引，0 为第一个 HTML 页面 |
+    | index          | Int         | 必选。正数，目的页面所在的位置索引，0 为第一个 HTML 页面 |
 
 - 代码示例：
 

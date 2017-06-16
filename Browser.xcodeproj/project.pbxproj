@@ -31,13 +31,15 @@
 		DDC104B81EEA46F90075C41F /* LoginTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC104B41EEA46F90075C41F /* LoginTableViewController.swift */; };
 		DDC104B91EEA46F90075C41F /* OpenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC104B51EEA46F90075C41F /* OpenViewController.swift */; };
 		DDC104BB1EEA46F90075C41F /* OnemenaBrowser.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC104B71EEA46F90075C41F /* OnemenaBrowser.swift */; };
+		DDD9529A1EF3E64100EBF24B /* AppExport.m in Sources */ = {isa = PBXBuildFile; fileRef = DDD952931EF3E64100EBF24B /* AppExport.m */; };
+		DDD9529B1EF3E64100EBF24B /* AppNavigationExport.m in Sources */ = {isa = PBXBuildFile; fileRef = DDD952951EF3E64100EBF24B /* AppNavigationExport.m */; };
+		DDD9529D1EF3E64100EBF24B /* AppUserExport.m in Sources */ = {isa = PBXBuildFile; fileRef = DDD952991EF3E64100EBF24B /* AppUserExport.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		21E4F79F714474D48638D1FF /* Pods-Browser.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Browser.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Browser/Pods-Browser.debug.xcconfig"; sourceTree = "<group>"; };
 		4DD76948908E20B75B09E087 /* Pods_Browser.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Browser.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4E4276848E5C739E30D8DAB3 /* Pods-Browser.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Browser.release.xcconfig"; path = "Pods/Target Support Files/Pods-Browser/Pods-Browser.release.xcconfig"; sourceTree = "<group>"; };
-		DD4FF4801EF3A7CD00DF3BE4 /* AppExport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppExport.h; path = OMApp/AppExport.h; sourceTree = "<group>"; };
 		DD4FF4811EF3A7D600DF3BE4 /* Browser-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Browser-Bridging-Header.h"; sourceTree = "<group>"; };
 		DD545C3C1EF3761000D3D119 /* Browser-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Browser-Bridging-Header.h"; sourceTree = "<group>"; };
 		DDB7A3151EF1103C00BA986F /* OMApp.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = OMApp.js; sourceTree = "<group>"; };
@@ -65,6 +67,12 @@
 		DDC104B41EEA46F90075C41F /* LoginTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginTableViewController.swift; sourceTree = "<group>"; };
 		DDC104B51EEA46F90075C41F /* OpenViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenViewController.swift; sourceTree = "<group>"; };
 		DDC104B71EEA46F90075C41F /* OnemenaBrowser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnemenaBrowser.swift; sourceTree = "<group>"; };
+		DDD952921EF3E64100EBF24B /* AppExport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppExport.h; sourceTree = "<group>"; };
+		DDD952931EF3E64100EBF24B /* AppExport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppExport.m; sourceTree = "<group>"; };
+		DDD952941EF3E64100EBF24B /* AppNavigationExport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppNavigationExport.h; sourceTree = "<group>"; };
+		DDD952951EF3E64100EBF24B /* AppNavigationExport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppNavigationExport.m; sourceTree = "<group>"; };
+		DDD952981EF3E64100EBF24B /* AppUserExport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppUserExport.h; sourceTree = "<group>"; };
+		DDD952991EF3E64100EBF24B /* AppUserExport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppUserExport.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -187,7 +195,7 @@
 			isa = PBXGroup;
 			children = (
 				DD4FF4811EF3A7D600DF3BE4 /* Browser-Bridging-Header.h */,
-				DD4FF4801EF3A7CD00DF3BE4 /* AppExport.h */,
+				DDD952911EF3E64100EBF24B /* AppExport */,
 				DDB7A3321EF12DE800BA986F /* OMKit */,
 				DDB7A3131EF1103C00BA986F /* OMApp */,
 				DDC104991EEA44F00075C41F /* AppDelegate.swift */,
@@ -203,6 +211,19 @@
 				DD545C3C1EF3761000D3D119 /* Browser-Bridging-Header.h */,
 			);
 			path = Browser;
+			sourceTree = "<group>";
+		};
+		DDD952911EF3E64100EBF24B /* AppExport */ = {
+			isa = PBXGroup;
+			children = (
+				DDD952921EF3E64100EBF24B /* AppExport.h */,
+				DDD952931EF3E64100EBF24B /* AppExport.m */,
+				DDD952941EF3E64100EBF24B /* AppNavigationExport.h */,
+				DDD952951EF3E64100EBF24B /* AppNavigationExport.m */,
+				DDD952981EF3E64100EBF24B /* AppUserExport.h */,
+				DDD952991EF3E64100EBF24B /* AppUserExport.m */,
+			);
+			path = AppExport;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -339,11 +360,14 @@
 				DDB7A3491EF12DF100BA986F /* WebViewEvent.swift in Sources */,
 				DDB7A3451EF12DF100BA986F /* MenuBarItem.swift in Sources */,
 				DDB7A3411EF12DF100BA986F /* CustomNavigationBar.swift in Sources */,
+				DDD9529B1EF3E64100EBF24B /* AppNavigationExport.m in Sources */,
 				DDC104BB1EEA46F90075C41F /* OnemenaBrowser.swift in Sources */,
 				DDB7A3461EF12DF100BA986F /* MenuBarItemView.swift in Sources */,
 				DDC104B91EEA46F90075C41F /* OpenViewController.swift in Sources */,
 				DDB7A34B1EF1352000BA986F /* HTTPViewController.swift in Sources */,
+				DDD9529A1EF3E64100EBF24B /* AppExport.m in Sources */,
 				DDC1049C1EEA44F00075C41F /* StartViewController.swift in Sources */,
+				DDD9529D1EF3E64100EBF24B /* AppUserExport.m in Sources */,
 				DDB7A3441EF12DF100BA986F /* MenuBar.swift in Sources */,
 				DDB7A3421EF12DF100BA986F /* UIButton.swift in Sources */,
 				DDC104B81EEA46F90075C41F /* LoginTableViewController.swift in Sources */,
