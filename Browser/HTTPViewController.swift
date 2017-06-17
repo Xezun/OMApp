@@ -15,7 +15,7 @@ let kAccessTokenDefaultsKey = "kHTTPParametersDefaultsKey"
 let kAutoRequestDefaultsKey = "kAutoRequestDefaultsKey"
 
 protocol HTTPViewControllerDelegate: class {
-    func httpViewController(success: Bool, with result: String?)
+    func httpViewController(success: Bool, with result: Any?)
 }
 
 class HTTPViewController: UITableViewController, NavigationBarCustomizable, NavigationGestureDrivable {
@@ -99,7 +99,7 @@ class HTTPViewController: UITableViewController, NavigationBarCustomizable, Navi
 }
 
 
-func sendHTTP(with requestObject: [String: Any], accessToken: String?, userToken: String?, completion: @escaping ((Bool,String?)->Void)) {
+func sendHTTP(with requestObject: [String: Any], accessToken: String?, userToken: String?, completion: @escaping ((Bool, Any?)->Void)) {
     guard let url: String = requestObject["url"] as? String else {
         return
     }
@@ -138,10 +138,21 @@ func sendHTTP(with requestObject: [String: Any], accessToken: String?, userToken
     activity.startAnimating()
     activity.hidesWhenStopped = true
     URLSession.shared.dataTask(with: request, completionHandler: { (data, response, error) -> Void in
-        var result: String? = nil
+        var result: Any? = nil
+        
         if let data = data {
-            result = String(data: data, encoding: .utf8)
+            if let response = response {
+                if let mimeType = response.mimeType {
+                    if mimeType == "application/json" {
+                        result = try? JSONSerialization.jsonObject(with: data, options: .allowFragments)
+                    }
+                }
+            }
+            if result == nil {
+                result = String(data: data, encoding: .utf8)
+            }
         }
+        
         DispatchQueue.main.async {
             activity.stopAnimating()
             activity.removeFromSuperview()

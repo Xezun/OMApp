@@ -12,10 +12,17 @@
 @class AppNavigationExport, AppUserExport;
 @protocol AppExportDelegate;
 
+/// AppPage 枚举
 typedef NSString *AppPage NS_EXTENSIBLE_STRING_ENUM;
+/// AppTheme 枚举
 typedef NSString *AppTheme NS_EXTENSIBLE_STRING_ENUM;
 
 NS_ASSUME_NONNULL_BEGIN
+
+
+/**
+ 定义了 OMApp 对 JavaScript 的接口。
+ */
 @protocol AppExport <NSObject, JSExport>
 @property (nonatomic, strong, nonnull) AppNavigationExport *navigation;
 @property (nonatomic, strong, nonnull) NSString *theme;

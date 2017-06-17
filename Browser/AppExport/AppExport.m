@@ -102,6 +102,7 @@ const void *const UIWebViewJavaScriptContext = &UIWebViewJavaScriptContext;
 }
 
 - (void)http:(NSDictionary<NSString *,id> *)request completion:(JSValue *)completion {
+    // TODO:  不确定 JSValue 在异步请求的过程中是否会被释放。JSManagedValue
     dispatch_async(dispatch_get_main_queue(), ^{
         [_delegate appExport:self http:request completion:^(BOOL success, id _Nullable result) {
             NSMutableArray *arguments = [NSMutableArray arrayWithObject:@(success)];
