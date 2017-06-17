@@ -115,4 +115,11 @@ FOUNDATION_EXPORT AppTheme const _Nonnull AppThemeNight;
 @interface AppThemeExport : NSObject <AppThemeExport>
 @end
 
+
+@interface NSObject (UIWebViewJSContext)
+
+- (void)webView:(UIWebView *)webView didCreateJavaScriptContext:(JSContext *)context forFrame:(id)frame;
+
+@end
+
 NS_ASSUME_NONNULL_END

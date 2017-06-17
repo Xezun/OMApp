@@ -226,3 +226,13 @@ AppTheme const _Nonnull AppThemeNight = @"night";
 }
 
 @end
+
+
+
+@implementation NSObject (UIWebViewJSContext)
+
+- (void)webView:(UIWebView *)webView didCreateJavaScriptContext:(JSContext *)context forFrame:(id)frame {
+    
+}
+
+@end

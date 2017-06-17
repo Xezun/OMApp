@@ -42,6 +42,7 @@ class OnemenaBrowser: UIViewController, NavigationBarCustomizable, NavigationGes
         super.viewDidLoad()
         webView.frame = view.bounds
         webView.delegate = self
+        webView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         view.addSubview(webView)
         // webView.stringByEvaluatingJavaScript(from: "window.onerror = function(error) { setTimeout(function(){alert(error)}, 2000); }")
         customNavigationBar.barTintColor = UIColor(rgb: 0x3e84e0)
@@ -59,6 +60,10 @@ class OnemenaBrowser: UIViewController, NavigationBarCustomizable, NavigationGes
     
     func webViewDidFinishLoad(_ webView: UIWebView) {
         
+    }
+    
+    override func webView(_ webView: UIWebView, didCreateJavaScriptContext context: JSContext, forFrame frame: Any) {
+        print("didCreateJavaScriptContext")
     }
     
     weak var export: AppExport?

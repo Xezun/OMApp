@@ -219,6 +219,14 @@
 							method: "GET"
 						}, function(success, resultObject){
 							if (success) {
+								var string = null;
+                                for (key in resultObject) {
+                                	if (string) {
+                                		
+                                	} else {
+
+                                	}
+                                }
 								document.getElementById("http_result").innerHTML = resultObject;
 							} else {
 								document.getElementById("http_result").innerHTML = "请求失败！"

@@ -1,0 +1,1906 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><style>body {
+  max-width: 980px;
+  border: 1px solid #ddd;
+  outline: 1300px solid #fff;
+  margin: 16px auto;
+}
+
+body .markdown-body
+{
+  padding: 45px;
+}
+
+@font-face {
+  font-family: fontawesome-mini;
+  src: url(data:font/woff;charset=utf-8;base64,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) format('woff');
+}
+
+@font-face {
+  font-family: octicons-anchor;
+  src: url(data:font/woff;charset=utf-8;base64,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) format('woff');
+}
+
+.markdown-body {
+  font-family: sans-serif;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  color: #333333;
+  overflow: hidden;
+  font-family: "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  word-wrap: break-word;
+}
+
+.markdown-body a {
+  background: transparent;
+}
+
+.markdown-body a:active,
+.markdown-body a:hover {
+  outline: 0;
+}
+
+.markdown-body b,
+.markdown-body strong {
+  font-weight: bold;
+}
+
+.markdown-body mark {
+  background: #ff0;
+  color: #000;
+  font-style: italic;
+  font-weight: bold;
+}
+
+.markdown-body sub,
+.markdown-body sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+.markdown-body sup {
+  top: -0.5em;
+}
+.markdown-body sub {
+  bottom: -0.25em;
+}
+
+.markdown-body h1 {
+  font-size: 2em;
+  margin: 0.67em 0;
+}
+
+.markdown-body img {
+  border: 0;
+}
+
+.markdown-body hr {
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  height: 0;
+}
+
+.markdown-body pre {
+  overflow: auto;
+}
+
+.markdown-body code,
+.markdown-body kbd,
+.markdown-body pre,
+.markdown-body samp {
+  font-family: monospace, monospace;
+  font-size: 1em;
+}
+
+.markdown-body input {
+  color: inherit;
+  font: inherit;
+  margin: 0;
+}
+
+.markdown-body html input[disabled] {
+  cursor: default;
+}
+
+.markdown-body input {
+  line-height: normal;
+}
+
+.markdown-body input[type="checkbox"] {
+  box-sizing: border-box;
+  padding: 0;
+}
+
+.markdown-body table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.markdown-body td,
+.markdown-body th {
+  padding: 0;
+}
+
+.markdown-body .codehilitetable {
+  border: 0;
+  border-spacing: 0;
+}
+
+.markdown-body .codehilitetable tr {
+  border: 0;
+}
+
+.markdown-body .codehilitetable pre,
+.markdown-body .codehilitetable div.codehilite {
+  margin: 0;
+}
+
+.markdown-body .linenos,
+.markdown-body .code,
+.markdown-body .codehilitetable td {
+  border: 0;
+  padding: 0;
+}
+
+.markdown-body td:not(.linenos) .linenodiv {
+  padding: 0 !important;
+}
+
+.markdown-body .code {
+  width: 100%;
+}
+
+.markdown-body .linenos div pre,
+.markdown-body .linenodiv pre,
+.markdown-body .linenodiv {
+  border: 0;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  -webkit-border-top-left-radius: 3px;
+  -webkit-border-bottom-left-radius: 3px;
+  -moz-border-radius-topleft: 3px;
+  -moz-border-radius-bottomleft: 3px;
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+}
+
+.markdown-body .code div pre,
+.markdown-body .code div {
+  border: 0;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  -webkit-border-top-right-radius: 3px;
+  -webkit-border-bottom-right-radius: 3px;
+  -moz-border-radius-topright: 3px;
+  -moz-border-radius-bottomright: 3px;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+
+.markdown-body * {
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.markdown-body input {
+  font: 13px Helvetica, arial, freesans, clean, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
+  line-height: 1.4;
+}
+
+.markdown-body a {
+  color: #4183c4;
+  text-decoration: none;
+}
+
+.markdown-body a:hover,
+.markdown-body a:focus,
+.markdown-body a:active {
+  text-decoration: underline;
+}
+
+.markdown-body hr {
+  height: 0;
+  margin: 15px 0;
+  overflow: hidden;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.markdown-body hr:before,
+.markdown-body hr:after {
+  display: table;
+  content: " ";
+}
+
+.markdown-body hr:after {
+  clear: both;
+}
+
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 {
+  margin-top: 15px;
+  margin-bottom: 15px;
+  line-height: 1.1;
+}
+
+.markdown-body h1 {
+  font-size: 30px;
+}
+
+.markdown-body h2 {
+  font-size: 21px;
+}
+
+.markdown-body h3 {
+  font-size: 16px;
+}
+
+.markdown-body h4 {
+  font-size: 14px;
+}
+
+.markdown-body h5 {
+  font-size: 12px;
+}
+
+.markdown-body h6 {
+  font-size: 11px;
+}
+
+.markdown-body blockquote {
+  margin: 0;
+}
+
+.markdown-body ul,
+.markdown-body ol {
+  padding: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.markdown-body ol ol,
+.markdown-body ul ol {
+  list-style-type: lower-roman;
+}
+
+.markdown-body ul ul ol,
+.markdown-body ul ol ol,
+.markdown-body ol ul ol,
+.markdown-body ol ol ol {
+  list-style-type: lower-alpha;
+}
+
+.markdown-body dd {
+  margin-left: 0;
+}
+
+.markdown-body code,
+.markdown-body pre,
+.markdown-body samp {
+  font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  font-size: 12px;
+}
+
+.markdown-body pre {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.markdown-body kbd {
+  background-color: #e7e7e7;
+  background-image: -moz-linear-gradient(#fefefe, #e7e7e7);
+  background-image: -webkit-linear-gradient(#fefefe, #e7e7e7);
+  background-image: linear-gradient(#fefefe, #e7e7e7);
+  background-repeat: repeat-x;
+  border-radius: 2px;
+  border: 1px solid #cfcfcf;
+  color: #000;
+  padding: 3px 5px;
+  line-height: 10px;
+  font: 11px Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  display: inline-block;
+}
+
+.markdown-body>*:first-child {
+  margin-top: 0 !important;
+}
+
+.markdown-body>*:last-child {
+  margin-bottom: 0 !important;
+}
+
+.markdown-body .headeranchor-link {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  display: block;
+  padding-right: 6px;
+  padding-left: 30px;
+  margin-left: -30px;
+}
+
+.markdown-body .headeranchor-link:focus {
+  outline: none;
+}
+
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 {
+  position: relative;
+  margin-top: 1em;
+  margin-bottom: 16px;
+  font-weight: bold;
+  line-height: 1.4;
+}
+
+.markdown-body h1 .headeranchor,
+.markdown-body h2 .headeranchor,
+.markdown-body h3 .headeranchor,
+.markdown-body h4 .headeranchor,
+.markdown-body h5 .headeranchor,
+.markdown-body h6 .headeranchor {
+  display: none;
+  color: #000;
+  vertical-align: middle;
+}
+
+.markdown-body h1:hover .headeranchor-link,
+.markdown-body h2:hover .headeranchor-link,
+.markdown-body h3:hover .headeranchor-link,
+.markdown-body h4:hover .headeranchor-link,
+.markdown-body h5:hover .headeranchor-link,
+.markdown-body h6:hover .headeranchor-link {
+  height: 1em;
+  padding-left: 8px;
+  margin-left: -30px;
+  line-height: 1;
+  text-decoration: none;
+}
+
+.markdown-body h1:hover .headeranchor-link .headeranchor,
+.markdown-body h2:hover .headeranchor-link .headeranchor,
+.markdown-body h3:hover .headeranchor-link .headeranchor,
+.markdown-body h4:hover .headeranchor-link .headeranchor,
+.markdown-body h5:hover .headeranchor-link .headeranchor,
+.markdown-body h6:hover .headeranchor-link .headeranchor {
+  display: inline-block;
+}
+
+.markdown-body h1 {
+  padding-bottom: 0.3em;
+  font-size: 2.25em;
+  line-height: 1.2;
+  border-bottom: 1px solid #eee;
+}
+
+.markdown-body h2 {
+  padding-bottom: 0.3em;
+  font-size: 1.75em;
+  line-height: 1.225;
+  border-bottom: 1px solid #eee;
+}
+
+.markdown-body h3 {
+  font-size: 1.5em;
+  line-height: 1.43;
+}
+
+.markdown-body h4 {
+  font-size: 1.25em;
+}
+
+.markdown-body h5 {
+  font-size: 1em;
+}
+
+.markdown-body h6 {
+  font-size: 1em;
+  color: #777;
+}
+
+.markdown-body p,
+.markdown-body blockquote,
+.markdown-body ul,
+.markdown-body ol,
+.markdown-body dl,
+.markdown-body table,
+.markdown-body pre,
+.markdown-body .admonition {
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+.markdown-body hr {
+  height: 4px;
+  padding: 0;
+  margin: 16px 0;
+  background-color: #e7e7e7;
+  border: 0 none;
+}
+
+.markdown-body ul,
+.markdown-body ol {
+  padding-left: 2em;
+}
+
+.markdown-body ul ul,
+.markdown-body ul ol,
+.markdown-body ol ol,
+.markdown-body ol ul {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.markdown-body li>p {
+  margin-top: 16px;
+}
+
+.markdown-body dl {
+  padding: 0;
+}
+
+.markdown-body dl dt {
+  padding: 0;
+  margin-top: 16px;
+  font-size: 1em;
+  font-style: italic;
+  font-weight: bold;
+}
+
+.markdown-body dl dd {
+  padding: 0 16px;
+  margin-bottom: 16px;
+}
+
+.markdown-body blockquote {
+  padding: 0 15px;
+  color: #777;
+  border-left: 4px solid #ddd;
+}
+
+.markdown-body blockquote>:first-child {
+  margin-top: 0;
+}
+
+.markdown-body blockquote>:last-child {
+  margin-bottom: 0;
+}
+
+.markdown-body table {
+  display: block;
+  width: 100%;
+  overflow: auto;
+  word-break: normal;
+  word-break: keep-all;
+}
+
+.markdown-body table th {
+  font-weight: bold;
+}
+
+.markdown-body table th,
+.markdown-body table td {
+  padding: 6px 13px;
+  border: 1px solid #ddd;
+}
+
+.markdown-body table tr {
+  background-color: #fff;
+  border-top: 1px solid #ccc;
+}
+
+.markdown-body table tr:nth-child(2n) {
+  background-color: #f8f8f8;
+}
+
+.markdown-body img {
+  max-width: 100%;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.markdown-body code,
+.markdown-body samp {
+  padding: 0;
+  padding-top: 0.2em;
+  padding-bottom: 0.2em;
+  margin: 0;
+  font-size: 85%;
+  background-color: rgba(0,0,0,0.04);
+  border-radius: 3px;
+}
+
+.markdown-body code:before,
+.markdown-body code:after {
+  letter-spacing: -0.2em;
+  content: "\00a0";
+}
+
+.markdown-body pre>code {
+  padding: 0;
+  margin: 0;
+  font-size: 100%;
+  word-break: normal;
+  white-space: pre;
+  background: transparent;
+  border: 0;
+}
+
+.markdown-body .codehilite {
+  margin-bottom: 16px;
+}
+
+.markdown-body .codehilite pre,
+.markdown-body pre {
+  padding: 16px;
+  overflow: auto;
+  font-size: 85%;
+  line-height: 1.45;
+  background-color: #f7f7f7;
+  border-radius: 3px;
+}
+
+.markdown-body .codehilite pre {
+  margin-bottom: 0;
+  word-break: normal;
+}
+
+.markdown-body pre {
+  word-wrap: normal;
+}
+
+.markdown-body pre code {
+  display: inline;
+  max-width: initial;
+  padding: 0;
+  margin: 0;
+  overflow: initial;
+  line-height: inherit;
+  word-wrap: normal;
+  background-color: transparent;
+  border: 0;
+}
+
+.markdown-body pre code:before,
+.markdown-body pre code:after {
+  content: normal;
+}
+
+/* Admonition */
+.markdown-body .admonition {
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  position: relative;
+  border-radius: 3px;
+  border: 1px solid #e0e0e0;
+  border-left: 6px solid #333;
+  padding: 10px 10px 10px 30px;
+}
+
+.markdown-body .admonition table {
+  color: #333;
+}
+
+.markdown-body .admonition p {
+  padding: 0;
+}
+
+.markdown-body .admonition-title {
+  font-weight: bold;
+  margin: 0;
+}
+
+.markdown-body .admonition>.admonition-title {
+  color: #333;
+}
+
+.markdown-body .attention>.admonition-title {
+  color: #a6d796;
+}
+
+.markdown-body .caution>.admonition-title {
+  color: #d7a796;
+}
+
+.markdown-body .hint>.admonition-title {
+  color: #96c6d7;
+}
+
+.markdown-body .danger>.admonition-title {
+  color: #c25f77;
+}
+
+.markdown-body .question>.admonition-title {
+  color: #96a6d7;
+}
+
+.markdown-body .note>.admonition-title {
+  color: #d7c896;
+}
+
+.markdown-body .admonition:before,
+.markdown-body .attention:before,
+.markdown-body .caution:before,
+.markdown-body .hint:before,
+.markdown-body .danger:before,
+.markdown-body .question:before,
+.markdown-body .note:before {
+  font: normal normal 16px fontawesome-mini;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  line-height: 1.5;
+  color: #333;
+  position: absolute;
+  left: 0;
+  top: 0;
+  padding-top: 10px;
+  padding-left: 10px;
+}
+
+.markdown-body .admonition:before {
+  content: "\f056\00a0";
+  color: 333;
+}
+
+.markdown-body .attention:before {
+  content: "\f058\00a0";
+  color: #a6d796;
+}
+
+.markdown-body .caution:before {
+  content: "\f06a\00a0";
+  color: #d7a796;
+}
+
+.markdown-body .hint:before {
+  content: "\f05a\00a0";
+  color: #96c6d7;
+}
+
+.markdown-body .danger:before {
+  content: "\f057\00a0";
+  color: #c25f77;
+}
+
+.markdown-body .question:before {
+  content: "\f059\00a0";
+  color: #96a6d7;
+}
+
+.markdown-body .note:before {
+  content: "\f040\00a0";
+  color: #d7c896;
+}
+
+.markdown-body .admonition::after {
+  content: normal;
+}
+
+.markdown-body .attention {
+  border-left: 6px solid #a6d796;
+}
+
+.markdown-body .caution {
+  border-left: 6px solid #d7a796;
+}
+
+.markdown-body .hint {
+  border-left: 6px solid #96c6d7;
+}
+
+.markdown-body .danger {
+  border-left: 6px solid #c25f77;
+}
+
+.markdown-body .question {
+  border-left: 6px solid #96a6d7;
+}
+
+.markdown-body .note {
+  border-left: 6px solid #d7c896;
+}
+
+.markdown-body .admonition>*:first-child {
+  margin-top: 0 !important;
+}
+
+.markdown-body .admonition>*:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* progress bar*/
+.markdown-body .progress {
+  display: block;
+  width: 300px;
+  margin: 10px 0;
+  height: 24px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  background-color: #ededed;
+  position: relative;
+  box-shadow: inset -1px 1px 3px rgba(0, 0, 0, .1);
+}
+
+.markdown-body .progress-label {
+  position: absolute;
+  text-align: center;
+  font-weight: bold;
+  width: 100%; margin: 0;
+  line-height: 24px;
+  color: #333;
+  text-shadow: 1px 1px 0 #fefefe, -1px -1px 0 #fefefe, -1px 1px 0 #fefefe, 1px -1px 0 #fefefe, 0 1px 0 #fefefe, 0 -1px 0 #fefefe, 1px 0 0 #fefefe, -1px 0 0 #fefefe, 1px 1px 2px #000;
+  -webkit-font-smoothing: antialiased !important;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.markdown-body .progress-bar {
+  height: 24px;
+  float: left;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  background-color: #96c6d7;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .5), inset 0 -1px 0 rgba(0, 0, 0, .1);
+  background-size: 30px 30px;
+  background-image: -webkit-linear-gradient(
+    135deg, rgba(255, 255, 255, .4) 27%,
+    transparent 27%,
+    transparent 52%, rgba(255, 255, 255, .4) 52%,
+    rgba(255, 255, 255, .4) 77%,
+    transparent 77%, transparent
+  );
+  background-image: -moz-linear-gradient(
+    135deg,
+    rgba(255, 255, 255, .4) 27%, transparent 27%,
+    transparent 52%, rgba(255, 255, 255, .4) 52%,
+    rgba(255, 255, 255, .4) 77%, transparent 77%,
+    transparent
+  );
+  background-image: -ms-linear-gradient(
+    135deg,
+    rgba(255, 255, 255, .4) 27%, transparent 27%,
+    transparent 52%, rgba(255, 255, 255, .4) 52%,
+    rgba(255, 255, 255, .4) 77%, transparent 77%,
+    transparent
+  );
+  background-image: -o-linear-gradient(
+    135deg,
+    rgba(255, 255, 255, .4) 27%, transparent 27%,
+    transparent 52%, rgba(255, 255, 255, .4) 52%,
+    rgba(255, 255, 255, .4) 77%, transparent 77%,
+    transparent
+  );
+  background-image: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, .4) 27%, transparent 27%,
+    transparent 52%, rgba(255, 255, 255, .4) 52%,
+    rgba(255, 255, 255, .4) 77%, transparent 77%,
+    transparent
+  );
+}
+
+.markdown-body .progress-100plus .progress-bar {
+  background-color: #a6d796;
+}
+
+.markdown-body .progress-80plus .progress-bar {
+  background-color: #c6d796;
+}
+
+.markdown-body .progress-60plus .progress-bar {
+  background-color: #d7c896;
+}
+
+.markdown-body .progress-40plus .progress-bar {
+  background-color: #d7a796;
+}
+
+.markdown-body .progress-20plus .progress-bar {
+  background-color: #d796a6;
+}
+
+.markdown-body .progress-0plus .progress-bar {
+  background-color: #c25f77;
+}
+
+.markdown-body .candystripe-animate .progress-bar{
+  -webkit-animation: animate-stripes 3s linear infinite;
+  -moz-animation: animate-stripes 3s linear infinite;
+  animation: animate-stripes 3s linear infinite;
+}
+
+@-webkit-keyframes animate-stripes {
+  0% {
+    background-position: 0 0;
+  }
+
+  100% {
+    background-position: 60px 0;
+  }
+}
+
+@-moz-keyframes animate-stripes {
+  0% {
+    background-position: 0 0;
+  }
+
+  100% {
+    background-position: 60px 0;
+  }
+}
+
+@keyframes animate-stripes {
+  0% {
+    background-position: 0 0;
+  }
+
+  100% {
+    background-position: 60px 0;
+  }
+}
+
+.markdown-body .gloss .progress-bar {
+  box-shadow:
+    inset 0 4px 12px rgba(255, 255, 255, .7),
+    inset 0 -12px 0 rgba(0, 0, 0, .05);
+}
+
+/* Multimarkdown Critic Blocks */
+.markdown-body .critic_mark {
+  background: #ff0;
+}
+
+.markdown-body .critic_delete {
+  color: #c82829;
+  text-decoration: line-through;
+}
+
+.markdown-body .critic_insert {
+  color: #718c00 ;
+  text-decoration: underline;
+}
+
+.markdown-body .critic_comment {
+  color: #8e908c;
+  font-style: italic;
+}
+
+.markdown-body .headeranchor {
+  font: normal normal 16px octicons-anchor;
+  line-height: 1;
+  display: inline-block;
+  text-decoration: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.headeranchor:before {
+  content: '\f05c';
+}
+
+.markdown-body .task-list-item {
+  list-style-type: none;
+}
+
+.markdown-body .task-list-item+.task-list-item {
+  margin-top: 3px;
+}
+
+.markdown-body .task-list-item input {
+  margin: 0 4px 0.25em -20px;
+  vertical-align: middle;
+}
+
+/* Media */
+@media only screen and (min-width: 480px) {
+  .markdown-body {
+    font-size:14px;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .markdown-body {
+    font-size:16px;
+  }
+}
+
+@media print {
+  .markdown-body * {
+    background: transparent !important;
+    color: black !important;
+    filter:none !important;
+    -ms-filter: none !important;
+  }
+
+  .markdown-body {
+    font-size:12pt;
+    max-width:100%;
+    outline:none;
+    border: 0;
+  }
+
+  .markdown-body a,
+  .markdown-body a:visited {
+    text-decoration: underline;
+  }
+
+  .markdown-body .headeranchor-link {
+    display: none;
+  }
+
+  .markdown-body a[href]:after {
+    content: " (" attr(href) ")";
+  }
+
+  .markdown-body abbr[title]:after {
+    content: " (" attr(title) ")";
+  }
+
+  .markdown-body .ir a:after,
+  .markdown-body a[href^="javascript:"]:after,
+  .markdown-body a[href^="#"]:after {
+    content: "";
+  }
+
+  .markdown-body pre {
+    white-space: pre;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
+  .markdown-body pre,
+  .markdown-body blockquote {
+    border: 1px solid #999;
+    padding-right: 1em;
+    page-break-inside: avoid;
+  }
+
+  .markdown-body .progress,
+  .markdown-body .progress-bar {
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+  }
+
+  .markdown-body .progress {
+    border: 1px solid #ddd;
+  }
+
+  .markdown-body .progress-bar {
+    height: 22px;
+    border-right: 1px solid #ddd;
+  }
+
+  .markdown-body tr,
+  .markdown-body img {
+    page-break-inside: avoid;
+  }
+
+  .markdown-body img {
+    max-width: 100% !important;
+  }
+
+  .markdown-body p,
+  .markdown-body h2,
+  .markdown-body h3 {
+    orphans: 3;
+    widows: 3;
+  }
+
+  .markdown-body h2,
+  .markdown-body h3 {
+    page-break-after: avoid;
+  }
+}
+</style><title>README</title></head><body><article class="markdown-body"><h1 id="apphtml"><a name="user-content-apphtml" href="#apphtml" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>App/HTML 交互协议</h1>
+<h2 id="_1"><a name="user-content-_1" href="#_1" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>目录</h2>
+<div class="toc">
+<ul>
+<li><a href="#apphtml">App/HTML 交互协议</a><ul>
+<li><a href="#_1">目录</a></li>
+<li><a href="#_2">说明</a></li>
+<li><a href="#_3">环境</a></li>
+<li><a href="#html-app">第一部分：HTML 访问 App</a><ul>
+<li><a href="#_4">接口名称</a></li>
+<li><a href="#_5">调用方式</a></li>
+<li><a href="#_6">方法列表</a><ul>
+<li><a href="#1-logincallback">1. login(callback)</a></li>
+<li><a href="#2-openpage-parameters">2. open(page, parameters) [暂未启用]</a></li>
+<li><a href="#3-navigation">3. navigation</a><ul>
+<li><a href="#31-navigationpushurl-animated">3.1 navigation.push(url, animated)</a></li>
+<li><a href="#32-navigationpopanimated">3.2 navigation.pop(animated)</a></li>
+<li><a href="#33-navigationpoptoindex-animated">3.3 navigation.popTo(index, animated)</a></li>
+<li><a href="#34-navigationbar">3.4 navigation.bar</a></li>
+</ul>
+</li>
+<li><a href="#4-theme-currenttheme">4. <del>theme</del> currentTheme</a></li>
+<li><a href="#5-statistictype-parameters">5. statistic(type, parameters) [暂未启用]</a></li>
+<li><a href="#6-currentuser">6. <a name="currentUser">currentUser</a></a></li>
+<li><a href="#7-httprequestobject-callback">7. http(requestObject, callback)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#app-html">第二部分：App 访问 HTML</a><ul>
+<li><a href="#_7">接口名称</a></li>
+<li><a href="#_8">调用方式</a></li>
+<li><a href="#_9">方法列表</a><ul>
+<li><a href="#1">1. ***</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#omapp-url">第三部分：omApp 基于 URL 交互方式的实现</a><ul>
+<li><a href="#1-api-url">1. API 与 URL</a></li>
+<li><a href="#2-url">2. URL 方式回调的处理</a><ul>
+<li><a href="#21-omappdidfinishloginingtaskid-resultobject">2.1 omApp.didFinishLogining(taskID, resultObject)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<h2 id="_2"><a name="user-content-_2" href="#_2" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>说明</h2>
+<p>为了规范并统一 HTML 与原生的交互方式，提高开发效率，降低维护成本，特制定本协议。</p>
+<ul>
+<li>规定的 HTML 访问 App 的接口协议和 App 访问 HTML 的接口协议。</li>
+<li>本协议规定了一套接口，但是不限制使用何种机制实现 App/HTML 交互。</li>
+</ul>
+<h2 id="_3"><a name="user-content-_3" href="#_3" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>环境</h2>
+<ul>
+<li>
+<p>App 提供的 <code>浏览器（WebView）</code> 环境，通过特殊的 <code>UserAgent</code> 来标识：</p>
+<pre><code>`原UserAgent` + `空格` + `Onemena/` + `App发行版本号`
+</code></pre>
+<p><font size=2>* 例： Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) &hellip; Safari/8536.25 <font color=red>Onemena/1.0.1</font></font></p>
+</li>
+</ul>
+<hr />
+<h2 id="html-app"><a name="user-content-html-app" href="#html-app" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>第一部分：HTML 访问 App</h2>
+<pre><code>App 通过向 HTML 注册 Javascript 接口来实现 HTML 内容对 App 功能的访问。
+</code></pre>
+<h3 id="_4"><a name="user-content-_4" href="#_4" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>接口名称</h3>
+<pre><code>`omApp`
+</code></pre>
+<h3 id="_5"><a name="user-content-_5" href="#_5" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>调用方式</h3>
+<pre><code>`omApp` 或 `window.omApp`
+</code></pre>
+<h3 id="_6"><a name="user-content-_6" href="#_6" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>方法列表</h3>
+<h4 id="1-logincallback"><a name="user-content-1-logincallback" href="#1-logincallback" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>1. login(<em>callback</em>)</h4>
+<ul>
+<li>
+<p>接口说明：</p>
+<p>当 HTML 页面需要调用原生的登录界面时，调用此接口。</p>
+</li>
+<li>
+<p>参数说明：</p>
+<table>
+<thead>
+<tr>
+<th><strong>Name</strong></th>
+<th><strong>Type</strong></th>
+<th><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>callback</td>
+<td>Function</td>
+<td>可选。登录回调函数，用户返回登录结果</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>callback 函数参数：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th><strong>Name</strong></th>
+<th><strong>Type</strong></th>
+<th><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>success</td>
+<td>Bool</td>
+<td>是否登录成功。</td>
+</tr>
+</tbody>
+</table>
+<p><font size=2>* 请通过 <a href="#currentUser">omApp.currentUser</a> 来获取当前已登录用户信息。</font></p>
+</li>
+<li>
+<p>代码示例：</p>
+<pre><code>// 如非特殊声明，所有示例代码均为 Javascript
+omApp.login(function(success) {
+    if (success) {
+        // do suceess actions.
+    } else {
+        // do something when failed.
+    }
+});
+</code></pre>
+
+</li>
+</ul>
+<h4 id="2-openpage-parameters"><a name="user-content-2-openpage-parameters" href="#2-openpage-parameters" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>2. open(<em>page</em>, <em>parameters</em>) [暂未启用]</h4>
+<ul>
+<li>
+<p>接口说明：</p>
+<p>当 HTML 页面需要跳转到其它（原生）界面时，调用此接口。</p>
+</li>
+<li>
+<p>参数说明：</p>
+<table>
+<thead>
+<tr>
+<th><strong>Name</strong></th>
+<th><strong>Type</strong></th>
+<th><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>page</td>
+<td>OMAppPage</td>
+<td>必选。见 <a href="#OMAppPage">OMAppPage枚举</a></td>
+</tr>
+<tr>
+<td>parameters</td>
+<td>Object</td>
+<td>可选。见 <a href="#OMAppPage">OMAppPage枚举</a></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p><a name="OMAppPage"><strong><em>OMAppPage</em>枚举</strong></a></p>
+<ol>
+<li>
+<p>新闻列表：<em>OMAppPage.<strong>newsList</strong></em></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>String</td>
+<td>新闻栏目 ID</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>新闻详情：<em>OMAppPage.<strong>newsDetail</strong></em></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>String</td>
+<td>新闻 ID</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>视频列表：<em>OMAppPage.<strong>videoList</strong></em></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>String</td>
+<td>视频栏目 ID</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>视频详情：<em>OMAppPage.<strong>videoDetail</strong></em></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>String</td>
+<td>视频 ID</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>金币商城：<em>OMAppPage.<strong>mall</strong></em></p>
+</li>
+<li>
+<p>金币任务：<em>OMAppPage.<strong>task</strong></em></p>
+</li>
+</ol>
+</li>
+<li>
+<p>代码示例：</p>
+<pre><code>// 打开金币商城页
+omApp.open(OMAppPage.mall); 
+// 打开金币任务页
+omApp.open(OMAppPage.task); 
+</code></pre>
+
+</li>
+</ul>
+<h4 id="3-navigation"><a name="user-content-3-navigation" href="#3-navigation" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>3. navigation</h4>
+<h5 id="31-navigationpushurl-animated"><a name="user-content-31-navigationpushurl-animated" href="#31-navigationpushurl-animated" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>3.1 navigation.push(<em>url</em>, <em>animated</em>)</h5>
+<ul>
+<li>
+<p>接口说明：</p>
+<p>导航到下级页面。</p>
+</li>
+<li>
+<p>参数说明：</p>
+<table>
+<thead>
+<tr>
+<th><strong>Name</strong></th>
+<th><strong>Type</strong></th>
+<th><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>url</td>
+<td>String</td>
+<td>必选。下级页面的 URL</td>
+</tr>
+<tr>
+<td>animated</td>
+<td>Bool</td>
+<td>可选。是否展示转场动画，默认 true</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>代码示例：</p>
+<pre><code>// 支持相对根目录的路径
+omApp.navigation.push('/relative/path/page.html'); 
+// 完整URL
+omApp.navigation.push('http://8.dev.arabsada.com/?userToken'); 
+</code></pre>
+
+</li>
+</ul>
+<h5 id="32-navigationpopanimated"><a name="user-content-32-navigationpopanimated" href="#32-navigationpopanimated" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>3.2 navigation.pop(<em>animated</em>)</h5>
+<ul>
+<li>
+<p>接口说明：</p>
+<p>返回到上级页面。</p>
+</li>
+<li>
+<p>参数说明：</p>
+<table>
+<thead>
+<tr>
+<th><strong>Name</strong></th>
+<th><strong>Type</strong></th>
+<th><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>animated</td>
+<td>Bool</td>
+<td>可选。是否展示转场动画，默认 true</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>代码示例：</p>
+<pre><code>omApp.navigation.pop(); 
+</code></pre>
+
+</li>
+</ul>
+<h5 id="33-navigationpoptoindex-animated"><a name="user-content-33-navigationpoptoindex-animated" href="#33-navigationpoptoindex-animated" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>3.3 navigation.popTo(<em>index</em>, <em>animated</em>)</h5>
+<ul>
+<li>
+<p>接口说明：</p>
+<p>返回到指定级页面。</p>
+</li>
+<li>
+<p>参数说明：</p>
+<table>
+<thead>
+<tr>
+<th><strong>Name</strong></th>
+<th><strong>Type</strong></th>
+<th><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>index</td>
+<td>Int</td>
+<td>必选。正数，目的页面所在的位置索引，0 为第一个 HTML 页面</td>
+</tr>
+<tr>
+<td>animated</td>
+<td>Bool</td>
+<td>可选。是否展示转场动画，默认 true</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>代码示例：</p>
+<pre><code>omApp.navigation.popTo(0);
+</code></pre>
+
+</li>
+</ul>
+<h5 id="34-navigationbar"><a name="user-content-34-navigationbar" href="#34-navigationbar" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>3.4 navigation.bar</h5>
+<ul>
+<li>
+<p>接口说明：</p>
+<p>Object，导航条对象，控制导航条外观的接口。</p>
+</li>
+<li>
+<p>属性说明：</p>
+<table>
+<thead>
+<tr>
+<th><strong>Name</strong></th>
+<th><strong>Type</strong></th>
+<th><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>isHidden</td>
+<td>Bool</td>
+<td>导航条是否隐藏</td>
+</tr>
+<tr>
+<td>title</td>
+<td>String</td>
+<td>标题</td>
+</tr>
+<tr>
+<td>titleColor</td>
+<td>String</td>
+<td>标题颜色</td>
+</tr>
+<tr>
+<td>backgroundColor</td>
+<td>String</td>
+<td>背景色</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>代码示例：</p>
+<pre><code>omApp.navigation.bar.isHidden = false;
+omApp.navigation.bar.title = '自定义的标题';
+omApp.navigation.bar.titleColor = '#FF0000';
+omApp.navigation.bar.backgroundColor = '#0000FF';
+</code></pre>
+
+</li>
+</ul>
+<h4 id="4-theme-currenttheme"><a name="user-content-4-theme-currenttheme" href="#4-theme-currenttheme" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4. <del><em>theme</em></del> currentTheme</h4>
+<pre><code>2017-06-17: 接口由 `theme` 改为 `currentTheme`
+</code></pre>
+<ul>
+<li>
+<p>接口说明：</p>
+<p>App 属性，当前主题名称。</p>
+</li>
+<li>
+<p>属性说明：</p>
+<p>可写，<a href="#OMAppTheme">OMAppTheme</a> 枚举值。</p>
+</li>
+<li>
+<p><a name="OMAppTheme"><strong><em>OMAppTheme</em>枚举</strong></a></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><em>OMAppTheme.<strong>day</strong></em></td>
+<td>String</td>
+<td>新闻栏目 ID</td>
+</tr>
+<tr>
+<td><em>OMAppTheme.<strong>night</strong></em></td>
+<td>String</td>
+<td>新闻栏目 ID</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>代码示例：</p>
+<pre><code>if (omApp.currentTheme == OMAppTheme.day) {
+    // do something when the theme is day.
+} else if (omApp.currentTheme == OMAppTheme.night) {
+    // do something when the theme is night.
+}
+</code></pre>
+
+</li>
+</ul>
+<h4 id="5-statistictype-parameters"><a name="user-content-5-statistictype-parameters" href="#5-statistictype-parameters" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>5. statistic(<em>type</em>, <em>parameters</em>) [暂未启用]</h4>
+<ul>
+<li>
+<p>接口说明：</p>
+<p>用户行为统计，埋点。</p>
+</li>
+<li>
+<p>参数说明：</p>
+<table>
+<thead>
+<tr>
+<th><strong>Name</strong></th>
+<th><strong>Type</strong></th>
+<th><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>type</td>
+<td>OMStatisticType</td>
+<td>见 <a href="#OMStatisticType">OMStatisticType枚举</a></td>
+</tr>
+<tr>
+<td>parameters</td>
+<td>Object</td>
+<td>见 <a href="#OMStatisticType">OMStatisticType枚举</a></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p><a name="OMStatisticType"><strong><em>OMStatisticType</em>枚举</strong></a></p>
+<ol>
+<li>
+<p>跳转金币商城：<em>OMStatisticType.<strong>openMall</strong></em></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>type</td>
+<td>String</td>
+<td>根据需求文档，从金币任务内容页跳转到金币商城值为 2</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>跳转金币任务：<em>OMStatisticType.<strong>openTask</strong></em></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>type</td>
+<td>String</td>
+<td>根据需求文档，从金币商城内容页跳转到金币任务值为 3</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ol>
+</li>
+<li>
+<p>代码示例：</p>
+<pre><code>omApp.statistic(OMStatisticType.openMall, {&quot;type&quot;: 2});
+omApp.statistic(OMStatisticType.openMall, {&quot;type&quot;: 3});
+</code></pre>
+
+</li>
+</ul>
+<h4 id="6-currentuser"><a name="user-content-6-currentuser" href="#6-currentuser" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>6. <a name="currentUser">currentUser</a></h4>
+<ul>
+<li>
+<p>接口说明：</p>
+<p>只读非空属性，Object，包含用户信息的对象。请用 <code>isOnline</code> 属性来区分用户是否登录。</p>
+</li>
+<li>
+<p>属性说明：</p>
+<table>
+<thead>
+<tr>
+<th><strong>Name</strong></th>
+<th><strong>Type</strong></th>
+<th><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>isOnline</td>
+<td>Bool</td>
+<td>是否已登录</td>
+</tr>
+<tr>
+<td>id</td>
+<td>String</td>
+<td>用户ID</td>
+</tr>
+<tr>
+<td>name</td>
+<td>String</td>
+<td>用户名</td>
+</tr>
+<tr>
+<td>type</td>
+<td>String</td>
+<td>见 <a href="#OMUserType">OMUserType枚举</a></td>
+</tr>
+<tr>
+<td>coin</td>
+<td>Int</td>
+<td>用户金币数</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p><a name="OMUserType"><strong><em>OMUserType</em>枚举</strong></a></p>
+<table>
+<thead>
+<tr>
+<th><strong>Name</strong></th>
+<th><strong>Type</strong></th>
+<th><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><em>OMUserType.<strong>visitor</strong></em></td>
+<td>String</td>
+<td>游客用户</td>
+</tr>
+<tr>
+<td><em>OMUserType.<strong>google</strong></em></td>
+<td>String</td>
+<td>Google 登录用户</td>
+</tr>
+<tr>
+<td><em>OMUserType.<strong>facebook</strong></em></td>
+<td>String</td>
+<td>Facebook 登录用户</td>
+</tr>
+<tr>
+<td><em>OMUserType.<strong>twitter</strong></em></td>
+<td>String</td>
+<td>Twitter 登录用户</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>代码示例：</p>
+<pre><code>// 判断用户是否登录
+if (omApp.currentUser.isOnline) {
+    // do something when user is logged.
+} else {
+    // do something
+}
+// get the user name
+var userName = omApp.currentUser.name;
+</code></pre>
+
+</li>
+</ul>
+<h4 id="7-httprequestobject-callback"><a name="user-content-7-httprequestobject-callback" href="#7-httprequestobject-callback" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>7. http(<em>requestObject</em>, <em>callback</em>)</h4>
+<ul>
+<li>接口说明：</li>
+</ul>
+<p>HTML 页面不需要负责、保持用户登录状态，App 在此接口中为 HTML 页面提供包含用户信息的网络请求。</p>
+<ul>
+<li>
+<p>参数说明：</p>
+<table>
+<thead>
+<tr>
+<th><strong>Name</strong></th>
+<th><strong>Type</strong></th>
+<th><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>requestObject</td>
+<td>Object</td>
+<td>必选。网络请求</td>
+</tr>
+<tr>
+<td>callback</td>
+<td>Function</td>
+<td>可选。网络请求的回调</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>requestObject 对象属性：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th><strong>Name</strong></th>
+<th><strong>Type</strong></th>
+<th><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>url</td>
+<td>Object</td>
+<td>必选。url</td>
+</tr>
+<tr>
+<td>method</td>
+<td>String</td>
+<td>必选。值必须是 GET/POST，区分大小写</td>
+</tr>
+<tr>
+<td>params</td>
+<td>Object</td>
+<td>可选。网络请求参数</td>
+</tr>
+<tr>
+<td>headers</td>
+<td>Object</td>
+<td>可选。网络请求的header</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>callback 函数参数：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th><strong>Name</strong></th>
+<th><strong>Type</strong></th>
+<th><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>success</td>
+<td>Bool</td>
+<td>网络请求是否成功</td>
+</tr>
+<tr>
+<td>resultObject</td>
+<td>Any</td>
+<td>网络请求返回的数据（如果有）</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>代码示例：</p>
+<pre><code>var requestObject = {
+    url: &quot;http://api.onemena.com/&quot;,
+    method: &quot;GET&quot;,
+    params: {&quot;name&quot;: &quot;John&quot;}
+};
+omApp.http(requestObject, function(success, resultObject) {
+    if (!success) {
+        // do something when failed.
+        return;
+    }
+    // do suceess actions.
+});
+</code></pre>
+
+</li>
+</ul>
+<hr />
+<h2 id="app-html"><a name="user-content-app-html" href="#app-html" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>第二部分：App 访问 HTML</h2>
+<pre><code>HTML 提供 Javascript 接口实现，App 通过调用该接口实现对 HTML 的访问。
+</code></pre>
+<h3 id="_7"><a name="user-content-_7" href="#_7" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>接口名称</h3>
+<pre><code>`omHTML`
+</code></pre>
+<h3 id="_8"><a name="user-content-_8" href="#_8" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>调用方式</h3>
+<pre><code>`omHTML` 或 `window.omHTML`
+</code></pre>
+<h3 id="_9"><a name="user-content-_9" href="#_9" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>方法列表</h3>
+<h4 id="1"><a name="user-content-1" href="#1" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>1. ***</h4>
+<ul>
+<li>
+<p>接口说明：<br />
+    ***</p>
+</li>
+<li>
+<p>参数说明：</p>
+<table>
+<thead>
+<tr>
+<th><strong>Name</strong></th>
+<th><strong>Type</strong></th>
+<th><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>***</td>
+<td>***</td>
+<td>***</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>代码示例：</p>
+<pre><code>
+</code></pre>
+
+</li>
+</ul>
+<hr />
+<h2 id="omapp-url"><a name="user-content-omapp-url" href="#omapp-url" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>第三部分：<code>omApp</code> 基于 URL 交互方式的实现</h2>
+<pre><code>金币商城、金币任务一期，安卓、iOS都使用的是基于 URL 的交互方式。
+</code></pre>
+<h3 id="1-api-url"><a name="user-content-1-api-url" href="#1-api-url" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>1. API 与 URL</h3>
+<table>
+<thead>
+<tr>
+<th><strong>API</strong></th>
+<th><strong>URL</strong></th>
+<th><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>omApp.login</td>
+<td>app://login/?taskID=&hellip;</td>
+<td></td>
+</tr>
+<tr>
+<td>omApp.open</td>
+<td>app://open/?page=&hellip;&amp;id=&hellip;</td>
+<td></td>
+</tr>
+<tr>
+<td>omApp.navigation.push</td>
+<td>app://push/?url=&hellip;</td>
+<td></td>
+</tr>
+<tr>
+<td>omApp.navigation.pop</td>
+<td>app://pop/</td>
+<td></td>
+</tr>
+<tr>
+<td>omApp.navigation.popTo</td>
+<td>app://popTo/?index=&hellip;</td>
+<td></td>
+</tr>
+<tr>
+<td>omApp.navigation.bar</td>
+<td>app://navigationBar/?title=..</td>
+<td></td>
+</tr>
+<tr>
+<td>omApp.theme</td>
+<td>app://theme/?name=&hellip;</td>
+<td></td>
+</tr>
+<tr>
+<td>omApp.statistic</td>
+<td>app://statistic/?key1=&hellip;&amp;key2=&hellip;</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="2-url"><a name="user-content-2-url" href="#2-url" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>2. URL 方式回调的处理</h3>
+<h4 id="21-omappdidfinishloginingtaskid-resultobject"><a name="user-content-21-omappdidfinishloginingtaskid-resultobject" href="#21-omappdidfinishloginingtaskid-resultobject" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>2.1 omApp.didFinishLogining(<em>taskID</em>, <em>resultObject</em>)</h4>
+<ul>
+<li>
+<p>接口说明：<br />
+    通过URL交互方式回调处理函数。</p>
+</li>
+<li>
+<p>参数说明：</p>
+<table>
+<thead>
+<tr>
+<th><strong>Name</strong></th>
+<th><strong>Type</strong></th>
+<th><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>taskID</td>
+<td>String</td>
+<td>调用此次登录的 taskID</td>
+</tr>
+<tr>
+<td>resultObject</td>
+<td>Object</td>
+<td>登录结果信息</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>代码示例：</p>
+<pre><code class="swift">// Swift
+// App 执行 Javascript. 在执行为登录操作后，将登录信息返回给 HTML
+let token = &quot;a user token string.&quot; 
+let js = &quot;omApp.didFinishLogining(\&quot;\(taskID)\&quot;, {\&quot;userToken\&quot;: \(token)})&quot;
+_ = webView.stringByEvaluatingJavaScript(from: js)
+</code></pre>
+
+</li>
+</ul></article></body></html>
