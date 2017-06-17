@@ -71,7 +71,7 @@
     });
     ```
 
-#### 2. open(*page*, *parameters*, ...)
+#### 2. open(*page*, *parameters*, ...) [暂未启用]
 
 - 接口说明：
     当 HTML 页面需要跳转到其它（原生）界面时，调用此接口。
@@ -228,7 +228,7 @@
     }
     ```
 
-#### 5. statistic(*type*, *parameters*)
+#### 5. statistic(*type*, *parameters*) 【暂未启用】
 
 - 接口说明：
     用户行为统计，埋点。
