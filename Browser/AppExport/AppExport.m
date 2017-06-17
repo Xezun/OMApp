@@ -231,8 +231,15 @@ AppTheme const _Nonnull AppThemeNight = @"night";
 
 @implementation NSObject (UIWebViewJSContext)
 
-- (void)webView:(UIWebView *)webView didCreateJavaScriptContext:(JSContext *)context forFrame:(id)frame {
+- (void)webView:(UIWebView *)webView didCreateJavaScriptContext:(JSContext *)context {
     
+}
+
+- (void)webView:(UIWebView *)webView didCreateJavaScriptContext:(JSContext *)context forFrame:(id)frame {
+    NSObject *delegate = webView.delegate;
+    if ([delegate isKindOfClass:[NSObject class]]) {
+        [delegate webView:webView didCreateJavaScriptContext:context];
+    }
 }
 
 @end

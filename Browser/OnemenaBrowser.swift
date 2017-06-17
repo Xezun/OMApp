@@ -52,9 +52,11 @@ class OnemenaBrowser: UIViewController, NavigationBarCustomizable, NavigationGes
             UIWebView.userAgent = ua + " Onemena/" + Bundle.main.shortVersionString
         }
         
-        let app = AppExport.init(to: webView, delegate: self)
-        app.theme = "day"
-        self.export = app
+
+    }
+    
+    func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebViewNavigationType) -> Bool {
+        return true
     }
     
     
@@ -62,7 +64,10 @@ class OnemenaBrowser: UIViewController, NavigationBarCustomizable, NavigationGes
         
     }
     
-    override func webView(_ webView: UIWebView, didCreateJavaScriptContext context: JSContext, forFrame frame: Any) {
+    @objc override func webView(_ webView: UIWebView, didCreateJavaScriptContext context: JSContext) {
+        let app = AppExport.init(to: webView, delegate: self)
+        app.theme = "day"
+        self.export = app
         print("didCreateJavaScriptContext")
     }
     
