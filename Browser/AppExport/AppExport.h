@@ -25,7 +25,8 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @protocol AppExport <NSObject, JSExport>
 @property (nonatomic, strong, nonnull) AppNavigationExport *navigation;
-@property (nonatomic, strong, nonnull) NSString *theme;
+@property (nonatomic, strong, nonnull) NSString *currentTheme;
+@property (nonatomic, strong, nonnull) NSString *theme __deprecated;
 @property (nonatomic, strong, nonnull) AppUserExport *currentUser;
 - (void)login:(nullable JSValue *)completion;
 JSExportAs(open, - (void)open:(nonnull NSString *)page parameters:(nullable NSDictionary<NSString *, id> *)parameters);
@@ -59,7 +60,7 @@ UIKIT_EXTERN NSString * _Nonnull const UIWebViewJavaScriptContextKeyPath;
 
 @protocol AppExportDelegate <NSObject>
 
-- (void)appExport:(AppExport *)appExport theme:(AppTheme)theme;
+- (void)appExport:(AppExport *)appExport currentTheme:(AppTheme)currentTheme;
 - (void)appExport:(AppExport *)appExport loginWithCompletion:(void (^)(BOOL))completion;
 - (void)appExport:(AppExport *)appExport open:(AppPage)page parameters:(nullable NSDictionary<NSString *, id> *)parameters;
 - (void)appExport:(AppExport *)appExport present:(nonnull NSString *)url;
@@ -117,11 +118,5 @@ FOUNDATION_EXPORT AppTheme const _Nonnull AppThemeNight;
 
 
 
-
-@interface NSObject (UIWebViewJSContext)
-
-- (void)webView:(UIWebView *)webView didCreateJavaScriptContext:(JSContext *)context;
-
-@end
 
 NS_ASSUME_NONNULL_END

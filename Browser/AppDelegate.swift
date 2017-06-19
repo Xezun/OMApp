@@ -16,6 +16,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         window?.backgroundColor = .white
+        
+        let ua = UIWebView.userAgent
+        if !ua.contains("Onemena") {
+            UIWebView.userAgent = ua + " Onemena/" + Bundle.main.shortVersionString
+        }
         return true
     }
 

@@ -25,9 +25,7 @@ const void *const UIWebViewJavaScriptContext = &UIWebViewJavaScriptContext;
 
 @implementation AppExport
 
-@synthesize currentUser = _currentUser;
-@synthesize navigation = _navigation;
-@synthesize theme = _theme;
+@synthesize currentUser = _currentUser, currentTheme = _currentTheme, navigation = _navigation;
 
 - (void)dealloc {
 #if DEBUG
@@ -74,11 +72,19 @@ const void *const UIWebViewJavaScriptContext = &UIWebViewJavaScriptContext;
     return self;
 }
 
-- (void)setTheme:(NSString *)theme {
-    _theme = theme;
+- (void)setCurrentTheme:(NSString *)currentTheme {
+    _currentTheme = currentTheme;
     dispatch_async(dispatch_get_main_queue(), ^{
-        [_delegate appExport:self theme:theme];
+        [_delegate appExport:self currentTheme:currentTheme];
     });
+}
+
+- (NSString *)theme {
+    return [self currentTheme];
+}
+
+- (void)setTheme:(NSString *)theme {
+    [self setCurrentTheme:theme];
 }
 
 - (void)login:(JSValue *)completion {
@@ -229,17 +235,3 @@ AppTheme const _Nonnull AppThemeNight = @"night";
 
 
 
-@implementation NSObject (UIWebViewJSContext)
-
-- (void)webView:(UIWebView *)webView didCreateJavaScriptContext:(JSContext *)context {
-    
-}
-
-- (void)webView:(UIWebView *)webView didCreateJavaScriptContext:(JSContext *)context forFrame:(id)frame {
-    NSObject *delegate = webView.delegate;
-    if ([delegate isKindOfClass:[NSObject class]]) {
-        [delegate webView:webView didCreateJavaScriptContext:context];
-    }
-}
-
-@end

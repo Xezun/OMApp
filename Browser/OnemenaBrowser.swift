@@ -24,7 +24,7 @@ class OMWebView: UIWebView {
     }
 }
 
-class OnemenaBrowser: UIViewController, NavigationBarCustomizable, NavigationGestureDrivable, UIWebViewDelegate {
+class OnemenaBrowser: UIViewController, NavigationBarCustomizable, NavigationGestureDrivable, UIWebViewDelegate, UIWebViewJavaScriptDelegate {
     
     var webView: UIWebView
     
@@ -40,6 +40,8 @@ class OnemenaBrowser: UIViewController, NavigationBarCustomizable, NavigationGes
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.dataf.dateFormat = "yyyy-MM-dd hh:mm:ss"
+        
         webView.frame = view.bounds
         webView.delegate = self
         webView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
@@ -47,28 +49,31 @@ class OnemenaBrowser: UIViewController, NavigationBarCustomizable, NavigationGes
         // webView.stringByEvaluatingJavaScript(from: "window.onerror = function(error) { setTimeout(function(){alert(error)}, 2000); }")
         customNavigationBar.barTintColor = UIColor(rgb: 0x3e84e0)
         
-        let ua = UIWebView.userAgent
-        if !ua.contains("Onemena") {
-            UIWebView.userAgent = ua + " Onemena/" + Bundle.main.shortVersionString
-        }
-        
 
-    }
-    
-    func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebViewNavigationType) -> Bool {
-        return true
-    }
-    
-    
-    func webViewDidFinishLoad(_ webView: UIWebView) {
         
+        customNavigationBar.backButton.setImage(UIImage(named: "btn_nav_back_white"), for: .normal)
+        customNavigationBar.backButton.addTarget(self, action: #selector(navBack(_:)), for: .touchUpInside);
     }
     
-    @objc override func webView(_ webView: UIWebView, didCreateJavaScriptContext context: JSContext) {
+    func navBack(_ button: UIButton) -> Void {
+        if webView.canGoBack {
+            webView.goBack();
+        } else {
+            navigationController?.popViewController(animated: true);
+        }
+    }
+    
+    func viewControllerForPushGestureInteration(_ navigationController: UINavigationController) -> UIViewController? {
+        let vc = LogsTableViewController(logs: self.logs)
+        return vc
+    }
+
+    
+    func webView(_ webView: UIWebView, didCreateJavaScriptContext context: JSContext) {
         let app = AppExport.init(to: webView, delegate: self)
-        app.theme = "day"
+        app.currentTheme = "day"
         self.export = app
-        print("didCreateJavaScriptContext")
+        print("【事件】JavaScript 环境初始化完成")
     }
     
     weak var export: AppExport?
@@ -76,6 +81,16 @@ class OnemenaBrowser: UIViewController, NavigationBarCustomizable, NavigationGes
     var loginCompletion: ((Bool)->Void)?
     var httpCompletion: ((Bool, Any?)->Void)?
     
+    
+    var logs: [String] = []
+    
+    var dataf = DateFormatter()
+    func print(_ item: Any, line: Int = #line) -> Void {
+        let string = self.dataf.string(from: Date())
+        logs.append("\(string) (\(line)) \(item)");
+        Swift.print(item)
+        Swift.print("------------------------------------------------")
+    }
 }
 
 extension OnemenaBrowser: LoginTableViewControllerDelegate {
@@ -102,8 +117,8 @@ extension OnemenaBrowser: HTTPViewControllerDelegate {
 
 extension OnemenaBrowser: AppExportDelegate {
     
-    func appExport(_ appExport: AppExport, theme: AppTheme) {
-        print("更改 Theme：\(theme)")
+    func appExport(_ appExport: AppExport, currentTheme theme: AppTheme) {
+        print("【事件】currentTheme：\(theme)")
         switch theme {
         case AppTheme.night:
             view.window?.brightness = 0.5
@@ -113,14 +128,14 @@ extension OnemenaBrowser: AppExportDelegate {
     }
     
     func appExport(_ appExport: AppExport, present url: String) {
-        print("present: \(url)")
+        print("【事件】present: \(url)")
         guard let url = URL.init(string: url) else { return }
         let vc = OnemenaBrowser(url: url)
         present(vc, animated: true, completion: nil)
     }
     
     func appExport(_ appExport: AppExport, open page: AppPage, parameters: [String : Any]?) {
-        print("open: \(page), parameters: \(String(describing: parameters))")
+        print("【事件】open: \(page), parameters: \(String(describing: parameters))")
         guard let viewControllers = tabBarController?.viewControllers else { return }
         guard viewControllers.count > 1 else {
             return
@@ -143,22 +158,24 @@ extension OnemenaBrowser: AppExportDelegate {
     }
     
     func appExport(_ appExport: AppExport, navigationPop animated: Bool) {
-        print(Thread.current)
+        print("【事件】pop")
         navigationController?.popViewController(animated: true)
     }
     
     func appExport(_ appExport: AppExport, navigationPopTo index: Int, animated: Bool) {
+        print("【事件】popTo: \(index)")
         navigationController?.popToRootViewController(animated: true)
     }
     
     func appExport(_ appExport: AppExport, navigationPush url: String, animated: Bool) {
+        print("【事件】push: \(url)")
         guard let url = URL.init(string: url) else { return }
         let vc = OnemenaBrowser(url: url)
         navigationController?.pushViewController(vc, animated: true)
     }
     
     func appExport(_ appExport: AppExport, http request: [String : Any], completion: @escaping (Bool, Any?) -> Void) {
-        print("http: \(request)")
+        print("【事件】http: \(request)")
         if UserDefaults.standard.bool(forKey: kAutoRequestDefaultsKey) {
             sendHTTP(with: request, accessToken: UserDefaults.standard.string(forKey: kAccessTokenDefaultsKey), userToken: UserDefaults.standard.string(forKey: kUserTokenDefaultsKey), completion: { (success, result) in
                 completion(success, result)
@@ -172,6 +189,7 @@ extension OnemenaBrowser: AppExportDelegate {
     }
     
     func appExport(_ appExport: AppExport, loginWithCompletion completionHandler: @escaping (Bool) -> Void) {
+        print("【事件】login")
         let viewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "login") as! LoginTableViewController
         viewController.delegate = self
         self.loginCompletion = completionHandler
@@ -179,22 +197,26 @@ extension OnemenaBrowser: AppExportDelegate {
     }
     
     func appExport(_ appExport: AppExport, updateNavigationBarVisibility isHidden: Bool) {
+        print("【事件】navigation.bar.isHidden: \(isHidden)")
         customNavigationBar.isHidden = isHidden
     }
     
     func appExport(_ appExport: AppExport, updateNavigationBarTitle title: String?) {
+        print("【事件】navigation.bar.title: \(String(describing: title))")
         customNavigationBar.title = title
     }
     
     func appExport(_ appExport: AppExport, updateNavigationBarTitleColor titleColor: UIColor) {
+        print("【事件】navigation.bar.titleColor: \(titleColor)")
         customNavigationBar.titleButton.setTitleColor(titleColor, for: .normal)
     }
     
     func appExport(_ appExport: AppExport, updateNavigationBarBackgroundColor backgroundColor: UIColor) {
+        print("【事件】navigation.bar.backgroundColor: \(backgroundColor)")
         customNavigationBar.barTintColor = backgroundColor
     }
     
     func appExport(_ appExport: AppExport, didCatchAnException expection: String) {
-        print(expection)
+        print("【异常】 \(expection)")
     }
 }
