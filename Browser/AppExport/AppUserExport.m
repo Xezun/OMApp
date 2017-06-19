@@ -17,6 +17,17 @@ AppUserType const _Nonnull AppUserTypeTwitter = @"twitter";
 
 @synthesize id = _id, name = _name, coin = _coin, type = _type;
 
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        _id = @"";
+        _name = @"";
+        _coin = 0;
+        _type = AppUserTypeVisitor;
+    }
+    return self;
+}
+
 - (BOOL)isOnline {
     return ![self.type isEqualToString:AppUserTypeVisitor];
 }

@@ -72,7 +72,7 @@ class LoginTableViewController: UITableViewController, NavigationBarCustomizable
             
             navigationController?.popViewController(animated: true)
         default:
-            super.tableView(tableView, didSelectRowAt: indexPath)
+            break;
         }
     }
 

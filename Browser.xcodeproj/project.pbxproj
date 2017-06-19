@@ -12,6 +12,7 @@
 		DD10F9F81EF78383005E0FE1 /* LogsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD10F9F71EF78383005E0FE1 /* LogsTableViewController.swift */; };
 		DD10F9FB1EF78524005E0FE1 /* LogsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD10F9F91EF78524005E0FE1 /* LogsTableViewCell.swift */; };
 		DD10F9FC1EF78524005E0FE1 /* LogsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD10F9FA1EF78524005E0FE1 /* LogsTableViewCell.xib */; };
+		DD10FA081EF7A60B005E0FE1 /* ConsoleTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD10FA071EF7A60B005E0FE1 /* ConsoleTableViewController.swift */; };
 		DDB7A3171EF1103C00BA986F /* OMApp.js in Resources */ = {isa = PBXBuildFile; fileRef = DDB7A3151EF1103C00BA986F /* OMApp.js */; };
 		DDB7A3411EF12DF100BA986F /* CustomNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB7A3341EF12DF100BA986F /* CustomNavigationBar.swift */; };
 		DDB7A3421EF12DF100BA986F /* UIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB7A3361EF12DF100BA986F /* UIButton.swift */; };
@@ -49,6 +50,7 @@
 		DD10F9F71EF78383005E0FE1 /* LogsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogsTableViewController.swift; sourceTree = "<group>"; };
 		DD10F9F91EF78524005E0FE1 /* LogsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogsTableViewCell.swift; sourceTree = "<group>"; };
 		DD10F9FA1EF78524005E0FE1 /* LogsTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LogsTableViewCell.xib; sourceTree = "<group>"; };
+		DD10FA071EF7A60B005E0FE1 /* ConsoleTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConsoleTableViewController.swift; sourceTree = "<group>"; };
 		DD4FF4811EF3A7D600DF3BE4 /* Browser-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Browser-Bridging-Header.h"; sourceTree = "<group>"; };
 		DD545C3C1EF3761000D3D119 /* Browser-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Browser-Bridging-Header.h"; sourceTree = "<group>"; };
 		DDB7A3151EF1103C00BA986F /* OMApp.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = OMApp.js; sourceTree = "<group>"; };
@@ -123,6 +125,14 @@
 				DD10F9FA1EF78524005E0FE1 /* LogsTableViewCell.xib */,
 			);
 			name = logs;
+			sourceTree = "<group>";
+		};
+		DD10F9FE1EF7A502005E0FE1 /* console */ = {
+			isa = PBXGroup;
+			children = (
+				DD10FA071EF7A60B005E0FE1 /* ConsoleTableViewController.swift */,
+			);
+			name = console;
 			sourceTree = "<group>";
 		};
 		DDB7A3131EF1103C00BA986F /* OMApp */ = {
@@ -223,6 +233,7 @@
 				DDC104B41EEA46F90075C41F /* LoginTableViewController.swift */,
 				DDC104B51EEA46F90075C41F /* OpenViewController.swift */,
 				DDB7A34A1EF1352000BA986F /* HTTPViewController.swift */,
+				DD10F9FE1EF7A502005E0FE1 /* console */,
 				DD10F9FD1EF7998C005E0FE1 /* logs */,
 				DDC1049D1EEA44F00075C41F /* Main.storyboard */,
 				DDC104A01EEA44F00075C41F /* Assets.xcassets */,
@@ -394,6 +405,7 @@
 				DDD9529D1EF3E64100EBF24B /* AppUserExport.m in Sources */,
 				DD10F9F61EF77221005E0FE1 /* UIWebView+JavaScript.m in Sources */,
 				DDB7A3441EF12DF100BA986F /* MenuBar.swift in Sources */,
+				DD10FA081EF7A60B005E0FE1 /* ConsoleTableViewController.swift in Sources */,
 				DD10F9FB1EF78524005E0FE1 /* LogsTableViewCell.swift in Sources */,
 				DDB7A3421EF12DF100BA986F /* UIButton.swift in Sources */,
 				DDC104B81EEA46F90075C41F /* LoginTableViewController.swift in Sources */,

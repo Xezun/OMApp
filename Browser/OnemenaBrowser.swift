@@ -49,10 +49,16 @@ class OnemenaBrowser: UIViewController, NavigationBarCustomizable, NavigationGes
         // webView.stringByEvaluatingJavaScript(from: "window.onerror = function(error) { setTimeout(function(){alert(error)}, 2000); }")
         customNavigationBar.barTintColor = UIColor(rgb: 0x3e84e0)
         
-
-        
+        customNavigationBar.infoButton.setImage(#imageLiteral(resourceName: "btn_nav_more_white"), for: .normal)
+        customNavigationBar.infoButton.addTarget(self, action: #selector(console(_:)), for: .touchUpInside)
         customNavigationBar.backButton.setImage(UIImage(named: "btn_nav_back_white"), for: .normal)
         customNavigationBar.backButton.addTarget(self, action: #selector(navBack(_:)), for: .touchUpInside);
+    }
+    
+    func console(_ button: UIButton) -> Void {
+        let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "console") as! ConsoleTableViewController
+        vc.webView = webView
+        self.present(vc, animated: true, completion: nil)
     }
     
     func navBack(_ button: UIButton) -> Void {
@@ -219,4 +225,7 @@ extension OnemenaBrowser: AppExportDelegate {
     func appExport(_ appExport: AppExport, didCatchAnException expection: String) {
         print("【异常】 \(expection)")
     }
+    
+    
+    
 }
