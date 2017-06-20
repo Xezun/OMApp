@@ -814,6 +814,7 @@
                                                 </label>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="设置的 token 将被用于网络请求" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="nOd-Ii-ltd">
                                                     <rect key="frame" x="136" y="8" width="223" height="27.5"/>
+                                                    <string key="text">eyJpdiI6Ijg4ZlFLU2oxeElnQlJtWXRSM055MEE9PSIsInZhbHVlIjoiME1mMzlNbDN6NDhlQzZFa2M5aTl0dz09IiwibWFjIjoiYjEwZTkyN2M3ZWY3YjFmY2FmNzdkYzkzODVmMzk1ZWViYTA1ZDM3MGVlZWRlZDQyY2JlY2Q1NGE2NzlmOTVmYSJ9</string>
                                                     <nil key="textColor"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                     <textInputTraits key="textInputTraits"/>

@@ -295,6 +295,7 @@
     | name            | String      | 用户名           |
     | type            | String      | 见 [OMUserType枚举](#OMUserType)    |
     | coin            | Int         | 用户金币数        |
+    | token           | String      | user token        |
 
 - <a name="OMUserType">***OMUserType*枚举**</a>
 
