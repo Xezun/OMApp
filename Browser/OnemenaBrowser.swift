@@ -76,7 +76,7 @@ class OnemenaBrowser: UIViewController, NavigationBarCustomizable, NavigationGes
 
     
     func webView(_ webView: UIWebView, didCreateJavaScriptContext context: JSContext) {
-        let app = AppExport.init(to: webView, delegate: self)
+        let app = AppExport.init(context: context, delegate: self)
         app.currentTheme = "day"
         self.export = app
         print("【事件】JavaScript 环境初始化完成")
@@ -180,21 +180,28 @@ extension OnemenaBrowser: AppExportDelegate {
         navigationController?.pushViewController(vc, animated: true)
     }
     
-    func appExport(_ appExport: AppExport, http request: [String : Any], completion: @escaping (Bool, Any?) -> Void) {
+    func appExport(_ appExport: AppExport, http request: AppHTTPRequest, completion: @escaping (Bool, Any?) -> Void) {
         print("【事件】http: \(request)")
+        var dict: [String: Any] = [
+            "url": request.url,
+            "method": request.method
+        ]
+        dict["params"] = request.params
+        dict["headers"] = request.headers
         if UserDefaults.standard.bool(forKey: kAutoRequestDefaultsKey) {
-            sendHTTP(with: request, accessToken: UserDefaults.standard.string(forKey: kAccessTokenDefaultsKey), userToken: UserDefaults.standard.string(forKey: kUserTokenDefaultsKey), completion: { (success, result) in
+            
+            sendHTTP(with: dict, accessToken: UserDefaults.standard.string(forKey: kAccessTokenDefaultsKey), userToken: UserDefaults.standard.string(forKey: kUserTokenDefaultsKey), completion: { (success, result) in
                 completion(success, result)
             })
         } else {
-            let viewController = HTTPViewController.viewController(requestObject: request)
+            let viewController = HTTPViewController.viewController(requestObject: dict)
             viewController.delegate = self
             self.httpCompletion = completion
             navigationController?.pushViewController(viewController, animated: true)
         }
     }
     
-    func appExport(_ appExport: AppExport, loginWithCompletion completionHandler: @escaping (Bool) -> Void) {
+    func appExport(_ appExport: AppExport, login completionHandler: @escaping (Bool) -> Void) {
         print("【事件】login")
         let viewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "login") as! LoginTableViewController
         viewController.delegate = self

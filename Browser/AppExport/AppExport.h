@@ -36,11 +36,9 @@ JSExportAs(http, - (void)http:(nonnull NSDictionary<NSString *, id> *)request co
 
 
 
-UIKIT_EXTERN NSString * _Nonnull const UIWebViewJavaScriptContextKeyPath;
-
 @interface AppExport : NSObject <AppExport>
 
-+ (AppExport *)exportTo:(nonnull UIWebView *)webView delegate:(nullable id<AppExportDelegate>)delegate;
++ (AppExport *)exportWithContext:(nonnull JSContext *)context delegate:(nullable id<AppExportDelegate>)delegate;
 
 @property (nonatomic, weak, nullable) id<AppExportDelegate> delegate;
 
@@ -54,17 +52,22 @@ UIKIT_EXTERN NSString * _Nonnull const UIWebViewJavaScriptContextKeyPath;
 
 
 
-
+@protocol AppHTTPRequest <NSObject>
+@property (nonatomic, copy, readonly, nonnull) NSString *url;
+@property (nonatomic, copy, readonly, nonnull) NSString *method;
+@property (nonatomic, copy, readonly, nullable) NSString *params;
+@property (nonatomic, copy, readonly, nullable) NSString *headers;
+@end
 
 @protocol AppNavigationBarExport;
 
 @protocol AppExportDelegate <NSObject>
 
 - (void)appExport:(AppExport *)appExport currentTheme:(AppTheme)currentTheme;
-- (void)appExport:(AppExport *)appExport loginWithCompletion:(void (^)(BOOL))completion;
+- (void)appExport:(AppExport *)appExport login:(void (^)(BOOL))completion;
 - (void)appExport:(AppExport *)appExport open:(AppPage)page parameters:(nullable NSDictionary<NSString *, id> *)parameters;
 - (void)appExport:(AppExport *)appExport present:(nonnull NSString *)url;
-- (void)appExport:(AppExport *)appExport http:(NSDictionary<NSString *, id> *)request completion:(void (^)(BOOL success, id _Nullable result))completion;
+- (void)appExport:(AppExport *)appExport http:(id<AppHTTPRequest>)request completion:(void (^)(BOOL success, id _Nullable result))completion;
 
 - (void)appExport:(AppExport *)appExport navigationPush:(NSString *)url animated:(BOOL)animated;
 - (void)appExport:(AppExport *)appExport navigationPop:(BOOL)animated;

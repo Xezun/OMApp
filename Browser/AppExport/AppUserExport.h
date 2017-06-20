@@ -28,6 +28,7 @@ FOUNDATION_EXPORT AppUserType const _Nonnull AppUserTypeTwitter;
 @property (nonatomic, copy, nullable, readonly) NSString *id;
 @property (nonatomic, copy, nullable, readonly) NSString *name;
 @property (nonatomic, copy, nullable, readonly) NSString *type;
+@property (nonatomic, copy, nullable, readonly) NSString *token __deprecated;
 @property (nonatomic, readonly) NSInteger coin;
 @end
 
@@ -39,5 +40,6 @@ FOUNDATION_EXPORT AppUserType const _Nonnull AppUserTypeTwitter;
 @property (nonatomic, copy, nullable) NSString *id;
 @property (nonatomic, copy, nullable) NSString *name;
 @property (nonatomic, copy, nullable) NSString *type;
+@property (nonatomic, copy, nullable) NSString *token;
 @property (nonatomic) NSInteger coin;
 @end

@@ -8,28 +8,29 @@
 
 #import "AppUserExport.h"
 
-AppUserType const _Nonnull AppUserTypeVisitor = @"visitor";
-AppUserType const _Nonnull AppUserTypeGoogle = @"facebook";
-AppUserType const _Nonnull AppUserTypeFacebook = @"google";
-AppUserType const _Nonnull AppUserTypeTwitter = @"twitter";
+AppUserType const _Nonnull AppUserTypeVisitor   = @"visitor";
+AppUserType const _Nonnull AppUserTypeGoogle    = @"facebook";
+AppUserType const _Nonnull AppUserTypeFacebook  = @"google";
+AppUserType const _Nonnull AppUserTypeTwitter   = @"twitter";
 
 @implementation AppUserExport
 
-@synthesize id = _id, name = _name, coin = _coin, type = _type;
+@synthesize id = _id, name = _name, coin = _coin, type = _type, token = _token;
 
 - (instancetype)init {
     self = [super init];
     if (self) {
-        _id = @"";
-        _name = @"";
+        _id = nil;
+        _name = nil;
         _coin = 0;
+        _token = nil;
         _type = AppUserTypeVisitor;
     }
     return self;
 }
 
 - (BOOL)isOnline {
-    return ![self.type isEqualToString:AppUserTypeVisitor];
+    return (_type != nil && ![self.type isEqualToString:AppUserTypeVisitor]);
 }
 
 @end

@@ -13,9 +13,13 @@
 #import "AppNavigationExport.h"
 #import "AppUserExport.h"
 
-NSString * _Nonnull const UIWebViewJavaScriptContextKeyPath = @"documentView.webView.mainFrame.javaScriptContext";
 
-const void *const UIWebViewJavaScriptContext = &UIWebViewJavaScriptContext;
+@interface AppHTTPRequest : NSObject <AppHTTPRequest>
+@property (nonatomic, copy, nonnull) NSString *url;
+@property (nonatomic, copy, nonnull) NSString *method;
+@property (nonatomic, copy, nullable) NSString *params;
+@property (nonatomic, copy, nullable) NSString *headers;
+@end
 
 @interface AppExport () <AppNavigationExportDelegate>
 
@@ -33,13 +37,11 @@ const void *const UIWebViewJavaScriptContext = &UIWebViewJavaScriptContext;
 #endif
 }
 
-+ (AppExport *)exportTo:(UIWebView *)webView delegate:(id<AppExportDelegate>)delegate {
++ (AppExport *)exportWithContext:(nonnull JSContext *)context delegate:(nullable id<AppExportDelegate>)delegate {
     AppNavigationExport *navigation = [[AppNavigationExport alloc] init];
     AppUserExport *currentUser = [[AppUserExport alloc] init];
     
     AppExport *appExport = [[AppExport alloc] initWithNavigation:navigation currentUser:currentUser];
-    
-    JSContext *context = [webView valueForKeyPath:UIWebViewJavaScriptContextKeyPath];
     
     context[@"OMAppPage"] = [[AppPageExport alloc] init];
     context[@"OMAppTheme"] = [[AppThemeExport alloc] init];
@@ -53,8 +55,6 @@ const void *const UIWebViewJavaScriptContext = &UIWebViewJavaScriptContext;
             [weakObject.delegate appExport:weakObject didCatchAnException:exception.toString];
         });
     }];
-    
-    objc_setAssociatedObject(webView, UIWebViewJavaScriptContext, context, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     
     appExport.context = context;
     appExport.delegate = delegate;
@@ -89,7 +89,7 @@ const void *const UIWebViewJavaScriptContext = &UIWebViewJavaScriptContext;
 
 - (void)login:(JSValue *)completion {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [_delegate appExport:self loginWithCompletion:^(BOOL success) {
+        [_delegate appExport:self login:^(BOOL success) {
             [completion callWithArguments:@[@(success)]];
         }];
     });
@@ -109,8 +109,13 @@ const void *const UIWebViewJavaScriptContext = &UIWebViewJavaScriptContext;
 
 - (void)http:(NSDictionary<NSString *,id> *)request completion:(JSValue *)completion {
     // TODO:  不确定 JSValue 在异步请求的过程中是否会被释放。JSManagedValue
+    AppHTTPRequest *object = [[AppHTTPRequest alloc] init];
+    object.url      = request[@"url"];
+    object.method   = request[@"method"];
+    object.headers  = request[@"headers"];
+    object.params   = request[@"params"];
     dispatch_async(dispatch_get_main_queue(), ^{
-        [_delegate appExport:self http:request completion:^(BOOL success, id _Nullable result) {
+        [_delegate appExport:self http:object completion:^(BOOL success, id _Nullable result) {
             NSMutableArray *arguments = [NSMutableArray arrayWithObject:@(success)];
             if (result != nil) {
                 [arguments addObject:result];
@@ -180,12 +185,12 @@ const void *const UIWebViewJavaScriptContext = &UIWebViewJavaScriptContext;
 
 
 
-AppPage _Nonnull const AppPageMall = @"mall";
-AppPage _Nonnull const AppPageTask = @"task";
-AppPage _Nonnull const AppPageNewsList = @"newsList";
-AppPage _Nonnull const AppPageNewsDetail = @"newsDetail";
-AppPage _Nonnull const AppPageVideoList = @"videoList";
-AppPage _Nonnull const AppPageVideoDetail = @"videoDetail";
+AppPage _Nonnull const AppPageMall          = @"mall";
+AppPage _Nonnull const AppPageTask          = @"task";
+AppPage _Nonnull const AppPageNewsList      = @"newsList";
+AppPage _Nonnull const AppPageNewsDetail    = @"newsDetail";
+AppPage _Nonnull const AppPageVideoList     = @"videoList";
+AppPage _Nonnull const AppPageVideoDetail   = @"videoDetail";
 
 @implementation AppPageExport
 
@@ -235,3 +240,8 @@ AppTheme const _Nonnull AppThemeNight = @"night";
 
 
 
+@implementation AppHTTPRequest
+
+
+
+@end

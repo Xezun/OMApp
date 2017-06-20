@@ -297,6 +297,8 @@
     | coin            | Int         | 用户金币数        |
     | token           | String      | user token        |
 
+    <font size=2>* 说明： token 字段对外并不是一个好的 API 设计，未来优化的版本中将去掉此值。</font>
+
 - <a name="OMUserType">***OMUserType*枚举**</a>
 
     | **Name**                       | **Type**    | **Description** |
