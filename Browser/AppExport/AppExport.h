@@ -55,8 +55,8 @@ JSExportAs(http, - (void)http:(nonnull NSDictionary<NSString *, id> *)request co
 @protocol AppHTTPRequest <NSObject>
 @property (nonatomic, copy, readonly, nonnull) NSString *url;
 @property (nonatomic, copy, readonly, nonnull) NSString *method;
-@property (nonatomic, copy, readonly, nullable) NSString *params;
-@property (nonatomic, copy, readonly, nullable) NSString *headers;
+@property (nonatomic, copy, readonly, nullable) NSDictionary<NSString *, id> *params;
+@property (nonatomic, copy, readonly, nullable) NSDictionary<NSString *, NSString *> *headers;
 @end
 
 @protocol AppNavigationBarExport;

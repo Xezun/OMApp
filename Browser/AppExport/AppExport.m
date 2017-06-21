@@ -17,8 +17,8 @@
 @interface AppHTTPRequest : NSObject <AppHTTPRequest>
 @property (nonatomic, copy, nonnull) NSString *url;
 @property (nonatomic, copy, nonnull) NSString *method;
-@property (nonatomic, copy, nullable) NSString *params;
-@property (nonatomic, copy, nullable) NSString *headers;
+@property (nonatomic, copy, nullable) NSDictionary<NSString *, id> *params;
+@property (nonatomic, copy, nullable) NSDictionary<NSString *, NSString *> *headers;
 @end
 
 @interface AppExport () <AppNavigationExportDelegate>
