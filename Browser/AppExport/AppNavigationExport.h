@@ -9,11 +9,12 @@
 #import <Foundation/Foundation.h>
 @import JavaScriptCore;
 
-@protocol AppExportDelegate;
+@protocol AppExportDelegate, AppNavigationExportDelegate;
 
 NS_ASSUME_NONNULL_BEGIN
 
-// 导航栏
+
+/** 导航栏 */
 @protocol AppNavigationBarExport <NSObject, JSExport>
 @property (nonatomic) BOOL isHidden;
 @property (nonatomic, copy, nullable) NSString *title;
@@ -21,9 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy, nullable) NSString *backgoundColor;
 @end
 
-
-
-@protocol AppNavigationExportDelegate;
+/** 导航。处理导航行为以及管理导航条。 */
 @protocol AppNavigationExport <NSObject, JSExport>
 @property (nonatomic, strong, readonly, nonnull) NSObject<AppNavigationBarExport> *bar;
 @property (nonatomic, weak, nullable, readonly) id<AppNavigationExportDelegate> delegate;
@@ -34,11 +33,11 @@ JSExportAs(popTo, - (void)popTo:(NSInteger)index animated:(BOOL)animated);
 
 
 
+
+
 // 导航
 @interface AppNavigationExport : NSObject <AppNavigationExport>
-
 @property (nonatomic, weak, nullable) id<AppNavigationExportDelegate> delegate;
-
 @end
 
 

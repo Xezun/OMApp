@@ -38,6 +38,8 @@ class OnemenaBrowser: UIViewController, NavigationBarCustomizable, NavigationGes
         fatalError("init(coder:) has not been implemented")
     }
     
+    var logsVC = LogsTableViewController()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.dataf.dateFormat = "yyyy-MM-dd hh:mm:ss"
@@ -70,8 +72,7 @@ class OnemenaBrowser: UIViewController, NavigationBarCustomizable, NavigationGes
     }
     
     func viewControllerForPushGestureInteration(_ navigationController: UINavigationController) -> UIViewController? {
-        let vc = LogsTableViewController(logs: self.logs)
-        return vc
+        return logsVC
     }
 
     
@@ -87,13 +88,11 @@ class OnemenaBrowser: UIViewController, NavigationBarCustomizable, NavigationGes
     var loginCompletion: ((Bool)->Void)?
     var httpCompletion: ((Bool, Any?)->Void)?
     
-    
-    var logs: [String] = []
-    
     var dataf = DateFormatter()
     func print(_ item: Any, line: Int = #line) -> Void {
         let string = self.dataf.string(from: Date())
-        logs.append("\(string) (\(line)) \(item)");
+        logsVC.logs.append("\(string) (\(line)) \(item)");
+        logsVC.tableView.reloadData()
         Swift.print(item)
         Swift.print("------------------------------------------------")
     }
@@ -101,11 +100,12 @@ class OnemenaBrowser: UIViewController, NavigationBarCustomizable, NavigationGes
 
 extension OnemenaBrowser: LoginTableViewControllerDelegate {
     
-    func loginViewController(_ viewController: LoginTableViewController, didFinishLoginingWith result: (id: String, name: String, type: String, coin: String, success: Bool)) {
-        export?.currentUser.id = result.id
-        export?.currentUser.name = result.name
-        export?.currentUser.type = result.type
-        export?.currentUser.coin = Int(forceCast: result.coin)
+    func loginViewController(_ viewController: LoginTableViewController, didFinishLoginingWith result: (id: String, name: String, type: String, coin: String, token: String, success: Bool)) {
+        export?.currentUser.id      = result.id
+        export?.currentUser.name    = result.name
+        export?.currentUser.type    = result.type
+        export?.currentUser.coin    = Int(forceCast: result.coin)
+        export?.currentUser.token   = result.token
         loginCompletion?(result.success)
         loginCompletion = nil
     }
@@ -114,7 +114,34 @@ extension OnemenaBrowser: LoginTableViewControllerDelegate {
 
 extension OnemenaBrowser: HTTPViewControllerDelegate {
     
+    func toString(_ object: Any?, level: Int, indent: String) -> String {
+        guard let object = object else { return "null" }
+        
+        if let dict = object as? [AnyHashable: Any] {
+            if level > 0 {
+                let nextIndent = indent.appending("    ")
+                let string = dict.map({ (item) -> String in
+                    return "\(item.key): \(toString(item.value, level: level - 1, indent: nextIndent))"
+                }).joined(separator: ", \n\(nextIndent)")
+                return "{\n\(nextIndent)\(string)\(indent)}\n"
+            }
+            return "{\(dict.count) keyed values}"
+        } else if let array = object as? [Any] {
+            if level > 0 {
+                let nextIndent = indent.appending("    ")
+                let string = array.map({ (item) -> String in
+                    return toString(item, level: level - 1, indent: nextIndent)
+                }).joined(separator: ", ")
+                return "[\(string)]"
+            }
+            return "[\(array.count) items]"
+        } else {
+            return "\(object)"
+        }
+    }
+    
     func httpViewController(success: Bool, with result: Any?) {
+        print("网络请求结果：\(toString(result, level: 3, indent: ""))")
         httpCompletion?(success, result)
         httpCompletion = nil
     }
@@ -188,15 +215,17 @@ extension OnemenaBrowser: AppExportDelegate {
         ]
         dict["params"] = request.params
         dict["headers"] = request.headers
+        
+        self.httpCompletion = completion
+        
         if UserDefaults.standard.bool(forKey: kAutoRequestDefaultsKey) {
-            
             sendHTTP(with: dict, accessToken: UserDefaults.standard.string(forKey: kAccessTokenDefaultsKey), userToken: UserDefaults.standard.string(forKey: kUserTokenDefaultsKey), completion: { (success, result) in
-                completion(success, result)
+                // completion(success, result)
+                self.httpViewController(success: success, with: result)
             })
         } else {
             let viewController = HTTPViewController.viewController(requestObject: dict)
             viewController.delegate = self
-            self.httpCompletion = completion
             navigationController?.pushViewController(viewController, animated: true)
         }
     }

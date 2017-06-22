@@ -242,6 +242,8 @@ AppTheme const _Nonnull AppThemeNight = @"night";
 
 @implementation AppHTTPRequest
 
-
+- (NSString *)description {
+    return [NSString stringWithFormat:@"url: %@, method: %@, params: %@, headers: %@", self.url, self.method, self.params, self.headers];
+}
 
 @end

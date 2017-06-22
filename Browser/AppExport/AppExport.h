@@ -20,14 +20,12 @@ typedef NSString *AppTheme NS_EXTENSIBLE_STRING_ENUM;
 NS_ASSUME_NONNULL_BEGIN
 
 
-/**
- 定义了 OMApp 对 JavaScript 的接口。
- */
+/** 定义了 OMApp 对 JavaScript 的接口。 */
 @protocol AppExport <NSObject, JSExport>
-@property (nonatomic, strong, nonnull) AppNavigationExport *navigation;
+@property (nonatomic, strong, nonnull, readonly) AppNavigationExport *navigation;
 @property (nonatomic, strong, nonnull) NSString *currentTheme;
 @property (nonatomic, strong, nonnull) NSString *theme __deprecated;
-@property (nonatomic, strong, nonnull) AppUserExport *currentUser;
+@property (nonatomic, strong, nonnull, readonly) AppUserExport *currentUser;
 - (void)login:(nullable JSValue *)completion;
 JSExportAs(open, - (void)open:(nonnull NSString *)page parameters:(nullable NSDictionary<NSString *, id> *)parameters);
 - (void)present:(nonnull NSString *)url;

@@ -110,25 +110,25 @@ func sendHTTP(with requestObject: [String: Any], accessToken: String?, userToken
     var request = URLRequest(url: URL(string: url)!)
     request.httpMethod = method
     
+    // headers
     if let headers = requestObject["headers"] as? [String: Any] {
         for item in headers {
             request.addValue(String.init(forceCast: item.value), forHTTPHeaderField: item.key)
         }
     }
-    
-    if let userToken = userToken {
-        request.setValue(userToken, forHTTPHeaderField: "User-Token")
-    }
     if let accessToken = accessToken {
-        request.setValue(accessToken, forHTTPHeaderField: "Access-Token")
+        request.setValue(accessToken, forHTTPHeaderField: "access-token")
     }
     
-    if let tmp = requestObject["params"] as? [String: Any] {
-        let string = tmp.map({ (item) -> String in
-            return "\(item.key)=\(item.value)"
-        }).joined(separator: "&")
-        request.httpBody = string.data(using: .utf8)
+    // parameters
+    var parameters: [String: Any] = (requestObject["params"] as? [String: Any]) ?? [:]
+    if let userToken = userToken {
+        parameters["user_token"] = userToken
     }
+    let httpBody = parameters.map({ (item) -> String in
+        return "\(item.key)=\(item.value)"
+    }).joined(separator: "&")
+    request.httpBody = httpBody.data(using: .utf8)
     
     let activity = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
     activity.frame = UIScreen.main.bounds

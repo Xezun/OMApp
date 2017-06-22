@@ -10,17 +10,7 @@ import UIKit
 import XZKit
 class LogsTableViewController: UITableViewController, NavigationBarCustomizable {
     
-    var logs: [String]
-    
-    init(logs: [String]) {
-        self.logs = logs
-        super.init(style: .plain)
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
+    var logs = [String]()
 
     override func viewDidLoad() {
         super.viewDidLoad()

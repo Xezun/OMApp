@@ -10,7 +10,7 @@ import UIKit
 import XZKit
 
 protocol LoginTableViewControllerDelegate: class {
-    func loginViewController(_ viewController: LoginTableViewController, didFinishLoginingWith result: (id: String, name: String, type: String, coin: String, success: Bool)) -> Void
+    func loginViewController(_ viewController: LoginTableViewController, didFinishLoginingWith result: (id: String, name: String, type: String, coin: String, token: String, success: Bool)) -> Void
 }
 
 class LoginTableViewController: UITableViewController, NavigationBarCustomizable, NavigationGestureDrivable {
@@ -59,9 +59,10 @@ class LoginTableViewController: UITableViewController, NavigationBarCustomizable
                 let name = nameTextField.text ?? "no name"
                 let coin = coinTextField.text ?? "0"
                 let type = typeTextField.text ?? "facebook"
-                delegate?.loginViewController(self, didFinishLoginingWith: (id, name, type, coin, true))
+                let token = userTokenTextField.text ?? ""
+                delegate?.loginViewController(self, didFinishLoginingWith: (id, name, type, coin, token, true))
             } else {
-                delegate?.loginViewController(self, didFinishLoginingWith: ("", "未登录", "", "0", true))
+                delegate?.loginViewController(self, didFinishLoginingWith: ("", "未登录", "", "0", "", true))
             }
             
             if let userToken = userTokenTextField.text {

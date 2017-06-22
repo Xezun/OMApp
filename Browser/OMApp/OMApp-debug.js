@@ -1,6 +1,11 @@
 // OMApp
 
+var kOMAppUserToken = "eyJpdiI6IkN2a2xoNkdJeFF2RWNZbTRyQXMyNHc9PSIsInZhbHVlIjoiR1VlbXh0VTg1b0JPT2JvMGgzT2pSdz09IiwibWFjIjoiOTNhYjZhZWVlZDliM2Q4M2RhZGEyYzc1M2Y1NzUzMWIwMjRjMzAyYzM5OGY1Y2I5NjAyZWJiN2VmYjRjNWMzOSJ9";
+var kOMAppAccessToken = "2BB93F9A-760E-4B44-8BB4-4E9AEDF8409D";
+
 if (!(/Onemena/.test(navigator.userAgent))) {
+
+
 	/* OMAppPage 页面类型枚举定义 */
 	var _OMAppPage = (function() {
 		var kOMAppPageMall 			= "mall";
@@ -21,7 +26,11 @@ if (!(/Onemena/.test(navigator.userAgent))) {
 		return _object;
 	})();
 	Object.defineProperties(window, {
-		OMAppPage: {get: function() {return _OMAppPage;}}
+		OMAppPage: { 
+			get: function() {
+				return _OMAppPage;
+			} 
+		}
 	});
 
 	/* OMUserType 用户类型枚举定义 */
@@ -230,6 +239,24 @@ if (!(/Onemena/.test(navigator.userAgent))) {
 		// 7. HTTP
 		function _http(requestObject, callback) {
 			var xmlhttp = new XMLHttpRequest();
+			xmlhttp.open(requestObject.method, requestObject.url, true);
+
+			// 设置 headers
+			if (requestObject.headers) {
+				for (key in requestObject.headers) {
+					xmlhttp.setRequestHeader(key, requestObject.headers[key]);
+				}
+			}
+			xmlhttp.setRequestHeader("access-token", kOMAppAccessToken);
+
+			// 请求参数
+			var data = "user_token=" + encodeURIComponent(kOMAppUserToken);
+			if (requestObject.params) {
+				for (key in requestObject.params) {
+					data = data + "&" + key + "=" + encodeURIComponent(requestObject.params[key]);
+				}
+			}
+
 			xmlhttp.onreadystatechange = function() {
 				if (xmlhttp.readyState != 4) { // 小于 4 时，请求未完成。
 					return;
@@ -244,27 +271,6 @@ if (!(/Onemena/.test(navigator.userAgent))) {
 					result = JSON.parse(result);
 				}
 				callback(true, result);
-			}
-			xmlhttp.open(requestObject.method, requestObject.url, true);
-
-			// 设置 headers
-			if (requestObject.headers) {
-				for (key in requestObject.headers) {
-					xmlhttp.setRequestHeader(key, requestObject.headers[key]);
-				}
-			}
-			xmlhttp.setRequestHeader("Access-Token", "ab5a9b96-1ea7-4da1-aa96-02d6dca28cdb");
-
-			// 请求参数
-			var data = null;
-			if (requestObject.params) {
-				for (key in requestObject.params) {
-					if (data) {
-						data = data + "&" + key + "=" + encodeURIComponent(requestObject.params[key]);
-					} else {
-						data = key + "=" + encodeURIComponent(requestObject.params[key]);
-					}
-				}
 			}
 			xmlhttp.send(data);
 		}
