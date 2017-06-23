@@ -1026,7 +1026,7 @@ body .markdown-body
 <li><a href="#_4">接口名称</a></li>
 <li><a href="#_5">调用方式</a></li>
 <li><a href="#_6">方法列表</a><ul>
-<li><a href="#1-logincallback">1. login(callback)</a></li>
+<li><a href="#1-logincallbackid">1. login(callbackID)</a></li>
 <li><a href="#2-openpage-parameters">2. open(page, parameters) [暂未启用]</a></li>
 <li><a href="#3-navigation">3. navigation</a><ul>
 <li><a href="#31-navigationpushurl-animated">3.1 navigation.push(url, animated)</a></li>
@@ -1038,7 +1038,7 @@ body .markdown-body
 <li><a href="#4-theme-currenttheme">4. <del>theme</del> currentTheme</a></li>
 <li><a href="#5-statistictype-parameters">5. statistic(type, parameters) [暂未启用]</a></li>
 <li><a href="#6-currentuser">6. <a name="currentUser">currentUser</a></a></li>
-<li><a href="#7-httprequestobject-callback">7. http(requestObject, callback)</a></li>
+<li><a href="#7-httprequest-callbackid">7. http(request, callbackID)</a></li>
 </ul>
 </li>
 </ul>
@@ -1047,15 +1047,15 @@ body .markdown-body
 <li><a href="#_7">接口名称</a></li>
 <li><a href="#_8">调用方式</a></li>
 <li><a href="#_9">方法列表</a><ul>
-<li><a href="#1">1. ***</a></li>
+<li><a href="#1">1. &hellip;</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li><a href="#omapp-url">第三部分：omApp 基于 URL 交互方式的实现</a><ul>
-<li><a href="#1-api-url">1. API 与 URL</a></li>
-<li><a href="#2-url">2. URL 方式回调的处理</a><ul>
-<li><a href="#21-omappdidfinishloginingtaskid-resultobject">2.1 omApp.didFinishLogining(taskID, resultObject)</a></li>
+<li><a href="#1_1">1. 基本规则</a><ul>
+<li><a href="#11-url">1.1 URL结构</a></li>
+<li><a href="#12">1.2 回调函数的处理</a></li>
 </ul>
 </li>
 </ul>
@@ -1081,7 +1081,7 @@ body .markdown-body
 </ul>
 <hr />
 <h2 id="html-app"><a name="user-content-html-app" href="#html-app" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>第一部分：HTML 访问 App</h2>
-<pre><code>App 通过向 HTML 注册 Javascript 接口来实现 HTML 内容对 App 功能的访问。
+<pre><code>App 通过向 HTML 注册 JavaScript 接口来实现 HTML 内容对 App 功能的访问。
 </code></pre>
 <h3 id="_4"><a name="user-content-_4" href="#_4" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>接口名称</h3>
 <pre><code>`omApp`
@@ -1090,7 +1090,7 @@ body .markdown-body
 <pre><code>`omApp` 或 `window.omApp`
 </code></pre>
 <h3 id="_6"><a name="user-content-_6" href="#_6" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>方法列表</h3>
-<h4 id="1-logincallback"><a name="user-content-1-logincallback" href="#1-logincallback" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>1. login(<em>callback</em>)</h4>
+<h4 id="1-logincallbackid"><a name="user-content-1-logincallbackid" href="#1-logincallbackid" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>1. login(<em>callbackID</em>)</h4>
 <ul>
 <li>
 <p>接口说明：</p>
@@ -1108,14 +1108,14 @@ body .markdown-body
 </thead>
 <tbody>
 <tr>
-<td>callback</td>
+<td>callbackID</td>
 <td>Function</td>
 <td>可选。登录回调函数，用户返回登录结果</td>
 </tr>
 </tbody>
 </table>
 <ul>
-<li>callback 函数参数：</li>
+<li>callbackID 函数参数：</li>
 </ul>
 <table>
 <thead>
@@ -1147,6 +1147,38 @@ omApp.login(function(success) {
 });
 </code></pre>
 
+</li>
+<li>
+<p>基于 URL 的交互方式:</p>
+<ul>
+<li>
+<p>URL： <code>app://login/?callbackID=...</code></p>
+</li>
+<li>
+<p>回调： <code>omApp.didFinishLogin(callbackID, success)</code></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>callbackID</td>
+<td>String</td>
+<td>url 中的 callbackID</td>
+</tr>
+<tr>
+<td>success</td>
+<td>Bool</td>
+<td>登录是否成功</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
 </li>
 </ul>
 <h4 id="2-openpage-parameters"><a name="user-content-2-openpage-parameters" href="#2-openpage-parameters" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>2. open(<em>page</em>, <em>parameters</em>) [暂未启用]</h4>
@@ -1316,6 +1348,12 @@ omApp.navigation.push('http://8.dev.arabsada.com/?userToken');
 </code></pre>
 
 </li>
+<li>
+<p>基于 URL 的交互方式:</p>
+<ul>
+<li>URL： <code>app://navigation.push/?url=...</code></li>
+</ul>
+</li>
 </ul>
 <h5 id="32-navigationpopanimated"><a name="user-content-32-navigationpopanimated" href="#32-navigationpopanimated" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>3.2 navigation.pop(<em>animated</em>)</h5>
 <ul>
@@ -1347,6 +1385,12 @@ omApp.navigation.push('http://8.dev.arabsada.com/?userToken');
 <pre><code>omApp.navigation.pop(); 
 </code></pre>
 
+</li>
+<li>
+<p>基于 URL 的交互方式:</p>
+<ul>
+<li>URL：<code>app://navigation.pop/</code></li>
+</ul>
 </li>
 </ul>
 <h5 id="33-navigationpoptoindex-animated"><a name="user-content-33-navigationpoptoindex-animated" href="#33-navigationpoptoindex-animated" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>3.3 navigation.popTo(<em>index</em>, <em>animated</em>)</h5>
@@ -1384,6 +1428,12 @@ omApp.navigation.push('http://8.dev.arabsada.com/?userToken');
 <pre><code>omApp.navigation.popTo(0);
 </code></pre>
 
+</li>
+<li>
+<p>基于 URL 的交互方式:</p>
+<ul>
+<li>URL：<code>app://navigation.popTo/?index=...</code></li>
+</ul>
 </li>
 </ul>
 <h5 id="34-navigationbar"><a name="user-content-34-navigationbar" href="#34-navigationbar" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>3.4 navigation.bar</h5>
@@ -1435,6 +1485,12 @@ omApp.navigation.bar.backgroundColor = '#0000FF';
 </code></pre>
 
 </li>
+<li>
+<p>基于 URL 的交互方式:</p>
+<ul>
+<li>URL：<code>app://navigation.bar/?isHidden=...&amp;title=...&amp;titleColor=...</code></li>
+</ul>
+</li>
 </ul>
 <h4 id="4-theme-currenttheme"><a name="user-content-4-theme-currenttheme" href="#4-theme-currenttheme" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4. <del><em>theme</em></del> currentTheme</h4>
 <pre><code>2017-06-17: 接口由 `theme` 改为 `currentTheme`
@@ -1481,6 +1537,12 @@ omApp.navigation.bar.backgroundColor = '#0000FF';
 }
 </code></pre>
 
+</li>
+<li>
+<p>基于 URL 的交互方式:</p>
+<ul>
+<li>URL：<code>app://currentTheme/?name=...</code></li>
+</ul>
 </li>
 </ul>
 <h4 id="5-statistictype-parameters"><a name="user-content-5-statistictype-parameters" href="#5-statistictype-parameters" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>5. statistic(<em>type</em>, <em>parameters</em>) [暂未启用]</h4>
@@ -1606,8 +1668,14 @@ omApp.statistic(OMStatisticType.openMall, {&quot;type&quot;: 3});
 <td>Int</td>
 <td>用户金币数</td>
 </tr>
+<tr>
+<td>token</td>
+<td>String</td>
+<td>user token</td>
+</tr>
 </tbody>
 </table>
+<p><font size=2>* 说明： token 字段对外并不是一个好的 API 设计，未来优化的版本中将去掉此值。</font></p>
 </li>
 <li>
 <p><a name="OMUserType"><strong><em>OMUserType</em>枚举</strong></a></p>
@@ -1656,8 +1724,14 @@ var userName = omApp.currentUser.name;
 </code></pre>
 
 </li>
+<li>
+<p>基于 URL 的交互方式:</p>
+<ul>
+<li>URL：<code>app://currentUser/?name=...</code></li>
 </ul>
-<h4 id="7-httprequestobject-callback"><a name="user-content-7-httprequestobject-callback" href="#7-httprequestobject-callback" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>7. http(<em>requestObject</em>, <em>callback</em>)</h4>
+</li>
+</ul>
+<h4 id="7-httprequest-callbackid"><a name="user-content-7-httprequest-callbackid" href="#7-httprequest-callbackid" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>7. http(<em>request</em>, <em>callbackID</em>)</h4>
 <ul>
 <li>接口说明：</li>
 </ul>
@@ -1675,13 +1749,13 @@ var userName = omApp.currentUser.name;
 </thead>
 <tbody>
 <tr>
-<td>requestObject</td>
+<td>request</td>
 <td>Object</td>
 <td>必选。网络请求</td>
 </tr>
 <tr>
-<td>callback</td>
-<td>Function</td>
+<td>callbackID</td>
+<td>String</td>
 <td>可选。网络请求的回调</td>
 </tr>
 </tbody>
@@ -1721,7 +1795,7 @@ var userName = omApp.currentUser.name;
 </tbody>
 </table>
 <ul>
-<li>callback 函数参数：</li>
+<li>callbackID 函数参数：</li>
 </ul>
 <table>
 <thead>
@@ -1738,7 +1812,7 @@ var userName = omApp.currentUser.name;
 <td>网络请求是否成功</td>
 </tr>
 <tr>
-<td>resultObject</td>
+<td>result</td>
 <td>Any</td>
 <td>网络请求返回的数据（如果有）</td>
 </tr>
@@ -1747,12 +1821,12 @@ var userName = omApp.currentUser.name;
 </li>
 <li>
 <p>代码示例：</p>
-<pre><code>var requestObject = {
+<pre><code>var request = {
     url: &quot;http://api.onemena.com/&quot;,
     method: &quot;GET&quot;,
     params: {&quot;name&quot;: &quot;John&quot;}
 };
-omApp.http(requestObject, function(success, resultObject) {
+omApp.http(request, function(success, result) {
     if (!success) {
         // do something when failed.
         return;
@@ -1761,6 +1835,62 @@ omApp.http(requestObject, function(success, resultObject) {
 });
 </code></pre>
 
+</li>
+<li>
+<p>基于 URL 的交互方式:</p>
+<ul>
+<li>
+<p>URL： <code>app://http/?callbackID=...&amp;request={url: ..., method: ...}</code></p>
+</li>
+<li>
+<p>回调： <code>omApp.didFinishHTTPRequest(callbackID, success, result)</code></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>callbackID</td>
+<td>String</td>
+<td>url 中的 callbackID</td>
+</tr>
+<tr>
+<td>success</td>
+<td>Bool</td>
+<td>http 请求是否成功</td>
+</tr>
+<tr>
+<td>result</td>
+<td>String/JSON</td>
+<td>HTTP 请求到的数据</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>代码示例：</p>
+<pre><code>// 1. 为了避免 JavaScript 语法错误，建议先对字符串进行 URL 编码。
+// 2. 对于 JSON 数据，应该返回对象数据。
+
+// JavaScript URL 解码函数：
+// var string = decodeURIComponent(aString);
+// JavaScript JSON 解析函数：
+// var object = JSON.parse(aString);
+// JavaScript URL 编码函数：
+// var encodedString = encodeURIComponent(aString);
+
+// 返回 String 数据的 JS 代码：
+omApp.execute(callbackID, true, decodeURIComponent('anEncodedString'));
+// 返回 Object 数据的 JS 代码：
+omApp.execute(callbackID, true, JSON.parse(decodeURIComponent('anEncodedString')));
+</code></pre>
+
+</li>
+</ul>
 </li>
 </ul>
 <hr />
@@ -1774,7 +1904,7 @@ omApp.http(requestObject, function(success, resultObject) {
 <pre><code>`omHTML` 或 `window.omHTML`
 </code></pre>
 <h3 id="_9"><a name="user-content-_9" href="#_9" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>方法列表</h3>
-<h4 id="1"><a name="user-content-1" href="#1" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>1. ***</h4>
+<h4 id="1"><a name="user-content-1" href="#1" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>1. &hellip;</h4>
 <ul>
 <li>
 <p>接口说明：<br />
@@ -1792,9 +1922,9 @@ omApp.http(requestObject, function(success, resultObject) {
 </thead>
 <tbody>
 <tr>
-<td>***</td>
-<td>***</td>
-<td>***</td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
 </tbody>
 </table>
@@ -1808,99 +1938,22 @@ omApp.http(requestObject, function(success, resultObject) {
 </ul>
 <hr />
 <h2 id="omapp-url"><a name="user-content-omapp-url" href="#omapp-url" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>第三部分：<code>omApp</code> 基于 URL 交互方式的实现</h2>
-<pre><code>金币商城、金币任务一期，安卓、iOS都使用的是基于 URL 的交互方式。
+<pre><code>通过注入 `OMApp.js` 文件，为 HTML 页面提供与原生的交互环境。
 </code></pre>
-<h3 id="1-api-url"><a name="user-content-1-api-url" href="#1-api-url" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>1. API 与 URL</h3>
-<table>
-<thead>
-<tr>
-<th><strong>API</strong></th>
-<th><strong>URL</strong></th>
-<th><strong>Description</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>omApp.login</td>
-<td>app://login/?taskID=&hellip;</td>
-<td></td>
-</tr>
-<tr>
-<td>omApp.open</td>
-<td>app://open/?page=&hellip;&amp;id=&hellip;</td>
-<td></td>
-</tr>
-<tr>
-<td>omApp.navigation.push</td>
-<td>app://push/?url=&hellip;</td>
-<td></td>
-</tr>
-<tr>
-<td>omApp.navigation.pop</td>
-<td>app://pop/</td>
-<td></td>
-</tr>
-<tr>
-<td>omApp.navigation.popTo</td>
-<td>app://popTo/?index=&hellip;</td>
-<td></td>
-</tr>
-<tr>
-<td>omApp.navigation.bar</td>
-<td>app://navigationBar/?title=..</td>
-<td></td>
-</tr>
-<tr>
-<td>omApp.theme</td>
-<td>app://theme/?name=&hellip;</td>
-<td></td>
-</tr>
-<tr>
-<td>omApp.statistic</td>
-<td>app://statistic/?key1=&hellip;&amp;key2=&hellip;</td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<h3 id="2-url"><a name="user-content-2-url" href="#2-url" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>2. URL 方式回调的处理</h3>
-<h4 id="21-omappdidfinishloginingtaskid-resultobject"><a name="user-content-21-omappdidfinishloginingtaskid-resultobject" href="#21-omappdidfinishloginingtaskid-resultobject" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>2.1 omApp.didFinishLogining(<em>taskID</em>, <em>resultObject</em>)</h4>
+<h3 id="1_1"><a name="user-content-1_1" href="#1_1" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>1. 基本规则</h3>
+<h4 id="11-url"><a name="user-content-11-url" href="#11-url" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>1.1 URL结构</h4>
 <ul>
-<li>
-<p>接口说明：<br />
-    通过URL交互方式回调处理函数。</p>
+<li>基本形式：app://method.name/?param1=&hellip;&amp;param2=&hellip;</li>
+<li>协议名：<code>app</code>，App 通过拦截此协议名的 URL 来区分普通请求与交互请求。</li>
+<li>方法：URL 的 host 部分表示 HTML 要调用 App 的方法名。</li>
+<li>参数：URL 的 query 部分表示方法所需的参数。<ul>
+<li>参数值为基本数据类型。</li>
+<li>参数值为 Object 时，为 URL 编码后的 JSON 字符串。</li>
+</ul>
 </li>
-<li>
-<p>参数说明：</p>
-<table>
-<thead>
-<tr>
-<th><strong>Name</strong></th>
-<th><strong>Type</strong></th>
-<th><strong>Description</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>taskID</td>
-<td>String</td>
-<td>调用此次登录的 taskID</td>
-</tr>
-<tr>
-<td>resultObject</td>
-<td>Object</td>
-<td>登录结果信息</td>
-</tr>
-</tbody>
-</table>
-</li>
-<li>
-<p>代码示例：</p>
-<pre><code class="swift">// Swift
-// App 执行 Javascript. 在执行为登录操作后，将登录信息返回给 HTML
-let token = &quot;a user token string.&quot; 
-let js = &quot;omApp.didFinishLogining(\&quot;\(taskID)\&quot;, {\&quot;userToken\&quot;: \(token)})&quot;
-_ = webView.stringByEvaluatingJavaScript(from: js)
-</code></pre>
-
-</li>
+</ul>
+<h4 id="12"><a name="user-content-12" href="#12" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>1.2 回调函数的处理</h4>
+<ul>
+<li>在有回调方法中，URL 协议会将回调函数（函数ID），通过 <code>callbackID</code> 字段传递给原生。</li>
+<li>原生在执行任务后，通过调用 JS 的 omApp.didFinish** 等方法执行回调。</li>
 </ul></article></body></html>

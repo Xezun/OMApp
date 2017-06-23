@@ -18,9 +18,7 @@
 
         `原UserAgent` + `空格` + `Onemena/` + `App发行版本号`
      
-
     <font size=2>* 例： Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) ... Safari/8536.25 <font color=red>Onemena/1.0.1</font></font>
-
 
 
 
@@ -28,19 +26,22 @@
 ***
 ## 第一部分：HTML 访问 App 
 
-    App 通过向 HTML 注册 Javascript 接口来实现 HTML 内容对 App 功能的访问。
+    App 通过向 HTML 注册 JavaScript 接口来实现 HTML 内容对 App 功能的访问。
+
 
 ### 接口名称
 
     `omApp`
 
+
 ### 调用方式
 
     `omApp` 或 `window.omApp`
 
+
 ### 方法列表
 
-#### 1. login(*callback*)
+#### 1. login(*callbackID*)
 
 - 接口说明：
 
@@ -50,9 +51,9 @@
 
     | **Name**       | **Type**    | **Description** |
     | :------------- | :---------- | :-------------- |
-    | callback       | Function    | 可选。登录回调函数，用户返回登录结果 |
+    | callbackID     | Function    | 可选。登录回调函数，用户返回登录结果 |
 
-    - callback 函数参数：
+    - callbackID 函数参数：
     
     | **Name**       | **Type**    | **Description** |
     | :------------- | :---------- | :-------------- |
@@ -74,6 +75,18 @@
     });
     ```
 
+- 基于 URL 的交互方式:
+    
+    - URL： `app://login/?callbackID=...`
+
+    - 回调： `omApp.didFinishLogin(callbackID, success)`
+
+        | Name         | Type   | Description |
+        | :----------- | :----- | :--------- |
+        | callbackID   | String | url 中的 callbackID |
+        | success      | Bool   | 登录是否成功 |
+
+
 #### 2. open(*page*, *parameters*) [暂未启用]
 
 - 接口说明：
@@ -91,33 +104,31 @@
 
     1. 新闻列表：*OMAppPage.**newsList***
 
-        | Name | Type | Description | 
-        | :------------- | :---------- | :-------------- |
-        | id | String | 新闻栏目 ID |
+        | Name | Type   | Description | 
+        | :--- | :----- | :-------------- |
+        | id   | String | 新闻栏目 ID |
  
     2. 新闻详情：*OMAppPage.**newsDetail***
   
-        | Name | Type | Description | 
+        | Name           | Type        | Description | 
         | :------------- | :---------- | :-------------- |
-        | id | String | 新闻 ID |
+        | id             | String      | 新闻 ID |
  
     3. 视频列表：*OMAppPage.**videoList***
   
-        | Name | Type | Description | 
-        | :------------- | :---------- | :-------------- |
-        | id | String | 视频栏目 ID |
+        | Name    | Type        | Description | 
+        | :------ | :---------- | :-------------- |
+        | id      | String      | 视频栏目 ID |
  
     4. 视频详情：*OMAppPage.**videoDetail***
   
-        | Name | Type | Description | 
-        | :------------- | :---------- | :-------------- |
-        | id | String | 视频 ID |
+        | Name           | Type         | Description | 
+        | :------------- | :----------  | :-------------- |
+        | id             | String       | 视频 ID |
  
     5. 金币商城：*OMAppPage.**mall***
  
     6. 金币任务：*OMAppPage.**task***
-
-
 
 - 代码示例：
 
@@ -127,6 +138,11 @@
     // 打开金币任务页
     omApp.open(OMAppPage.task); 
     ```
+
+- 基于 URL 的交互方式:
+    
+    - URL： `app://open/?page=...`
+
 
 #### 3. navigation
 
@@ -152,6 +168,11 @@
     omApp.navigation.push('http://8.dev.arabsada.com/?userToken'); 
     ```
 
+- 基于 URL 的交互方式:
+    
+    - URL： `app://navigation.push/?url=...`
+    
+
 ##### 3.2 navigation.pop(*animated*)
 
 - 接口说明：
@@ -169,6 +190,11 @@
     ```
     omApp.navigation.pop(); 
     ```
+
+- 基于 URL 的交互方式:
+    
+    - URL：`app://navigation.pop/`
+
 
 ##### 3.3 navigation.popTo(*index*, *animated*)
 
@@ -188,6 +214,11 @@
     ```
     omApp.navigation.popTo(0);
     ```
+
+- 基于 URL 的交互方式:
+    
+    - URL：`app://navigation.popto/?index=...`
+
 
 ##### 3.4 navigation.bar
 
@@ -214,8 +245,12 @@
     omApp.navigation.bar.backgroundColor = '#0000FF';
     ```
 
+- 基于 URL 的交互方式:
+    
+    - URL：`app://navigation.bar/?isHidden=...&title=...&titleColor=...`
 
-#### 4. <del>*theme*</del> currentTheme
+
+#### 4. currentTheme
 
     2017-06-17: 接口由 `theme` 改为 `currentTheme` 
 
@@ -244,6 +279,10 @@
     }
     ```
 
+- 基于 URL 的交互方式:
+    
+    - URL：`app://currenttheme/?name=...`
+
 
 #### 5. statistic(*type*, *parameters*) [暂未启用]
 
@@ -253,10 +292,10 @@
 
 - 参数说明：
 
-    | **Name**       | **Type**           | **Description**                |
-    | :------------- | :----------------- | :----------------------------------------- |
-    | type           | OMStatisticType    | 见 [OMStatisticType枚举](#OMStatisticType)  |
-    | parameters     | Object             | 见 [OMStatisticType枚举](#OMStatisticType)  |
+    | **Name**  | **Type**        | **Description** |
+    | :-------- | :-------------- | :-------------- |
+    | type      | OMStatisticType | 见 [OMStatisticType枚举](#OMStatisticType)  |
+    | parameters | Object         | 见 [OMStatisticType枚举](#OMStatisticType)  |
 
 - <a name="OMStatisticType">***OMStatisticType*枚举**</a>
 
@@ -279,6 +318,7 @@
     omApp.statistic(OMStatisticType.openMall, {"type": 2});
     omApp.statistic(OMStatisticType.openMall, {"type": 3});
     ```
+
 
 #### 6. <a name="currentUser">currentUser</a>
 
@@ -321,7 +361,12 @@
     var userName = omApp.currentUser.name;
     ```
 
-#### 7. http(*requestObject*, *callback*)
+- 基于 URL 的交互方式:
+    
+    - URL：`app://currentUser/?name=...`
+
+
+#### 7. http(*request*, *callbackID*)
 
 - 接口说明：
 
@@ -331,8 +376,8 @@
 
     | **Name**       | **Type**    | **Description** |
     | :------------- | :---------- | :-------------- |
-    | requestObject  | Object      | 必选。网络请求         |
-    | callback       | Function    | 可选。网络请求的回调    |
+    | request        | Object      | 必选。网络请求         |
+    | callbackID     | String      | 可选。网络请求的回调    |
 
     - requestObject 对象属性：
     
@@ -343,23 +388,23 @@
     | params         | Object      | 可选。网络请求参数     |
     | headers        | Object      | 可选。网络请求的header  |
 
-    - callback 函数参数：
+    - callbackID 函数参数：
     
     | **Name**       | **Type**    | **Description** |
     | :------------- | :---------- | :-------------- |
     | success        | Bool        | 网络请求是否成功   |
-    | resultObject   | Any         | 网络请求返回的数据（如果有） |
+    | result         | Any         | 网络请求返回的数据（如果有） |
 
 
 - 代码示例：
 
     ```
-    var requestObject = {
+    var request = {
         url: "http://api.onemena.com/",
         method: "GET",
         params: {"name": "John"}
     };
-    omApp.http(requestObject, function(success, resultObject) {
+    omApp.http(request, function(success, result) {
         if (!success) {
             // do something when failed.
             return;
@@ -367,6 +412,38 @@
         // do suceess actions.
     });
     ```
+
+- 基于 URL 的交互方式:
+    
+    - URL： `app://http/?callbackID=...&request={url: ..., method: ...}`
+
+    - 回调： `omApp.didFinishHTTPRequest(callbackID, success, result, contentType)`
+
+        | Name        | Type    | Description |
+        | :---------- | :------ | :------------------ |
+        | callbackID  | String  | url 中的 callbackID    |
+        | success     | Bool    | http 请求是否成功     |
+        | result      | String  | HTTP 请求到的数据     |
+        | contentType | String  | result 的数据类型，决定数据是否需要解析 |
+
+    - 代码示例：
+
+        ```
+        // 1. 为了避免 JavaScript 语法错误，建议先对字符串进行 URL 编码。
+        // 2. 对于 JSON 数据，应该返回对象数据。
+
+        // JavaScript URL 解码函数：
+        // var string = decodeURIComponent(aString);
+        // JavaScript JSON 解析函数：
+        // var object = JSON.parse(aString);
+        // JavaScript URL 编码函数：
+        // var encodedString = encodeURIComponent(aString);
+
+        // 返回 String 数据的 JS 代码：
+        omApp.execute(callbackID, true, decodeURIComponent('anEncodedString'));
+        // 返回 Object 数据的 JS 代码：
+        omApp.execute(callbackID, true, decodeURIComponent('anEncodedString'), 'application/json');
+        ```
 
 
 
@@ -388,7 +465,7 @@
 
 ### 方法列表
 
-#### 1. ***
+#### 1. ...
 
 - 接口说明：
     ***
@@ -397,7 +474,7 @@
 
     | **Name**       | **Type**    | **Description** |
     | :------------- | :---------- | :-------------- |
-    | ***       | ***    | *** |
+    |        |     |  |
 
 
 - 代码示例：
@@ -411,46 +488,26 @@
 
 
 ***
+
 ## 第三部分：`omApp` 基于 URL 交互方式的实现
 
-    金币商城、金币任务一期，安卓、iOS都使用的是基于 URL 的交互方式。
+    通过注入 `OMApp.js` 文件，为 HTML 页面提供与原生的交互环境。
 
-### 1. API 与 URL
+### 1. 基本规则
 
-| **API**                   | **URL**                                   | **Description** |
-| :------------------------ | :---------------------------------------- | :-------------- |
-| omApp.login               | app://login/?taskID=...                   |                 |
-| omApp.open                | app://open/?page=...&id=...               |                 |
-| omApp.navigation.push     | app://push/?url=...                       |                 |
-| omApp.navigation.pop      | app://pop/                                |                 |
-| omApp.navigation.popTo    | app://popTo/?index=...                    |                 |
-| omApp.navigation.bar      | app://navigationBar/?title=..             |                 |
-| omApp.theme               | app://theme/?name=...                     |                 |
-| omApp.statistic           | app://statistic/?key1=...&key2=...        |                 |
+#### 1.1 URL结构
 
+- 基本形式：app://method.name/?param1=...&param2=...
+- 协议名：`app`，App 通过拦截此协议名的 URL 来区分普通请求与交互请求。
+- 方法：URL 的 host 部分表示 HTML 要调用 App 的方法名。
+- 参数：URL 的 query 部分表示方法所需的参数。
+    - 参数值为基本数据类型。
+    - 参数值为 Object 时，为 URL 编码后的 JSON 字符串。
 
-### 2. URL 方式回调的处理
+#### 1.2 回调函数的处理
 
-#### 2.1 omApp.didFinishLogining(*taskID*, *resultObject*)
-
-- 接口说明：
-    通过URL交互方式回调处理函数。
-
-- 参数说明：
-
-    | **Name**       | **Type**    | **Description**        |
-    | :------------- | :---------- | :--------------        |
-    | taskID         | String      | 调用此次登录的 taskID     |
-    | resultObject   | Object      | 登录结果信息             |
+- 在有回调方法中，URL 协议会将回调函数（函数ID），通过 `callbackID` 字段传递给原生。
+- 原生在执行任务后，通过调用 JS 的 omApp.didFinish** 等方法执行回调。
 
 
-- 代码示例：
-
-    ``` swift
-    // Swift
-    // App 执行 Javascript. 在执行为登录操作后，将登录信息返回给 HTML
-    let token = "a user token string." 
-    let js = "omApp.didFinishLogining(\"\(taskID)\", {\"userToken\": \(token)})"
-    _ = webView.stringByEvaluatingJavaScript(from: js)
-    ```
 

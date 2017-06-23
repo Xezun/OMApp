@@ -66,7 +66,7 @@ var _OMAppMessage = (function() {
 		var _object = {};
 		Object.defineProperties(_object, {
 			pop: {get: function () {return "navigation.pop";}},
-			popTo: {get: function () {return "navigation.popTo";}},
+			popTo: {get: function () {return "navigation.popto";}},
 			push: {get: function () {return "navigation.push";}},
 			bar: {get: function () {return "navigation.bar";}}
 		});
@@ -81,7 +81,7 @@ var _OMAppMessage = (function() {
 		}},
 		open: {get: function () {return "open";}},
 		login: {get: function () {return "login";}},
-		theme: {get: function () {return "theme";}},
+		currentTheme: {get: function () {return "currenttheme";}},
 		http: {get: function () {return "http";}}
 	});
 	return _object;
@@ -104,11 +104,11 @@ var _omApp = (function() {
         var url = OMAppMessage.scheme + '://' + encodeURIComponent(message);
         
         var query = null;
-        var taskID = null;
+        var callbackID = null;
         if (callback) { //
-			taskID = Date.parse(new Date());
-	        _allCallbacks[taskID] = callback;
-	        query = "taskID=" + taskID;
+			callbackID = "cb_" + Date.parse(new Date());
+	        _allCallbacks[callbackID] = callback;
+	        query = "callbackID=" + callbackID;
         }
 
         function toQueryValue(value) {
@@ -145,7 +145,7 @@ var _omApp = (function() {
         	document.body.removeChild(iframe);
         }, 1000);
 
-        return taskID;
+        return callbackID;
     }
 
 	// 1. 打开指定页面
@@ -163,13 +163,13 @@ var _omApp = (function() {
 	Object.defineProperty(_object, 'login', { get: function() { return _login; }});
 
 	// 2.2 原生通知JS登录已完成。
-	function _didFinishLogining(taskID, resultObject) {
-		if (_allCallbacks[taskID]) {
-			_allCallbacks[taskID](resultObject);
+	function _didFinishLogin(callbackID, success) {
+		if (_allCallbacks[callbackID]) {
+			_allCallbacks[callbackID](success);
 		}
-		_allCallbacks[taskID] = null;
+		_allCallbacks[callbackID] = null;
 	}
- 	Object.defineProperty(_object, 'didFinishLogining', { get: function() { return _didFinishLogining; }});
+ 	Object.defineProperty(_object, 'didFinishLogin', { get: function() { return _didFinishLogin; }});
 
  	// 3. alert
 	function _alert(message) {
@@ -240,16 +240,27 @@ var _omApp = (function() {
 	Object.defineProperty(_object, 'navigation', { get: function() { return _navigation; }});
 	
 	// 5. theme
-	var _theme = OMAppTheme.day;
-	Object.defineProperty(_object, 'theme', { 
-		get: function() { 
-			return _theme; 
+	var _currentTheme = OMAppTheme.day;
+	Object.defineProperties(_object, {
+		currentTheme: {
+			get: function() { 
+				return _currentTheme; 
+			},
+			set: function(newValue) {
+				_currentTheme = newValue;
+				native_message_send(OMAppMessage.currentTheme, {"name": newValue});
+			}
 		},
-		set: function(newValue) {
-			_theme = newValue;
-			native_message_send(OMAppMessage.theme, {"name": newValue});
+		theme: {
+			get: function() {
+				return currentTheme;
+			},
+			set: function(newValue) {
+				currentTheme = newValue;
+			}
 		}
 	});
+
 
 	// 6. 当前用户
 	var _currentUser = (function(){
@@ -287,18 +298,21 @@ var _omApp = (function() {
 	Object.defineProperty(_object, 'currentUser', { get: function() { return _currentUser; }});
 
 	// 7.1 HTTP
-	function _http(requestObject, callback) {
-        native_message_send(OMAppMessage.http, {"request": requestObject}, callback);
+	function _http(request, callback) {
+        native_message_send(OMAppMessage.http, {"request": request}, callback);
 	}
 	Object.defineProperty(_object, 'http', { get: function() { return _http; }});	
 	// 7.2 
-	function _didFinishHTTPRequesting(taskID, success, resultObject) {
-		if (_allCallbacks[taskID]) {
-			_allCallbacks[taskID](success, resultObject);
+	function _didFinishHTTPRequest(callbackID, success, result, contentType) {
+		if (_allCallbacks[callbackID]) {
+			if (/json/.test(contentType)) {
+				result = JSON.parse(result);
+			}
+			_allCallbacks[callbackID](success, result);
 		}
-		_allCallbacks[taskID] = null;
+		_allCallbacks[callbackID] = null;
 	}
- 	Object.defineProperty(_object, 'didFinishHTTPRequesting', { get: function() { return _didFinishHTTPRequesting; }});
+ 	Object.defineProperty(_object, 'didFinishHTTPRequest', { get: function() { return _didFinishHTTPRequest; }});
 
 	return _object;
 })();

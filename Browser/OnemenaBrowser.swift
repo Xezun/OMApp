@@ -81,6 +81,9 @@ class OnemenaBrowser: UIViewController, NavigationBarCustomizable, NavigationGes
         app.currentTheme = "day"
         self.export = app
         print("【事件】JavaScript 环境初始化完成")
+        
+        
+        webView.stringByEvaluatingJavaScript(from: "JSON.parse(decodeURIComponent(''))")
     }
     
     weak var export: AppExport?
