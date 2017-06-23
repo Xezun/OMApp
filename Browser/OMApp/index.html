@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Test</title>
+</head>
+<script type="text/javascript">
+Object.defineProperties(window, {
+	OMAppPage: {
+		get: function() {
+			return "_OMAppPage";
+		}
+	}
+});
+if (window.OMAppPage) {
+	alert(window.OMAppPage)
+} else {
+	alert('false')
+}
+</script>
+<body>
+
+</body>
+</html>

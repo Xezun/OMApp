@@ -234,7 +234,6 @@
     | title           | String      | 标题            |
     | titleColor      | String      | 标题颜色         |
     | backgroundColor | String      | 背景色           |
-    
 
 - 代码示例：
 
@@ -333,20 +332,20 @@
     | isOnline        | Bool        | 是否已登录        |
     | id              | String      | 用户ID           |
     | name            | String      | 用户名           |
-    | type            | String      | 见 [OMUserType枚举](#OMUserType)    |
+    | type            | String      | 见 [OMAppUserType枚举](#OMAppUserType)    |
     | coin            | Int         | 用户金币数        |
     | token           | String      | user token        |
 
     <font size=2>* 说明： token 字段对外并不是一个好的 API 设计，未来优化的版本中将去掉此值。</font>
 
-- <a name="OMUserType">***OMUserType*枚举**</a>
+- <a name="OMAppUserType">***OMAppUserType*枚举**</a>
 
     | **Name**                       | **Type**    | **Description** |
     | :----------------------------- | :---------- | :-------------- |
-    | *OMUserType.**visitor***       | String      | 游客用户          |
-    | *OMUserType.**google***        | String      | Google 登录用户   |
-    | *OMUserType.**facebook***      | String      | Facebook 登录用户  |
-    | *OMUserType.**twitter***       | String      | Twitter 登录用户  |
+    | *OMAppUserType.**visitor***       | String      | 游客用户          |
+    | *OMAppUserType.**google***        | String      | Google 登录用户   |
+    | *OMAppUserType.**facebook***      | String      | Facebook 登录用户  |
+    | *OMAppUserType.**twitter***       | String      | Twitter 登录用户  |
 
 - 代码示例：
 
