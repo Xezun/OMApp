@@ -423,7 +423,7 @@
         | :---------- | :------ | :------------------ |
         | callbackID  | String  | url 中的 callbackID    |
         | success     | Bool    | http 请求是否成功     |
-        | result      | String  | HTTP 请求到的数据     |
+        | result      | String  | URL 编码后的 HTTP 请求结果     |
         | contentType | String  | result 的数据类型，决定数据是否需要解析 |
 
     - 代码示例：
@@ -440,9 +440,9 @@
         // var encodedString = encodeURIComponent(aString);
 
         // 返回 String 数据的 JS 代码：
-        omApp.execute(callbackID, true, decodeURIComponent('anEncodedString'));
+        omApp.didFinishHTTPRequest(callbackID, true, 'anEncodedString');
         // 返回 Object 数据的 JS 代码：
-        omApp.execute(callbackID, true, decodeURIComponent('anEncodedString'), 'application/json');
+        omApp.didFinishHTTPRequest(callbackID, true, 'anEncodedString', 'application/json');
         ```
 
 

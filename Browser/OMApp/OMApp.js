@@ -305,8 +305,11 @@ var _omApp = (function() {
 	// 7.2 
 	function _didFinishHTTPRequest(callbackID, success, result, contentType) {
 		if (_allCallbacks[callbackID]) {
-			if (/json/.test(contentType)) {
-				result = JSON.parse(result);
+			if (result) {
+				result = decodeURIComponent(result);
+				if (/json/.test(contentType)) {
+					result = JSON.parse(result);
+				}
 			}
 			_allCallbacks[callbackID](success, result);
 		}
