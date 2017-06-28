@@ -4,29 +4,19 @@
 /* OMAppPage 页面类型枚举定义 */
 if (!window.OMAppPage) {
 	var _OMAppPage = (function() {
-		var kOMAppPageMall 			= "mall";
-		var kOMAppPageTask 			= "task";
-	    var kOMAppPageNewsList 		= "newsList";
-	    var kOMAppPageNewsDetail 	= "newsDetail";
-	    var kOMAppPageVideoList	 	= "videoList";
-	    var kOMAppPageVideoDetail 	= "videoDetail";
 	    var _object = {};
 		Object.defineProperties(_object, {
-			mall: {get: function() {return kOMAppPageMall;}},
-			task: {get: function() {return kOMAppPageTask;}},
-			newsList: {get: function() {return kOMAppPageNewsList;}},
-			newsDetail: {get: function() {return kOMAppPageNewsDetail;}},
-			videoList: {get: function() {return kOMAppPageVideoList;}},
-			videoDetail: {get: function() {return kOMAppPageVideoDetail;}}                  
+			mall: 			{ get: function() { return "mall";			} },
+			task: 			{ get: function() { return "task";			} },
+			newsList: 		{ get: function() { return "newsList";		} },
+			newsDetail: 	{ get: function() { return "newsDetail";	} },
+			videoList: 		{ get: function() { return "videoList";		} },
+			videoDetail: 	{ get: function() { return "videoDetail";	} }                  
 		});
 		return _object;
 	})();
 	Object.defineProperties(window, {
-		OMAppPage: {
-			get: function() {
-				return _OMAppPage;
-			}
-		}
+		OMAppPage: { get: function() { return _OMAppPage; } }
 	});
 }
 
@@ -72,27 +62,27 @@ if (!window.OMAppMessage) {
 		var _navigation = (function(){
 			var _object = {};
 			Object.defineProperties(_object, {
-				pop: 	{ get: function () { return "navigation.pop";	}},
-				popTo: 	{ get: function () { return "navigation.popto";	}},
-				push: 	{ get: function () { return "navigation.push";	}},
-				bar: 	{ get: function () { return "navigation.bar";	}}
+				pop: 	{ get: function () { return "navigation.pop";	} },
+				popTo: 	{ get: function () { return "navigation.popto";	} },
+				push: 	{ get: function () { return "navigation.push";	} },
+				bar: 	{ get: function () { return "navigation.bar";	} }
 			});
 			return _object;
 		})();
 
 		var _object = {};
 		Object.defineProperties(_object, {
-			scheme: 		{ get: function() { return "app"; 			}},
-			navigation: 	{ get: function() { return _navigation; 	}},
-			open: 			{ get: function() { return "open"; 			}},
-			login: 			{ get: function() { return "login"; 		}},
-			currentTheme: 	{ get: function() { return "currenttheme";	}},
-			http: 			{ get: function() { return "http"; 			}}
+			scheme: 		{ get: function() { return "app"; 			} },
+			navigation: 	{ get: function() { return _navigation; 	} },
+			open: 			{ get: function() { return "open"; 			} },
+			login: 			{ get: function() { return "login"; 		} },
+			currentTheme: 	{ get: function() { return "currenttheme";	} },
+			http: 			{ get: function() { return "http"; 			} }
 		});
 		return _object;
 	})();
 	Object.defineProperties(window, {
-		OMAppMessage: 		{ get: function() {return _OMAppMessage; 	}}
+		OMAppMessage: 		{ get: function() { return _OMAppMessage; 	}}
 	});
 }
 
@@ -158,7 +148,7 @@ if (!window.omApp) {
 		// 1. 打开指定页面
 		function _open(page, parameters) {
 			if (!_isApp) {
-				window.open(page + parameters);
+				window.open(page + "[" + parameters + "]");
 				return;
 			}
 			var param = { "page": page };
@@ -170,7 +160,7 @@ if (!window.omApp) {
 		// 2.1 HTML 调用原生的登录。
 		function _login(callback) {
 			if (!_isApp) {
-				if (confirm('Testing Login! \n[OK] -> true \n[Cancel] -> false')) {
+				if (confirm('Click to select the login result! \n[OK] -> true \n[Cancel] -> false')) {
 					callback(true);
 				} else {
 					callback(false);
@@ -232,7 +222,7 @@ if (!window.omApp) {
 				return OMAppMessageSend(OMAppMessage.navigation.popTo, {"index": index});
 			}
 
-			var _bar = (function(){
+			var _bar = (function() {
 				var _title = null;
 				var _titleColor = null;
 				var _backgroundColor = null;
@@ -262,10 +252,10 @@ if (!window.omApp) {
 
 			var _object = {};
 			Object.defineProperties(_object, {
-				push: { get: function() { return _push; } },
-				pop: { get: function() { return _pop; } },
-				popTo: { get: function() { return _popTo; } },
-				bar: { get: function() { return _bar; } }
+				push:	{ get: function() { return _push; 	} },
+				pop: 	{ get: function() { return _pop; 	} },
+				popTo: 	{ get: function() { return _popTo; 	} },
+				bar: 	{ get: function() { return _bar; 	} }
 			});
 			return _object;
 		})();
@@ -332,6 +322,27 @@ if (!window.omApp) {
 		// 7.1 HTTP
 		function _http(request, callback) {
 			if (!_isApp) {
+				function GetQueryString(parameterName) {
+				     var reg = new RegExp("(^|&)"+ parameterName +"=([^&]*)(&|$)");
+				     var r = window.location.search.substr(1).match(reg);
+				     if(r!=null)return  unescape(r[2]); return null;
+				}
+				var access_token = GetQueryString("access_token");
+				if (access_token) {
+					if (request.headers) {
+						request.headers["access-token"] = access_token;
+					} else {
+						request.headers = {"access-token": access_token};
+					}
+				};
+				var user_token = GetQueryString("user_token");
+				if (user_token) {
+					if (request.params) {
+						request.params["user_token"] = user_token;
+					} else {
+						request.params = {"user_token": user_token};
+					}
+				};
 				$.ajax({
 					url: request.url,
 					type: request.method,
@@ -372,3 +383,47 @@ if (!window.omApp) {
 	});
 };
 
+
+
+
+
+function OMApp_Show_HTTP_Configuration() {
+	var html = '<div id="OMApp_HTTP_Configuration" style="position: absolute; width: 320px; height: 150px; top: 50%; left: 50%; margin-top: -75px; padding: 20px; margin-left: -160px; font-size: 12px; background-color: #f5f5f5;">'+
+	'<table style="width: 100%; height: 100%">'+
+	'	<tr>'+
+	'		<th colspan="2">HTTP Request Configuration</th>'+
+	'	</tr>'+
+	'	<tr>'+
+	'		<td width="35%" align="right">access-token:</td>'+
+	'		<td><input type="text" name="access-token" style="width: 100%" id="OMApp_HTTP_Access_Token"></td>'+
+	'	</tr>'+
+	'	<tr>'+
+	'		<td align="right">user_token:</td>'+
+	'		<td><input type="text" name="user_token" style="width: 100%" id="OMApp_HTTP_User_Token"></td>'+
+	'	</tr>'+
+	'	<tr>'+
+	'		<td align="right">Auto Send:</td>'+
+	'		<td><input type="checkbox" name="save" id="OMApp_HTTP_Auto_Send"></td>'+
+	'	</tr>'+
+	'	<tr>'+
+	'		<td colspan="2" style="padding: 0; text-align: center; margin: 0">'+
+	'			<input type="button" name="send_http" value="Send HTTP Request" style="width: 80%; height: 100%;" onclick="\'OMApp_HTTP_Access_Token=\' + document.getElementById(\'OMApp_HTTP_Access_Token\').value + \'; OMApp_HTTP_User_Token=\' + document.getElementById(\'OMApp_HTTP_User_Token\').value + \'; OMApp_HTTP_Auto_Send=\' + document.getElementById(\'OMApp_HTTP_Auto_Send\').value;">'+
+	'		</td>'+
+	'	</tr>'+
+	'</table> '+
+	'</div>';
+	function getCookie(cname) {
+		var name = cname + "=";
+		var ca = document.cookie.split(';');
+		for(var i=0; i<ca.length; i++) {
+			var c = ca[i].trim();
+			if (c.indexOf(name)==0) return c.substring(name.length,c.length);
+		}
+		return "";
+	}
+
+	$(document.body).append(html);
+	$("input#OMApp_HTTP_Access_Token").value = getCookie("OMApp_HTTP_Access_Token");
+	$("input#OMApp_HTTP_User_Token").value = getCookie("OMApp_HTTP_User_Token");
+	$("input#OMApp_HTTP_Auto_Send").value = getCookie("OMApp_HTTP_User_Token")
+}
