@@ -1790,7 +1790,7 @@ var userName = omApp.currentUser.name;
 <td>必选。值必须是 GET/POST，区分大小写</td>
 </tr>
 <tr>
-<td>params</td>
+<td><del>params</del> data</td>
 <td>Object</td>
 <td>可选。网络请求参数</td>
 </tr>
@@ -1798,6 +1798,11 @@ var userName = omApp.currentUser.name;
 <td>headers</td>
 <td>Object</td>
 <td>可选。网络请求的header</td>
+</tr>
+<tr>
+<td><font size="2">* 字段变更：params -&gt; data </font></td>
+<td></td>
+<td></td>
 </tr>
 </tbody>
 </table>
@@ -1957,9 +1962,9 @@ omApp.didFinishHTTPRequest(callbackID, true, 'anEncodedString', 'application/jso
 <td>必选。内容</td>
 </tr>
 <tr>
-<td>buttons</td>
+<td>actions</td>
 <td>Array<String></td>
-<td>可选。按钮，默认确定按钮</td>
+<td>可选。按钮标题，默认确定按钮</td>
 </tr>
 </tbody>
 </table>
@@ -1988,7 +1993,7 @@ omApp.didFinishHTTPRequest(callbackID, true, 'anEncodedString', 'application/jso
 <pre><code>omApp.alert({
     title: &quot;alert 标题&quot;,
     body: &quot;alert 文字内容&quot;,
-    buttons: new Array(&quot;确定&quot;, &quot;取消&quot;)
+    actions: new Array(&quot;确定&quot;, &quot;取消&quot;)
 }, function(index) {
     if (index == 0) {
         // 点击了 确定 按钮
@@ -2006,7 +2011,7 @@ omApp.didFinishHTTPRequest(callbackID, true, 'anEncodedString', 'application/jso
 <p>URL： <code>app://alert/?callbackID=...&amp;message={title: ..., body: ...}</code></p>
 </li>
 <li>
-<p>回调： <code>omApp.didClickAlertAtIndex(callbackID, index)</code></p>
+<p>回调： <code>omApp.didSelectAlertActionAtIndex(callbackID, index)</code></p>
 <table>
 <thead>
 <tr>
@@ -2031,20 +2036,8 @@ omApp.didFinishHTTPRequest(callbackID, true, 'anEncodedString', 'application/jso
 </li>
 <li>
 <p>代码示例：</p>
-<pre><code>// 1. 为了避免 JavaScript 语法错误，建议先对字符串进行 URL 编码。
-// 2. 对于 JSON 数据，应该返回对象数据。
-
-// JavaScript URL 解码函数：
-// var string = decodeURIComponent(aString);
-// JavaScript JSON 解析函数：
-// var object = JSON.parse(aString);
-// JavaScript URL 编码函数：
-// var encodedString = encodeURIComponent(aString);
-
-// 返回 String 数据的 JS 代码：
-omApp.didFinishHTTPRequest(callbackID, true, 'anEncodedString');
-// 返回 Object 数据的 JS 代码：
-omApp.didFinishHTTPRequest(callbackID, true, 'anEncodedString', 'application/json');
+<pre><code>// 点击了第 0 个按钮
+omApp.didSelectAlertActionAtIndex(callbackID, 0);
 </code></pre>
 
 </li>
