@@ -7,6 +7,7 @@
 //
 
 #import "AppExport.h"
+@import UIKit;
 @import ObjectiveC;
 @import XZKit;
 
@@ -18,6 +19,7 @@
 @property (nonatomic, copy, nonnull) NSString *url;
 @property (nonatomic, copy, nonnull) NSString *method;
 @property (nonatomic, copy, nullable) NSDictionary<NSString *, id> *params;
+@property (nonatomic, copy, nullable) NSDictionary<NSString *, id> *data;
 @property (nonatomic, copy, nullable) NSDictionary<NSString *, NSString *> *headers;
 @end
 
@@ -114,8 +116,12 @@
     object.method   = request[@"method"];
     object.headers  = request[@"headers"];
     object.params   = request[@"params"];
+    object.data     = request[@"data"] != nil ? request[@"data"] : request[@"params"];
     dispatch_async(dispatch_get_main_queue(), ^{
         [_delegate appExport:self http:object completion:^(BOOL success, id _Nullable result) {
+            if (completion == nil) {
+                return;
+            }
             NSMutableArray *arguments = [NSMutableArray arrayWithObject:@(success)];
             if (result != nil) {
                 [arguments addObject:result];
@@ -123,6 +129,20 @@
             [completion callWithArguments:arguments];
         }];
     });
+}
+
+- (void)alert:(NSDictionary<NSString *,id> *)message completion:(JSValue *)completion {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:message[@"title"] message:message[@"body"] preferredStyle:(UIAlertControllerStyleAlert)];
+    NSArray<NSString *> *actions = message[@"actions"];
+    if ([actions isKindOfClass:[NSArray class]] && completion != nil) {
+        [actions enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            UIAlertAction *action = [UIAlertAction actionWithTitle:obj style:(UIAlertActionStyleCancel) handler:^(UIAlertAction * _Nonnull action) {
+                [completion callWithArguments:@[@(idx)]];
+            }];
+            [alert addAction:action];
+        }];
+    }
+    [UIApplication.sharedApplication.keyWindow.rootViewController presentViewController:alert animated:true completion:nil];
 }
 
 

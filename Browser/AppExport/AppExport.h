@@ -29,7 +29,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)login:(nullable JSValue *)completion;
 JSExportAs(open, - (void)open:(nonnull NSString *)page parameters:(nullable NSDictionary<NSString *, id> *)parameters);
 - (void)present:(nonnull NSString *)url;
-JSExportAs(http, - (void)http:(nonnull NSDictionary<NSString *, id> *)request completion:(nullable JSValue *)callback);
+JSExportAs(http, - (void)http:(nonnull NSDictionary<NSString *, id> *)request completion:(nullable JSValue *)completion);
+JSExportAs(alert, - (void)alert:(nonnull NSDictionary<NSString *, id> *)message completion:(nullable JSValue *)completion);
 @end
 
 
@@ -53,7 +54,8 @@ JSExportAs(http, - (void)http:(nonnull NSDictionary<NSString *, id> *)request co
 @protocol AppHTTPRequest <NSObject>
 @property (nonatomic, copy, readonly, nonnull) NSString *url;
 @property (nonatomic, copy, readonly, nonnull) NSString *method;
-@property (nonatomic, copy, readonly, nullable) NSDictionary<NSString *, id> *params;
+@property (nonatomic, copy, readonly, nullable) NSDictionary<NSString *, id> *params OBJC_DEPRECATED("User `data` property please.");
+@property (nonatomic, copy, readonly, nullable) NSDictionary<NSString *, id> *data;
 @property (nonatomic, copy, readonly, nullable) NSDictionary<NSString *, NSString *> *headers;
 @end
 

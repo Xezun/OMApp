@@ -1026,7 +1026,7 @@ body .markdown-body
 <li><a href="#_4">接口名称</a></li>
 <li><a href="#_5">调用方式</a></li>
 <li><a href="#_6">方法列表</a><ul>
-<li><a href="#1-logincallbackid">1. login(callbackID)</a></li>
+<li><a href="#1-logincallback">1. login(callback)</a></li>
 <li><a href="#2-openpage-parameters">2. open(page, parameters) [暂未启用]</a></li>
 <li><a href="#3-navigation">3. navigation</a><ul>
 <li><a href="#31-navigationpushurl-animated">3.1 navigation.push(url, animated)</a></li>
@@ -1035,10 +1035,11 @@ body .markdown-body
 <li><a href="#34-navigationbar">3.4 navigation.bar</a></li>
 </ul>
 </li>
-<li><a href="#4-theme-currenttheme">4. <del>theme</del> currentTheme</a></li>
+<li><a href="#4-currenttheme">4. currentTheme</a></li>
 <li><a href="#5-statistictype-parameters">5. statistic(type, parameters) [暂未启用]</a></li>
 <li><a href="#6-currentuser">6. <a name="currentUser">currentUser</a></a></li>
-<li><a href="#7-httprequest-callbackid">7. http(request, callbackID)</a></li>
+<li><a href="#7-httprequest-callback">7. http(request, callback)</a></li>
+<li><a href="#8-alertmessage-callback">8. alert(message, callback)</a></li>
 </ul>
 </li>
 </ul>
@@ -1090,7 +1091,7 @@ body .markdown-body
 <pre><code>`omApp` 或 `window.omApp`
 </code></pre>
 <h3 id="_6"><a name="user-content-_6" href="#_6" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>方法列表</h3>
-<h4 id="1-logincallbackid"><a name="user-content-1-logincallbackid" href="#1-logincallbackid" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>1. login(<em>callbackID</em>)</h4>
+<h4 id="1-logincallback"><a name="user-content-1-logincallback" href="#1-logincallback" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>1. login(<em>callback</em>)</h4>
 <ul>
 <li>
 <p>接口说明：</p>
@@ -1108,14 +1109,14 @@ body .markdown-body
 </thead>
 <tbody>
 <tr>
-<td>callbackID</td>
+<td>callback</td>
 <td>Function</td>
 <td>可选。登录回调函数，用户返回登录结果</td>
 </tr>
 </tbody>
 </table>
 <ul>
-<li>callbackID 函数参数：</li>
+<li>callback 函数参数：</li>
 </ul>
 <table>
 <thead>
@@ -1307,6 +1308,12 @@ omApp.open(OMAppPage.task);
 </code></pre>
 
 </li>
+<li>
+<p>基于 URL 的交互方式:</p>
+<ul>
+<li>URL： <code>app://open/?page=...</code></li>
+</ul>
+</li>
 </ul>
 <h4 id="3-navigation"><a name="user-content-3-navigation" href="#3-navigation" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>3. navigation</h4>
 <h5 id="31-navigationpushurl-animated"><a name="user-content-31-navigationpushurl-animated" href="#31-navigationpushurl-animated" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>3.1 navigation.push(<em>url</em>, <em>animated</em>)</h5>
@@ -1432,7 +1439,7 @@ omApp.navigation.push('http://8.dev.arabsada.com/?userToken');
 <li>
 <p>基于 URL 的交互方式:</p>
 <ul>
-<li>URL：<code>app://navigation.popTo/?index=...</code></li>
+<li>URL：<code>app://navigation.popto/?index=...</code></li>
 </ul>
 </li>
 </ul>
@@ -1492,7 +1499,7 @@ omApp.navigation.bar.backgroundColor = '#0000FF';
 </ul>
 </li>
 </ul>
-<h4 id="4-theme-currenttheme"><a name="user-content-4-theme-currenttheme" href="#4-theme-currenttheme" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4. <del><em>theme</em></del> currentTheme</h4>
+<h4 id="4-currenttheme"><a name="user-content-4-currenttheme" href="#4-currenttheme" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4. currentTheme</h4>
 <pre><code>2017-06-17: 接口由 `theme` 改为 `currentTheme`
 </code></pre>
 <ul>
@@ -1541,7 +1548,7 @@ omApp.navigation.bar.backgroundColor = '#0000FF';
 <li>
 <p>基于 URL 的交互方式:</p>
 <ul>
-<li>URL：<code>app://currentTheme/?name=...</code></li>
+<li>URL：<code>app://currenttheme/?name=...</code></li>
 </ul>
 </li>
 </ul>
@@ -1661,7 +1668,7 @@ omApp.statistic(OMStatisticType.openMall, {&quot;type&quot;: 3});
 <tr>
 <td>type</td>
 <td>String</td>
-<td>见 <a href="#OMUserType">OMUserType枚举</a></td>
+<td>见 <a href="#OMAppUserType">OMAppUserType枚举</a></td>
 </tr>
 <tr>
 <td>coin</td>
@@ -1678,7 +1685,7 @@ omApp.statistic(OMStatisticType.openMall, {&quot;type&quot;: 3});
 <p><font size=2>* 说明： token 字段对外并不是一个好的 API 设计，未来优化的版本中将去掉此值。</font></p>
 </li>
 <li>
-<p><a name="OMUserType"><strong><em>OMUserType</em>枚举</strong></a></p>
+<p><a name="OMAppUserType"><strong><em>OMAppUserType</em>枚举</strong></a></p>
 <table>
 <thead>
 <tr>
@@ -1689,22 +1696,22 @@ omApp.statistic(OMStatisticType.openMall, {&quot;type&quot;: 3});
 </thead>
 <tbody>
 <tr>
-<td><em>OMUserType.<strong>visitor</strong></em></td>
+<td><em>OMAppUserType.<strong>visitor</strong></em></td>
 <td>String</td>
 <td>游客用户</td>
 </tr>
 <tr>
-<td><em>OMUserType.<strong>google</strong></em></td>
+<td><em>OMAppUserType.<strong>google</strong></em></td>
 <td>String</td>
 <td>Google 登录用户</td>
 </tr>
 <tr>
-<td><em>OMUserType.<strong>facebook</strong></em></td>
+<td><em>OMAppUserType.<strong>facebook</strong></em></td>
 <td>String</td>
 <td>Facebook 登录用户</td>
 </tr>
 <tr>
-<td><em>OMUserType.<strong>twitter</strong></em></td>
+<td><em>OMAppUserType.<strong>twitter</strong></em></td>
 <td>String</td>
 <td>Twitter 登录用户</td>
 </tr>
@@ -1731,7 +1738,7 @@ var userName = omApp.currentUser.name;
 </ul>
 </li>
 </ul>
-<h4 id="7-httprequest-callbackid"><a name="user-content-7-httprequest-callbackid" href="#7-httprequest-callbackid" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>7. http(<em>request</em>, <em>callbackID</em>)</h4>
+<h4 id="7-httprequest-callback"><a name="user-content-7-httprequest-callback" href="#7-httprequest-callback" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>7. http(<em>request</em>, <em>callback</em>)</h4>
 <ul>
 <li>接口说明：</li>
 </ul>
@@ -1754,8 +1761,8 @@ var userName = omApp.currentUser.name;
 <td>必选。网络请求</td>
 </tr>
 <tr>
-<td>callbackID</td>
-<td>String</td>
+<td>callback</td>
+<td>Function</td>
 <td>可选。网络请求的回调</td>
 </tr>
 </tbody>
@@ -1795,7 +1802,7 @@ var userName = omApp.currentUser.name;
 </tbody>
 </table>
 <ul>
-<li>callbackID 函数参数：</li>
+<li>callback 函数参数：</li>
 </ul>
 <table>
 <thead>
@@ -1843,7 +1850,7 @@ omApp.http(request, function(success, result) {
 <p>URL： <code>app://http/?callbackID=...&amp;request={url: ..., method: ...}</code></p>
 </li>
 <li>
-<p>回调： <code>omApp.didFinishHTTPRequest(callbackID, success, result)</code></p>
+<p>回调： <code>omApp.didFinishHTTPRequest(callbackID, success, result, contentType)</code></p>
 <table>
 <thead>
 <tr>
@@ -1865,8 +1872,13 @@ omApp.http(request, function(success, result) {
 </tr>
 <tr>
 <td>result</td>
-<td>String/JSON</td>
-<td>HTTP 请求到的数据</td>
+<td>String</td>
+<td>URL 编码后的 HTTP 请求结果</td>
+</tr>
+<tr>
+<td>contentType</td>
+<td>String</td>
+<td>result 的数据类型，决定数据是否需要解析</td>
 </tr>
 </tbody>
 </table>
@@ -1884,9 +1896,155 @@ omApp.http(request, function(success, result) {
 // var encodedString = encodeURIComponent(aString);
 
 // 返回 String 数据的 JS 代码：
-omApp.execute(callbackID, true, decodeURIComponent('anEncodedString'));
+omApp.didFinishHTTPRequest(callbackID, true, 'anEncodedString');
 // 返回 Object 数据的 JS 代码：
-omApp.execute(callbackID, true, JSON.parse(decodeURIComponent('anEncodedString')));
+omApp.didFinishHTTPRequest(callbackID, true, 'anEncodedString', 'application/json');
+</code></pre>
+
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="8-alertmessage-callback"><a name="user-content-8-alertmessage-callback" href="#8-alertmessage-callback" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>8. alert(<em>message</em>, <em>callback</em>)</h4>
+<ul>
+<li>
+<p>接口说明：</p>
+<p>当 HTML 需要展示一个 alert 的时候。</p>
+</li>
+<li>
+<p>参数说明：</p>
+<table>
+<thead>
+<tr>
+<th><strong>Name</strong></th>
+<th><strong>Type</strong></th>
+<th><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>message</td>
+<td>Object</td>
+<td>必选。消息内容</td>
+</tr>
+<tr>
+<td>callback</td>
+<td>Function</td>
+<td>可选。回调</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>message 对象属性：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th><strong>Name</strong></th>
+<th><strong>Type</strong></th>
+<th><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>title</td>
+<td>Object</td>
+<td>必选。标题</td>
+</tr>
+<tr>
+<td>body</td>
+<td>String</td>
+<td>必选。内容</td>
+</tr>
+<tr>
+<td>buttons</td>
+<td>Array<String></td>
+<td>可选。按钮，默认确定按钮</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>callback 函数参数：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th><strong>Name</strong></th>
+<th><strong>Type</strong></th>
+<th><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>index</td>
+<td>Int</td>
+<td>点击的按钮的索引</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>代码示例：</p>
+<pre><code>omApp.alert({
+    title: &quot;alert 标题&quot;,
+    body: &quot;alert 文字内容&quot;,
+    buttons: new Array(&quot;确定&quot;, &quot;取消&quot;)
+}, function(index) {
+    if (index == 0) {
+        // 点击了 确定 按钮
+    } else {
+        // 点击了 取消 按钮
+    }
+});
+</code></pre>
+
+</li>
+<li>
+<p>基于 URL 的交互方式:</p>
+<ul>
+<li>
+<p>URL： <code>app://alert/?callbackID=...&amp;message={title: ..., body: ...}</code></p>
+</li>
+<li>
+<p>回调： <code>omApp.didClickAlertAtIndex(callbackID, index)</code></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>callbackID</td>
+<td>String</td>
+<td>url 中的 callbackID</td>
+</tr>
+<tr>
+<td>index</td>
+<td>Int</td>
+<td>点击按钮的次序</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>代码示例：</p>
+<pre><code>// 1. 为了避免 JavaScript 语法错误，建议先对字符串进行 URL 编码。
+// 2. 对于 JSON 数据，应该返回对象数据。
+
+// JavaScript URL 解码函数：
+// var string = decodeURIComponent(aString);
+// JavaScript JSON 解析函数：
+// var object = JSON.parse(aString);
+// JavaScript URL 编码函数：
+// var encodedString = encodeURIComponent(aString);
+
+// 返回 String 数据的 JS 代码：
+omApp.didFinishHTTPRequest(callbackID, true, 'anEncodedString');
+// 返回 Object 数据的 JS 代码：
+omApp.didFinishHTTPRequest(callbackID, true, 'anEncodedString', 'application/json');
 </code></pre>
 
 </li>

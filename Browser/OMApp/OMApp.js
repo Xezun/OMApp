@@ -180,13 +180,27 @@ if (!window.omApp) {
 		}
 	 	Object.defineProperty(_object, 'didFinishLogin', { get: function() { return _didFinishLogin; }});
 
-	 	// 3. alert
-		function _alert(message) {
-			setTimeout(function(){
-				alert(message);
-			}, 100);
+	 	// 3.1 alert
+		function _alert(message, callback) {
+			if (!_isApp) {
+				setTimeout(function(){
+					window.alert('title: ' + message.title + "\nbody: "+ message.body + "\nbuttons:" + message.buttons);
+					callback(-1);
+				}, 100);
+				return;
+			};
+			return OMAppMessageSend(OMAppMessage.alert, {"message": message}, callback);
 		}
 		Object.defineProperty(_object, 'alert', { get: function() { return _alert; }});
+
+		// 3.2
+		function _didSelectAlertActionAtIndex(callbackID, index) {
+			if (_allCallbacks[callbackID]) {
+				_allCallbacks[callbackID](index);
+			}
+			_allCallbacks[callbackID] = null;
+		}
+	 	Object.defineProperty(_object, 'didSelectAlertActionAtIndex', { get: function() { return _didSelectAlertActionAtIndex; }});
 
 		// 4. navigation
 		var _navigation = (function() {
@@ -356,6 +370,9 @@ if (!window.omApp) {
 					}
 				});
 				return;
+			};
+			if (request.params && !request.data) {
+				request.data = request.params;
 			};
 	        OMAppMessageSend(OMAppMessage.http, {"request": request}, callback);
 		}

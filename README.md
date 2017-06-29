@@ -41,7 +41,7 @@
 
 ### 方法列表
 
-#### 1. login(*callbackID*)
+#### 1. login(*callback*)
 
 - 接口说明：
 
@@ -51,9 +51,9 @@
 
     | **Name**       | **Type**    | **Description** |
     | :------------- | :---------- | :-------------- |
-    | callbackID     | Function    | 可选。登录回调函数，用户返回登录结果 |
+    | callback       | Function    | 可选。登录回调函数，用户返回登录结果 |
 
-    - callbackID 函数参数：
+    - callback 函数参数：
     
     | **Name**       | **Type**    | **Description** |
     | :------------- | :---------- | :-------------- |
@@ -365,7 +365,7 @@
     - URL：`app://currentUser/?name=...`
 
 
-#### 7. http(*request*, *callbackID*)
+#### 7. http(*request*, *callback*)
 
 - 接口说明：
 
@@ -376,7 +376,7 @@
     | **Name**       | **Type**    | **Description** |
     | :------------- | :---------- | :-------------- |
     | request        | Object      | 必选。网络请求         |
-    | callbackID     | String      | 可选。网络请求的回调    |
+    | callback       | Function    | 可选。网络请求的回调    |
 
     - requestObject 对象属性：
     
@@ -384,10 +384,11 @@
     | :------------- | :---------- | :-------------- |
     | url            | Object      | 必选。url             |
     | method         | String      | 必选。值必须是 GET/POST，区分大小写 |
-    | params         | Object      | 可选。网络请求参数     |
+    | <del>params</del> data         | Object      | 可选。网络请求参数     |
     | headers        | Object      | 可选。网络请求的header  |
+    <font size="2">* 字段变更：params -> data </font>
 
-    - callbackID 函数参数：
+    - callback 函数参数：
     
     | **Name**       | **Type**    | **Description** |
     | :------------- | :---------- | :-------------- |
@@ -444,6 +445,68 @@
         omApp.didFinishHTTPRequest(callbackID, true, 'anEncodedString', 'application/json');
         ```
 
+
+#### 8. alert(*message*, *callback*)
+
+- 接口说明：
+
+    当 HTML 需要展示一个 alert 的时候。
+
+- 参数说明：
+
+    | **Name**       | **Type**    | **Description** |
+    | :------------- | :---------- | :-------------- |
+    | message        | Object      | 必选。消息内容     | 
+    | callback       | Function    | 可选。回调       |
+
+    - message 对象属性：
+    
+    | **Name**       | **Type**      | **Description** |
+    | :------------- | :------------ | :-------------- |
+    | title          | Object        | 必选。标题 |
+    | body           | String        | 必选。内容 |
+    | actions        | Array<String> | 可选。按钮标题，默认确定按钮 |
+
+    - callback 函数参数：
+    
+    | **Name**       | **Type**    | **Description** |
+    | :------------- | :---------- | :-------------- |
+    | index          | Int         | 点击的按钮的索引 |
+
+
+- 代码示例：
+
+    ```
+    omApp.alert({
+        title: "alert 标题",
+        body: "alert 文字内容",
+        actions: new Array("确定", "取消")
+    }, function(index) {
+        if (index == 0) {
+            // 点击了 确定 按钮
+        } else {
+            // 点击了 取消 按钮
+        }
+    });
+    ```
+
+- 基于 URL 的交互方式:
+    
+    - URL： `app://alert/?callbackID=...&message={title: ..., body: ...}`
+
+    - 回调： `omApp.didSelectAlertActionAtIndex(callbackID, index)`
+
+        | Name        | Type    | Description |
+        | :---------- | :------ | :------------------ |
+        | callbackID  | String  | url 中的 callbackID    |
+        | index       | Int     | 点击按钮的次序     |
+
+    - 代码示例：
+
+        ```
+        // 点击了第 0 个按钮
+        omApp.didSelectAlertActionAtIndex(callbackID, 0);
+        ```
 
 
 

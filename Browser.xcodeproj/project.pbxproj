@@ -24,8 +24,6 @@
 		DDB7A3481EF12DF100BA986F /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB7A33F1EF12DF100BA986F /* WebViewController.swift */; };
 		DDB7A3491EF12DF100BA986F /* WebViewEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB7A3401EF12DF100BA986F /* WebViewEvent.swift */; };
 		DDB7A34B1EF1352000BA986F /* HTTPViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB7A34A1EF1352000BA986F /* HTTPViewController.swift */; };
-		DDB7A3531EF1665C00BA986F /* OMApp-debug.html in Resources */ = {isa = PBXBuildFile; fileRef = DDB7A3501EF1665C00BA986F /* OMApp-debug.html */; };
-		DDB7A3541EF1665C00BA986F /* OMApp-debug.js in Resources */ = {isa = PBXBuildFile; fileRef = DDB7A3511EF1665C00BA986F /* OMApp-debug.js */; };
 		DDB7A3551EF1665C00BA986F /* OMApp.html in Resources */ = {isa = PBXBuildFile; fileRef = DDB7A3521EF1665C00BA986F /* OMApp.html */; };
 		DDB7A35B1EF28B1F00BA986F /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDB7A35A1EF28B1F00BA986F /* JavaScriptCore.framework */; };
 		DDC1049A1EEA44F00075C41F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC104991EEA44F00075C41F /* AppDelegate.swift */; };
@@ -64,8 +62,6 @@
 		DDB7A33F1EF12DF100BA986F /* WebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 		DDB7A3401EF12DF100BA986F /* WebViewEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewEvent.swift; sourceTree = "<group>"; };
 		DDB7A34A1EF1352000BA986F /* HTTPViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPViewController.swift; sourceTree = "<group>"; };
-		DDB7A3501EF1665C00BA986F /* OMApp-debug.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = "OMApp-debug.html"; sourceTree = "<group>"; };
-		DDB7A3511EF1665C00BA986F /* OMApp-debug.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "OMApp-debug.js"; sourceTree = "<group>"; };
 		DDB7A3521EF1665C00BA986F /* OMApp.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = OMApp.html; sourceTree = "<group>"; };
 		DDB7A35A1EF28B1F00BA986F /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		DDC104961EEA44F00075C41F /* Browser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Browser.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -138,8 +134,6 @@
 		DDB7A3131EF1103C00BA986F /* OMApp */ = {
 			isa = PBXGroup;
 			children = (
-				DDB7A3501EF1665C00BA986F /* OMApp-debug.html */,
-				DDB7A3511EF1665C00BA986F /* OMApp-debug.js */,
 				DDB7A3521EF1665C00BA986F /* OMApp.html */,
 				DDB7A3151EF1103C00BA986F /* OMApp.js */,
 			);
@@ -325,10 +319,8 @@
 			files = (
 				DDC104A41EEA44F00075C41F /* LaunchScreen.storyboard in Resources */,
 				DDC104A11EEA44F00075C41F /* Assets.xcassets in Resources */,
-				DDB7A3541EF1665C00BA986F /* OMApp-debug.js in Resources */,
 				DDB7A3551EF1665C00BA986F /* OMApp.html in Resources */,
 				DDC1049F1EEA44F00075C41F /* Main.storyboard in Resources */,
-				DDB7A3531EF1665C00BA986F /* OMApp-debug.html in Resources */,
 				DD10F9FC1EF78524005E0FE1 /* LogsTableViewCell.xib in Resources */,
 				DDB7A3171EF1103C00BA986F /* OMApp.js in Resources */,
 			);
