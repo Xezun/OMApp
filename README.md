@@ -386,7 +386,8 @@
     | method         | String      | 必选。值必须是 GET/POST，区分大小写 |
     | <del>params</del> data         | Object      | 可选。网络请求参数     |
     | headers        | Object      | 可选。网络请求的header  |
-    <font size="2">* 字段变更：params -> data </font>
+    
+    <font size="2">* 字段变更：params -> data，2017-06-29，目前 SDK 对此改变进行兼容 </font>
 
     - callback 函数参数：
     
