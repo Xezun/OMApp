@@ -184,7 +184,7 @@ if (!window.omApp) {
 		function _alert(message, callback) {
 			if (!_isApp) {
 				setTimeout(function(){
-					window.alert('title: ' + message.title + "\nbody: "+ message.body + "\nbuttons:" + message.buttons);
+					window.alert('title: ' + message.title + "\nbody: "+ message.body + "\nactions:" + message.actions);
 					callback(-1);
 				}, 100);
 				return;
