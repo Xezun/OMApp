@@ -132,7 +132,12 @@
 }
 
 - (void)alert:(NSDictionary<NSString *,id> *)message completion:(JSValue *)completion {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:message[@"title"] message:message[@"body"] preferredStyle:(UIAlertControllerStyleAlert)];
+    NSString *title = message[@"title"];
+    if (![title isKindOfClass:[NSString class]]) {
+        title = [NSBundle mainBundle].displayName;
+    }
+    NSString *body = message[@"body"];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:body preferredStyle:(UIAlertControllerStyleAlert)];
     NSArray<NSString *> *actions = message[@"actions"];
     if ([actions isKindOfClass:[NSArray class]] && completion != nil) {
         [actions enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -141,6 +146,10 @@
             }];
             [alert addAction:action];
         }];
+    } else {
+        NSString *title = NSLocalizedString(@"确定", @"HTML 页面显示 alert 的默认 “确定” 按钮，请在国际化文件中适配此文字。");
+        UIAlertAction *action = [UIAlertAction actionWithTitle:title style:(UIAlertActionStyleDefault) handler:nil];
+        [alert addAction:action];
     }
     [UIApplication.sharedApplication.keyWindow.rootViewController presentViewController:alert animated:true completion:nil];
 }

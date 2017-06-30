@@ -464,7 +464,7 @@
     
     | **Name**       | **Type**      | **Description** |
     | :------------- | :------------ | :-------------- |
-    | title          | Object        | 必选。标题 |
+    | title          | String        | 必选。标题 |
     | body           | String        | 必选。内容 |
     | actions        | Array<String> | 可选。按钮标题，默认确定按钮 |
 
@@ -472,7 +472,7 @@
     
     | **Name**       | **Type**    | **Description** |
     | :------------- | :---------- | :-------------- |
-    | index          | Int         | 点击的按钮的索引 |
+    | index          | Int         | 当按钮被点击了，被点击的索引 |
 
 
 - 代码示例：
