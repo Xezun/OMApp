@@ -119,6 +119,9 @@ func sendHTTP(with requestObject: [String: Any], accessToken: String?, userToken
     if let accessToken = accessToken {
         request.setValue(accessToken, forHTTPHeaderField: "access-token")
     }
+    if let userToken = userToken {
+        request.setValue(userToken, forHTTPHeaderField: "user-token")
+    }
     
     // parameters
     var parameters: [String: Any] = (requestObject["params"] as? [String: Any]) ?? [:]
@@ -139,7 +142,6 @@ func sendHTTP(with requestObject: [String: Any], accessToken: String?, userToken
     activity.hidesWhenStopped = true
     URLSession.shared.dataTask(with: request, completionHandler: { (data, response, error) -> Void in
         var result: Any? = nil
-        
         if let data = data {
             if let response = response {
                 if let mimeType = response.mimeType {

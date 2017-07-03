@@ -218,25 +218,18 @@
 						}
 						omApp.http({
 							url: url,
-							method: "GET"
+							method: "GET",
+                            data: {"target:": "http://www.baidu.com/"}
 						}, function(success, resultObject){
 							if (success) {
-								var string = null;
-                                for (key in resultObject) {
-                                	if (string) {
-                                		
-                                	} else {
-
-                                	}
-                                }
-								document.getElementById("http_result").innerHTML = resultObject;
+								document.getElementById("http_result").innerHTML = JSON.stringify(resultObject);
 							} else {
 								document.getElementById("http_result").innerHTML = "请求失败！"
 							}
 						});
 					}
 				</script>
-				<td><form name="request"><input type="text" name="url" value="http://api.wekoora.com/ar_AE/api/article_details/167372"><button onclick="httpRequest();" type="button">发送网络请求</button></form></td>
+				<td><form name="request"><input type="text" name="url" value="http://api.test.arabsada.com/ar_AE/api/lucky_coin/lucky_coin_login"><button onclick="httpRequest();" type="button">发送网络请求</button></form></td>
 			</tr> 
 			<tr>
 				<td colspan="2" id="http_result"></td>
