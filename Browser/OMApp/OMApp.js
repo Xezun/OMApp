@@ -351,7 +351,8 @@ if (!window.omApp) {
 				};
 				var user_token = GetQueryString("user_token");
 				if (user_token) {
-					if (request.params) {
+					request.headers["user-token"] = user_token;
+					if (request.params) { // 因西安接口不规范，这个做兼容
 						request.params["user_token"] = user_token;
 					} else {
 						request.params = {"user_token": user_token};

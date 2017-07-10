@@ -8,28 +8,29 @@
 
 import UIKit
 import XZKit
+import OMKit
 
-extension Notification.Name {
-    static let OMHTMLOpenPageTest = Notification.Name(rawValue: "OMHTMLOpenPageTest")
-}
+//extension Notification.Name {
+//    static let OMHTMLOpenPageTest = Notification.Name(rawValue: "OMHTMLOpenPageTest")
+//}
+//
+//extension WebViewEvent {
+//    static let theme = WebViewEvent(rawValue: "theme")
+//}
+//
+//
+//class OMWebView: UIWebView {
+//    deinit {
+//        print("WebView is deinit.")
+//    }
+//}
 
-extension WebViewEvent {
-    static let theme = WebViewEvent(rawValue: "theme")
-}
-
-
-class OMWebView: UIWebView {
-    deinit {
-        print("WebView is deinit.")
-    }
-}
-
-class OnemenaBrowser: UIViewController, NavigationBarCustomizable, NavigationGestureDrivable, UIWebViewDelegate, UIWebViewJavaScriptDelegate {
+class OnemenaBrowser: UIViewController, NavigationBarCustomizable, NavigationGestureDrivable, UIWebViewDelegate, WebViewDelegate {
     
     var webView: UIWebView
     
     init(url: URL) {
-        self.webView = OMWebView()
+        self.webView = XZKit.WebView()
         webView.loadRequest(URLRequest(url: url))
         super.init(nibName: nil, bundle: nil)
     }
@@ -76,7 +77,7 @@ class OnemenaBrowser: UIViewController, NavigationBarCustomizable, NavigationGes
     }
 
     
-    func webView(_ webView: UIWebView, didCreateJavaScriptContext context: JSContext) {
+    func webView(_ webView: XZKit.WebView, didCreateJavaScriptContext context: JSContext) {
         let app = AppExport.init(context: context, delegate: self)
         app.currentTheme = "day"
         self.export = app
@@ -216,7 +217,7 @@ extension OnemenaBrowser: AppExportDelegate {
             "url": request.url,
             "method": request.method
         ]
-        dict["params"] = request.params
+        dict["params"] = request.data
         dict["headers"] = request.headers
         
         self.httpCompletion = completion

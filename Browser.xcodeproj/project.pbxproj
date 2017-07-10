@@ -8,21 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		68B6E83159BC834105D495CF /* Pods_Browser.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DD76948908E20B75B09E087 /* Pods_Browser.framework */; };
-		DD10F9F61EF77221005E0FE1 /* UIWebView+JavaScript.m in Sources */ = {isa = PBXBuildFile; fileRef = DD10F9F51EF77221005E0FE1 /* UIWebView+JavaScript.m */; };
 		DD10F9F81EF78383005E0FE1 /* LogsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD10F9F71EF78383005E0FE1 /* LogsTableViewController.swift */; };
 		DD10F9FB1EF78524005E0FE1 /* LogsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD10F9F91EF78524005E0FE1 /* LogsTableViewCell.swift */; };
 		DD10F9FC1EF78524005E0FE1 /* LogsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD10F9FA1EF78524005E0FE1 /* LogsTableViewCell.xib */; };
 		DD10FA081EF7A60B005E0FE1 /* ConsoleTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD10FA071EF7A60B005E0FE1 /* ConsoleTableViewController.swift */; };
 		DDB7A3171EF1103C00BA986F /* OMApp.js in Resources */ = {isa = PBXBuildFile; fileRef = DDB7A3151EF1103C00BA986F /* OMApp.js */; };
-		DDB7A3411EF12DF100BA986F /* CustomNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB7A3341EF12DF100BA986F /* CustomNavigationBar.swift */; };
-		DDB7A3421EF12DF100BA986F /* UIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB7A3361EF12DF100BA986F /* UIButton.swift */; };
-		DDB7A3431EF12DF100BA986F /* UIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB7A3371EF12DF100BA986F /* UIImageView.swift */; };
-		DDB7A3441EF12DF100BA986F /* MenuBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB7A3391EF12DF100BA986F /* MenuBar.swift */; };
-		DDB7A3451EF12DF100BA986F /* MenuBarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB7A33A1EF12DF100BA986F /* MenuBarItem.swift */; };
-		DDB7A3461EF12DF100BA986F /* MenuBarItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB7A33B1EF12DF100BA986F /* MenuBarItemView.swift */; };
-		DDB7A3471EF12DF100BA986F /* WebViewAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB7A33E1EF12DF100BA986F /* WebViewAction.swift */; };
-		DDB7A3481EF12DF100BA986F /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB7A33F1EF12DF100BA986F /* WebViewController.swift */; };
-		DDB7A3491EF12DF100BA986F /* WebViewEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB7A3401EF12DF100BA986F /* WebViewEvent.swift */; };
 		DDB7A34B1EF1352000BA986F /* HTTPViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDB7A34A1EF1352000BA986F /* HTTPViewController.swift */; };
 		DDB7A3551EF1665C00BA986F /* OMApp.html in Resources */ = {isa = PBXBuildFile; fileRef = DDB7A3521EF1665C00BA986F /* OMApp.html */; };
 		DDB7A35B1EF28B1F00BA986F /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDB7A35A1EF28B1F00BA986F /* JavaScriptCore.framework */; };
@@ -34,33 +24,18 @@
 		DDC104B81EEA46F90075C41F /* LoginTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC104B41EEA46F90075C41F /* LoginTableViewController.swift */; };
 		DDC104B91EEA46F90075C41F /* OpenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC104B51EEA46F90075C41F /* OpenViewController.swift */; };
 		DDC104BB1EEA46F90075C41F /* OnemenaBrowser.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC104B71EEA46F90075C41F /* OnemenaBrowser.swift */; };
-		DDD9529A1EF3E64100EBF24B /* AppExport.m in Sources */ = {isa = PBXBuildFile; fileRef = DDD952931EF3E64100EBF24B /* AppExport.m */; };
-		DDD9529B1EF3E64100EBF24B /* AppNavigationExport.m in Sources */ = {isa = PBXBuildFile; fileRef = DDD952951EF3E64100EBF24B /* AppNavigationExport.m */; };
-		DDD9529D1EF3E64100EBF24B /* AppUserExport.m in Sources */ = {isa = PBXBuildFile; fileRef = DDD952991EF3E64100EBF24B /* AppUserExport.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		21E4F79F714474D48638D1FF /* Pods-Browser.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Browser.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Browser/Pods-Browser.debug.xcconfig"; sourceTree = "<group>"; };
 		4DD76948908E20B75B09E087 /* Pods_Browser.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Browser.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4E4276848E5C739E30D8DAB3 /* Pods-Browser.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Browser.release.xcconfig"; path = "Pods/Target Support Files/Pods-Browser/Pods-Browser.release.xcconfig"; sourceTree = "<group>"; };
-		DD10F9F41EF77221005E0FE1 /* UIWebView+JavaScript.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIWebView+JavaScript.h"; sourceTree = "<group>"; };
-		DD10F9F51EF77221005E0FE1 /* UIWebView+JavaScript.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIWebView+JavaScript.m"; sourceTree = "<group>"; };
 		DD10F9F71EF78383005E0FE1 /* LogsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogsTableViewController.swift; sourceTree = "<group>"; };
 		DD10F9F91EF78524005E0FE1 /* LogsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogsTableViewCell.swift; sourceTree = "<group>"; };
 		DD10F9FA1EF78524005E0FE1 /* LogsTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LogsTableViewCell.xib; sourceTree = "<group>"; };
 		DD10FA071EF7A60B005E0FE1 /* ConsoleTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConsoleTableViewController.swift; sourceTree = "<group>"; };
-		DD4FF4811EF3A7D600DF3BE4 /* Browser-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Browser-Bridging-Header.h"; sourceTree = "<group>"; };
-		DD545C3C1EF3761000D3D119 /* Browser-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Browser-Bridging-Header.h"; sourceTree = "<group>"; };
+		DD1B19F81F135CD0000F184D /* Browser-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Browser-Bridging-Header.h"; sourceTree = "<group>"; };
 		DDB7A3151EF1103C00BA986F /* OMApp.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = OMApp.js; sourceTree = "<group>"; };
-		DDB7A3341EF12DF100BA986F /* CustomNavigationBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomNavigationBar.swift; sourceTree = "<group>"; };
-		DDB7A3361EF12DF100BA986F /* UIButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIButton.swift; sourceTree = "<group>"; };
-		DDB7A3371EF12DF100BA986F /* UIImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIImageView.swift; sourceTree = "<group>"; };
-		DDB7A3391EF12DF100BA986F /* MenuBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuBar.swift; sourceTree = "<group>"; };
-		DDB7A33A1EF12DF100BA986F /* MenuBarItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuBarItem.swift; sourceTree = "<group>"; };
-		DDB7A33B1EF12DF100BA986F /* MenuBarItemView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuBarItemView.swift; sourceTree = "<group>"; };
-		DDB7A33E1EF12DF100BA986F /* WebViewAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewAction.swift; sourceTree = "<group>"; };
-		DDB7A33F1EF12DF100BA986F /* WebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
-		DDB7A3401EF12DF100BA986F /* WebViewEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewEvent.swift; sourceTree = "<group>"; };
 		DDB7A34A1EF1352000BA986F /* HTTPViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPViewController.swift; sourceTree = "<group>"; };
 		DDB7A3521EF1665C00BA986F /* OMApp.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = OMApp.html; sourceTree = "<group>"; };
 		DDB7A35A1EF28B1F00BA986F /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
@@ -74,12 +49,6 @@
 		DDC104B41EEA46F90075C41F /* LoginTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginTableViewController.swift; sourceTree = "<group>"; };
 		DDC104B51EEA46F90075C41F /* OpenViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenViewController.swift; sourceTree = "<group>"; };
 		DDC104B71EEA46F90075C41F /* OnemenaBrowser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnemenaBrowser.swift; sourceTree = "<group>"; };
-		DDD952921EF3E64100EBF24B /* AppExport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppExport.h; sourceTree = "<group>"; };
-		DDD952931EF3E64100EBF24B /* AppExport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppExport.m; sourceTree = "<group>"; };
-		DDD952941EF3E64100EBF24B /* AppNavigationExport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppNavigationExport.h; sourceTree = "<group>"; };
-		DDD952951EF3E64100EBF24B /* AppNavigationExport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppNavigationExport.m; sourceTree = "<group>"; };
-		DDD952981EF3E64100EBF24B /* AppUserExport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppUserExport.h; sourceTree = "<group>"; };
-		DDD952991EF3E64100EBF24B /* AppUserExport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppUserExport.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,22 +82,32 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		DD10F9FD1EF7998C005E0FE1 /* logs */ = {
+		DD10F9FD1EF7998C005E0FE1 /* 日志 */ = {
 			isa = PBXGroup;
 			children = (
 				DD10F9F71EF78383005E0FE1 /* LogsTableViewController.swift */,
 				DD10F9F91EF78524005E0FE1 /* LogsTableViewCell.swift */,
 				DD10F9FA1EF78524005E0FE1 /* LogsTableViewCell.xib */,
 			);
-			name = logs;
+			name = "日志";
 			sourceTree = "<group>";
 		};
-		DD10F9FE1EF7A502005E0FE1 /* console */ = {
+		DD10F9FE1EF7A502005E0FE1 /* 控制台 */ = {
 			isa = PBXGroup;
 			children = (
 				DD10FA071EF7A60B005E0FE1 /* ConsoleTableViewController.swift */,
 			);
-			name = console;
+			name = "控制台";
+			sourceTree = "<group>";
+		};
+		DD1B19F71F135C2E000F184D /* 测试页面 */ = {
+			isa = PBXGroup;
+			children = (
+				DDC104B41EEA46F90075C41F /* LoginTableViewController.swift */,
+				DDC104B51EEA46F90075C41F /* OpenViewController.swift */,
+				DDB7A34A1EF1352000BA986F /* HTTPViewController.swift */,
+			);
+			name = "测试页面";
 			sourceTree = "<group>";
 		};
 		DDB7A3131EF1103C00BA986F /* OMApp */ = {
@@ -138,62 +117,6 @@
 				DDB7A3151EF1103C00BA986F /* OMApp.js */,
 			);
 			path = OMApp;
-			sourceTree = "<group>";
-		};
-		DDB7A3321EF12DE800BA986F /* OMKit */ = {
-			isa = PBXGroup;
-			children = (
-				DDB7A3331EF12DF100BA986F /* CustomNavigationBar */,
-				DDB7A3351EF12DF100BA986F /* Extension */,
-				DDB7A3381EF12DF100BA986F /* MenuBar */,
-				DDB7A33C1EF12DF100BA986F /* Social */,
-				DDB7A33D1EF12DF100BA986F /* WebView */,
-			);
-			path = OMKit;
-			sourceTree = "<group>";
-		};
-		DDB7A3331EF12DF100BA986F /* CustomNavigationBar */ = {
-			isa = PBXGroup;
-			children = (
-				DDB7A3341EF12DF100BA986F /* CustomNavigationBar.swift */,
-			);
-			path = CustomNavigationBar;
-			sourceTree = "<group>";
-		};
-		DDB7A3351EF12DF100BA986F /* Extension */ = {
-			isa = PBXGroup;
-			children = (
-				DDB7A3361EF12DF100BA986F /* UIButton.swift */,
-				DDB7A3371EF12DF100BA986F /* UIImageView.swift */,
-			);
-			path = Extension;
-			sourceTree = "<group>";
-		};
-		DDB7A3381EF12DF100BA986F /* MenuBar */ = {
-			isa = PBXGroup;
-			children = (
-				DDB7A3391EF12DF100BA986F /* MenuBar.swift */,
-				DDB7A33A1EF12DF100BA986F /* MenuBarItem.swift */,
-				DDB7A33B1EF12DF100BA986F /* MenuBarItemView.swift */,
-			);
-			path = MenuBar;
-			sourceTree = "<group>";
-		};
-		DDB7A33C1EF12DF100BA986F /* Social */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Social;
-			sourceTree = "<group>";
-		};
-		DDB7A33D1EF12DF100BA986F /* WebView */ = {
-			isa = PBXGroup;
-			children = (
-				DDB7A33E1EF12DF100BA986F /* WebViewAction.swift */,
-				DDB7A33F1EF12DF100BA986F /* WebViewController.swift */,
-				DDB7A3401EF12DF100BA986F /* WebViewEvent.swift */,
-			);
-			path = WebView;
 			sourceTree = "<group>";
 		};
 		DDC1048D1EEA44F00075C41F = {
@@ -217,40 +140,20 @@
 		DDC104981EEA44F00075C41F /* Browser */ = {
 			isa = PBXGroup;
 			children = (
-				DD4FF4811EF3A7D600DF3BE4 /* Browser-Bridging-Header.h */,
-				DDD952911EF3E64100EBF24B /* AppExport */,
-				DDB7A3321EF12DE800BA986F /* OMKit */,
 				DDB7A3131EF1103C00BA986F /* OMApp */,
 				DDC104991EEA44F00075C41F /* AppDelegate.swift */,
 				DDC1049B1EEA44F00075C41F /* StartViewController.swift */,
 				DDC104B71EEA46F90075C41F /* OnemenaBrowser.swift */,
-				DDC104B41EEA46F90075C41F /* LoginTableViewController.swift */,
-				DDC104B51EEA46F90075C41F /* OpenViewController.swift */,
-				DDB7A34A1EF1352000BA986F /* HTTPViewController.swift */,
-				DD10F9FE1EF7A502005E0FE1 /* console */,
-				DD10F9FD1EF7998C005E0FE1 /* logs */,
+				DD1B19F71F135C2E000F184D /* 测试页面 */,
+				DD10F9FE1EF7A502005E0FE1 /* 控制台 */,
+				DD10F9FD1EF7998C005E0FE1 /* 日志 */,
 				DDC1049D1EEA44F00075C41F /* Main.storyboard */,
 				DDC104A01EEA44F00075C41F /* Assets.xcassets */,
+				DD1B19F81F135CD0000F184D /* Browser-Bridging-Header.h */,
 				DDC104A21EEA44F00075C41F /* LaunchScreen.storyboard */,
 				DDC104A51EEA44F00075C41F /* Info.plist */,
-				DD545C3C1EF3761000D3D119 /* Browser-Bridging-Header.h */,
 			);
 			path = Browser;
-			sourceTree = "<group>";
-		};
-		DDD952911EF3E64100EBF24B /* AppExport */ = {
-			isa = PBXGroup;
-			children = (
-				DDD952921EF3E64100EBF24B /* AppExport.h */,
-				DDD952931EF3E64100EBF24B /* AppExport.m */,
-				DDD952941EF3E64100EBF24B /* AppNavigationExport.h */,
-				DDD952951EF3E64100EBF24B /* AppNavigationExport.m */,
-				DDD952981EF3E64100EBF24B /* AppUserExport.h */,
-				DDD952991EF3E64100EBF24B /* AppUserExport.m */,
-				DD10F9F41EF77221005E0FE1 /* UIWebView+JavaScript.h */,
-				DD10F9F51EF77221005E0FE1 /* UIWebView+JavaScript.m */,
-			);
-			path = AppExport;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -381,27 +284,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DDB7A3431EF12DF100BA986F /* UIImageView.swift in Sources */,
-				DDB7A3471EF12DF100BA986F /* WebViewAction.swift in Sources */,
-				DDB7A3491EF12DF100BA986F /* WebViewEvent.swift in Sources */,
-				DDB7A3451EF12DF100BA986F /* MenuBarItem.swift in Sources */,
-				DDB7A3411EF12DF100BA986F /* CustomNavigationBar.swift in Sources */,
-				DDD9529B1EF3E64100EBF24B /* AppNavigationExport.m in Sources */,
 				DDC104BB1EEA46F90075C41F /* OnemenaBrowser.swift in Sources */,
-				DDB7A3461EF12DF100BA986F /* MenuBarItemView.swift in Sources */,
 				DD10F9F81EF78383005E0FE1 /* LogsTableViewController.swift in Sources */,
 				DDC104B91EEA46F90075C41F /* OpenViewController.swift in Sources */,
 				DDB7A34B1EF1352000BA986F /* HTTPViewController.swift in Sources */,
-				DDD9529A1EF3E64100EBF24B /* AppExport.m in Sources */,
 				DDC1049C1EEA44F00075C41F /* StartViewController.swift in Sources */,
-				DDD9529D1EF3E64100EBF24B /* AppUserExport.m in Sources */,
-				DD10F9F61EF77221005E0FE1 /* UIWebView+JavaScript.m in Sources */,
-				DDB7A3441EF12DF100BA986F /* MenuBar.swift in Sources */,
 				DD10FA081EF7A60B005E0FE1 /* ConsoleTableViewController.swift in Sources */,
 				DD10F9FB1EF78524005E0FE1 /* LogsTableViewCell.swift in Sources */,
-				DDB7A3421EF12DF100BA986F /* UIButton.swift in Sources */,
 				DDC104B81EEA46F90075C41F /* LoginTableViewController.swift in Sources */,
-				DDB7A3481EF12DF100BA986F /* WebViewController.swift in Sources */,
 				DDC1049A1EEA44F00075C41F /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
