@@ -25,7 +25,7 @@ if (!window.OMAppUserType) {
 	var _OMAppUserType = (function() {
 	    var _object = {};
 		Object.defineProperties(_object, {
-			vistor: 	{ get: function() { return "visitor"; 	} },
+			visitor: 	{ get: function() { return "visitor"; 	} },
 			google: 	{ get: function() { return "google";	} },
 			facebook: 	{ get: function() { return "facebook";	} },
 			twitter: 	{ get: function() { return "twitter";	} }                 
@@ -289,10 +289,11 @@ if (!window.omApp) {
 			},
 			theme: {
 				get: function() {
-					return currentTheme;
+					setTimeout(function(){ alert("theme 属性已更名为 currentTheme ，请更正！"); }, 1000);
+					return null;
 				},
 				set: function(newValue) {
-					currentTheme = newValue;
+					setTimeout(function(){ alert("theme 属性已更名为 currentTheme ，请更正！"); }, 1000);
 				}
 			}
 		});
@@ -302,14 +303,14 @@ if (!window.omApp) {
 		var _currentUser = (function(){
 			var _id   = "";
 			var _name = "";
-			var _type = OMAppUserType.vistor;
+			var _type = OMAppUserType.visitor;
 			var _coin = 0;
 			
 			var _object = {};
 			Object.defineProperties(_object, {
 				isOnline: {
 					get: function () {
-						return (_type != OMAppUserType.vistor)
+						return (_type != OMAppUserType.visitor)
 					}
 				},
 				id: {
@@ -335,45 +336,15 @@ if (!window.omApp) {
 
 		// 7.1 HTTP
 		function _http(request, callback) {
-			if (!_isApp) {
-				function GetQueryString(parameterName) {
-				     var reg = new RegExp("(^|&)"+ parameterName +"=([^&]*)(&|$)");
-				     var r = window.location.search.substr(1).match(reg);
-				     if(r!=null)return  unescape(r[2]); return null;
-				}
-				var access_token = GetQueryString("access_token");
-				if (access_token) {
-					if (request.headers) {
-						request.headers["access-token"] = access_token;
-					} else {
-						request.headers = {"access-token": access_token};
-					}
-				};
-				var user_token = GetQueryString("user_token");
-				if (user_token) {
-					request.headers["user-token"] = user_token;
-					if (request.params) { // 因西安接口不规范，这个做兼容
-						request.params["user_token"] = user_token;
-					} else {
-						request.params = {"user_token": user_token};
-					}
-				};
-				$.ajax({
-					url: request.url,
-					type: request.method,
-					data: request.params,
-					headers: request.headers,
-					success: function(data, status, xhr) {
-						callback(true, data);
-					},
-					error: function() {
-						callback(false);
-					}
-				});
+			if (request.params) {
+				setTimeout(function(){
+					alert("params 属性已更名为 data ，请更正！");
+				}, 1000);
 				return;
 			};
-			if (request.params && !request.data) {
-				request.data = request.params;
+			if (!_isApp) {
+				_OMApp_HTTP_AJAX(request, callback);
+				return;
 			};
 	        OMAppMessageSend(OMAppMessage.http, {"request": request}, callback);
 		}
@@ -401,47 +372,66 @@ if (!window.omApp) {
 	});
 };
 
+// 获取 URL 中的参数
+function _OMApp_URL_GetQueryString(parameterName) {
+	var reg = new RegExp("(^|&)"+ parameterName +"=([^&]*)(&|$)");
+	var r = window.location.search.substr(1).match(reg);
+	if(r!=null)return  unescape(r[2]); return null;
+}
 
-
-
-
-function OMApp_Show_HTTP_Configuration() {
-	var html = '<div id="OMApp_HTTP_Configuration" style="position: absolute; width: 320px; height: 150px; top: 50%; left: 50%; margin-top: -75px; padding: 20px; margin-left: -160px; font-size: 12px; background-color: #f5f5f5;">'+
-	'<table style="width: 100%; height: 100%">'+
-	'	<tr>'+
-	'		<th colspan="2">HTTP Request Configuration</th>'+
-	'	</tr>'+
-	'	<tr>'+
-	'		<td width="35%" align="right">access-token:</td>'+
-	'		<td><input type="text" name="access-token" style="width: 100%" id="OMApp_HTTP_Access_Token"></td>'+
-	'	</tr>'+
-	'	<tr>'+
-	'		<td align="right">user_token:</td>'+
-	'		<td><input type="text" name="user_token" style="width: 100%" id="OMApp_HTTP_User_Token"></td>'+
-	'	</tr>'+
-	'	<tr>'+
-	'		<td align="right">Auto Send:</td>'+
-	'		<td><input type="checkbox" name="save" id="OMApp_HTTP_Auto_Send"></td>'+
-	'	</tr>'+
-	'	<tr>'+
-	'		<td colspan="2" style="padding: 0; text-align: center; margin: 0">'+
-	'			<input type="button" name="send_http" value="Send HTTP Request" style="width: 80%; height: 100%;" onclick="\'OMApp_HTTP_Access_Token=\' + document.getElementById(\'OMApp_HTTP_Access_Token\').value + \'; OMApp_HTTP_User_Token=\' + document.getElementById(\'OMApp_HTTP_User_Token\').value + \'; OMApp_HTTP_Auto_Send=\' + document.getElementById(\'OMApp_HTTP_Auto_Send\').value;">'+
-	'		</td>'+
-	'	</tr>'+
-	'</table> '+
-	'</div>';
-	function getCookie(cname) {
-		var name = cname + "=";
-		var ca = document.cookie.split(';');
-		for(var i=0; i<ca.length; i++) {
-			var c = ca[i].trim();
-			if (c.indexOf(name)==0) return c.substring(name.length,c.length);
+// 发送网路请求
+function _OMApp_HTTP_AJAX(request, callback) {
+	var xmlhttp = new XMLHttpRequest();
+	xmlhttp.onreadystatechange = function() {
+		if (xmlhttp.readyState != 4) {
+			return;
 		}
-		return "";
+		var contentType = xmlhttp.getResponseHeader("Content-Type");
+		if (/json/.test(contentType)) {
+			callback(xmlhttp.status == 200, JSON.parse(xmlhttp.responseText));
+		} else {
+			callback(xmlhttp.status == 200, xmlhttp.responseText);
+		}
+	}
+	xmlhttp.open(request.method, request.url, true);
+	
+	// 读取测试用的 user_token 和 access_token
+	var access_token = _OMApp_URL_GetQueryString("access_token");
+	if (access_token) {
+		if (request.headers) {
+			request.headers["access-token"] = access_token;
+		} else {
+			request.headers = {"access-token": access_token};
+		}
+	};
+	var user_token = _OMApp_URL_GetQueryString("user_token");
+	if (user_token) {
+		request.headers["user-token"] = user_token;
+		if (request.data) {  // 因西安接口不规范，这个做兼容
+			request.data["user_token"] = user_token;
+		} else {
+			request.data = {"user_token": user_token};
+		}
+	};
+
+	// 设置 Headers
+	if (request.headers) {
+		for (key in request.headers) {
+			xmlhttp.setRequestHeader(key, request.headers[key]);
+		}
 	}
 
-	$(document.body).append(html);
-	$("input#OMApp_HTTP_Access_Token").value = getCookie("OMApp_HTTP_Access_Token");
-	$("input#OMApp_HTTP_User_Token").value = getCookie("OMApp_HTTP_User_Token");
-	$("input#OMApp_HTTP_Auto_Send").value = getCookie("OMApp_HTTP_User_Token")
+	var data = null;
+	if (request.data) {
+		for (key in request.data) {
+			if (data) {
+				data = data + "&" + key + "=" + encodeURIComponent(request.data[key]);
+			} else {
+				data = key + "=" + encodeURIComponent(request.data[key]);
+			}
+		}
+	}
+	xmlhttp.send(data);
 }
+
+
