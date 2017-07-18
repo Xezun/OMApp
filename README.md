@@ -38,6 +38,10 @@
 
     `omApp` 或 `window.omApp`
 
+### 基本规范
+
+    1. URL 参数为 *Key-Value* 形式，如果 Value 不是基本数据类型，则用 `URL 编码后的JSON串` 表示。 
+
 
 ### 方法列表
 

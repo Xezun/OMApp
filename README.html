@@ -1025,7 +1025,8 @@ body .markdown-body
 <li><a href="#html-app">第一部分：HTML 访问 App</a><ul>
 <li><a href="#_4">接口名称</a></li>
 <li><a href="#_5">调用方式</a></li>
-<li><a href="#_6">方法列表</a><ul>
+<li><a href="#_6">基本规范</a></li>
+<li><a href="#_7">方法列表</a><ul>
 <li><a href="#1-logincallback">1. login(callback)</a></li>
 <li><a href="#2-openpage-parameters">2. open(page, parameters) [暂未启用]</a></li>
 <li><a href="#3-navigation">3. navigation</a><ul>
@@ -1045,9 +1046,9 @@ body .markdown-body
 </ul>
 </li>
 <li><a href="#app-html">第二部分：App 访问 HTML</a><ul>
-<li><a href="#_7">接口名称</a></li>
-<li><a href="#_8">调用方式</a></li>
-<li><a href="#_9">方法列表</a><ul>
+<li><a href="#_8">接口名称</a></li>
+<li><a href="#_9">调用方式</a></li>
+<li><a href="#_10">方法列表</a><ul>
 <li><a href="#1">1. &hellip;</a></li>
 </ul>
 </li>
@@ -1090,7 +1091,10 @@ body .markdown-body
 <h3 id="_5"><a name="user-content-_5" href="#_5" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>调用方式</h3>
 <pre><code>`omApp` 或 `window.omApp`
 </code></pre>
-<h3 id="_6"><a name="user-content-_6" href="#_6" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>方法列表</h3>
+<h3 id="_6"><a name="user-content-_6" href="#_6" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>基本规范</h3>
+<pre><code>1. URL 参数为 *Key-Value* 形式，如果 Value 不是基本数据类型，则用 `URL 编码后的JSON串` 表示。
+</code></pre>
+<h3 id="_7"><a name="user-content-_7" href="#_7" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>方法列表</h3>
 <h4 id="1-logincallback"><a name="user-content-1-logincallback" href="#1-logincallback" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>1. login(<em>callback</em>)</h4>
 <ul>
 <li>
@@ -2044,13 +2048,13 @@ omApp.didSelectAlertActionAtIndex(callbackID, 0);
 <h2 id="app-html"><a name="user-content-app-html" href="#app-html" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>第二部分：App 访问 HTML</h2>
 <pre><code>HTML 提供 Javascript 接口实现，App 通过调用该接口实现对 HTML 的访问。
 </code></pre>
-<h3 id="_7"><a name="user-content-_7" href="#_7" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>接口名称</h3>
+<h3 id="_8"><a name="user-content-_8" href="#_8" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>接口名称</h3>
 <pre><code>`omHTML`
 </code></pre>
-<h3 id="_8"><a name="user-content-_8" href="#_8" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>调用方式</h3>
+<h3 id="_9"><a name="user-content-_9" href="#_9" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>调用方式</h3>
 <pre><code>`omHTML` 或 `window.omHTML`
 </code></pre>
-<h3 id="_9"><a name="user-content-_9" href="#_9" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>方法列表</h3>
+<h3 id="_10"><a name="user-content-_10" href="#_10" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>方法列表</h3>
 <h4 id="1"><a name="user-content-1" href="#1" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>1. &hellip;</h4>
 <ul>
 <li>
