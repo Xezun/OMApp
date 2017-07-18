@@ -1082,7 +1082,7 @@ body .markdown-body
 </ul>
 <hr />
 <h2 id="html-app"><a name="user-content-html-app" href="#html-app" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>第一部分：HTML 访问 App</h2>
-<pre><code>App 通过向 HTML 注册 JavaScript 接口来实现 HTML 内容对 App 功能的访问。
+<pre><code>HTML 页面通过调用 App 提供的 JavaScript 接口来实现对 App 功能的访问。
 </code></pre>
 <h3 id="_4"><a name="user-content-_4" href="#_4" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>接口名称</h3>
 <pre><code>`omApp`
@@ -1095,7 +1095,7 @@ body .markdown-body
 <ul>
 <li>
 <p>接口说明：</p>
-<p>当 HTML 页面需要调用原生的登录界面时，调用此接口。</p>
+<p>点击了 HTML 页面的登录按钮或 HTML 页面操作需要用户登录时。</p>
 </li>
 <li>
 <p>参数说明：</p>
@@ -1742,7 +1742,7 @@ var userName = omApp.currentUser.name;
 <ul>
 <li>接口说明：</li>
 </ul>
-<p>HTML 页面不需要负责、保持用户登录状态，App 在此接口中为 HTML 页面提供包含用户信息的网络请求。</p>
+<p>当 HTML 页面发送一个请求，需要携带用户身份信息的时候，使用此方法。出于安全等因素，HTML 页面不负责、保持用户状态，相关逻辑由 App 实现，HTML 直接使用结果。</p>
 <ul>
 <li>
 <p>参数说明：</p>
@@ -1781,7 +1781,7 @@ var userName = omApp.currentUser.name;
 <tbody>
 <tr>
 <td>url</td>
-<td>Object</td>
+<td>String</td>
 <td>必选。url</td>
 </tr>
 <tr>
@@ -1799,13 +1799,9 @@ var userName = omApp.currentUser.name;
 <td>Object</td>
 <td>可选。网络请求的header</td>
 </tr>
-<tr>
-<td><font size="2">* 字段变更：params -&gt; data </font></td>
-<td></td>
-<td></td>
-</tr>
 </tbody>
 </table>
+<p><font size="2">* 字段变更：params -&gt; data，2017-06-29，目前 SDK 对此改变进行兼容 </font></p>
 <ul>
 <li>callback 函数参数：</li>
 </ul>
@@ -1953,7 +1949,7 @@ omApp.didFinishHTTPRequest(callbackID, true, 'anEncodedString', 'application/jso
 <tbody>
 <tr>
 <td>title</td>
-<td>Object</td>
+<td>String</td>
 <td>必选。标题</td>
 </tr>
 <tr>
@@ -1983,7 +1979,7 @@ omApp.didFinishHTTPRequest(callbackID, true, 'anEncodedString', 'application/jso
 <tr>
 <td>index</td>
 <td>Int</td>
-<td>点击的按钮的索引</td>
+<td>当按钮被点击了，被点击的索引</td>
 </tr>
 </tbody>
 </table>

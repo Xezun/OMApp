@@ -26,7 +26,7 @@
 ***
 ## 第一部分：HTML 访问 App 
 
-    App 通过向 HTML 注册 JavaScript 接口来实现 HTML 内容对 App 功能的访问。
+    HTML 页面通过调用 App 提供的 JavaScript 接口来实现对 App 功能的访问。
 
 
 ### 接口名称
@@ -45,7 +45,7 @@
 
 - 接口说明：
 
-    当 HTML 页面需要调用原生的登录界面时，调用此接口。
+    点击了 HTML 页面的登录按钮或 HTML 页面操作需要用户登录时。
 
 - 参数说明：
 
@@ -382,7 +382,7 @@
     
     | **Name**       | **Type**    | **Description** |
     | :------------- | :---------- | :-------------- |
-    | url            | Object      | 必选。url             |
+    | url            | String      | 必选。url             |
     | method         | String      | 必选。值必须是 GET/POST，区分大小写 |
     | <del>params</del> data         | Object      | 可选。网络请求参数     |
     | headers        | Object      | 可选。网络请求的header  |
