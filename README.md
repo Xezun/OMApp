@@ -20,10 +20,11 @@
      
     <font size=2>* 例： Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) ... Safari/8536.25 <font color=red>Onemena/1.0.1</font></font>
 
-- `OMApp` JavaScript 框架：
+    ```
+    // 判断是否在 App 中
+    var isApp = /Onemena/.test(window.navigator.userAgent)
+    ```
 
-    1. 该框架模拟了 `omApp` 环境，方便 HTML 在浏览器中开发调试。
-    2. 该框架实现了本规范中基于 URL 的交互方式。
 
 ## 基本规范
 
@@ -35,37 +36,6 @@
 
     HTML 页面通过调用 App 提供的 JavaScript 接口来实现对 App 功能的访问。
 
-### 准备工作
-
-- HTML 端：在每个页面引入 `OMApp.js` 文件，请放在所有 JavaScript 代码或引用之前。
-- App 端：
-    - 对象注入：请在 WebView `JavaScript环境` 初始化后（HTML 页面 JS 执行前）注入 `omApp` 对象，否则可能无法注入对象，或页面 JS 找不到对象 `omApp` 对象。
-    - URL拦截：需在 URL 中提供 `omApp` 对象初始化的数据。
-        - 参数名： `om_app_info` 。
-        - 参数值：包含初始化信息的 JSON 字符串（需进行 URL 编码）。
-        ```
-        // 目前所需的信息如下：
-        {
-            currentTheme: "day", // 取值请参考 OMAppTheme 枚举
-            currentUser: {
-                id: "0",
-                name: "Default",
-                type: "facebook", // 取值请参考 OMAppTheme 枚举
-                token: 'OM_API_USER_TOKEN', 
-                coin: 999
-            },
-            navigation: {
-                bar: {
-                    title: "OMApp",
-                    titleColor: "#000000",
-                    isHidden: false,
-                    backgroundColor: "#FFFFFF"
-                }
-            }
-        }
-        ```
-
-
 ### 接口名称
 
     `omApp`
@@ -74,6 +44,18 @@
 ### 调用方式
 
     `omApp` 或 `window.omApp`
+
+
+### 准备工作
+
+- 为方便开发调试，HTML 页面可以引入 `OMApp.js` 文件，该文件：
+    1. 提供了 `omApp` 环境。
+    2. 模拟了一些基本行为。
+- 在 App 中，需提供给 `WebView` 提供 `omApp` 环境，有两种方式：
+    - 对象注入。
+        - 注入的对象 `omApp` 需实现本规范中已声明的。
+    - URL拦截：1. 在 iOS 中，即 `JSContext` 创建时。
+- App 通过 `` 进行交互，`OMApp.js` 文件封装了 URL 交互的相关协议
 
 
 ### 方法列表

@@ -1,4 +1,3 @@
-// require JQurey.js
 // OMApp
 
 /* OMAppPage 页面类型枚举定义 */
@@ -99,6 +98,24 @@ if (!window.omApp) {
 		var _allCallbacks = {};
 		var _isApp = /Onemena/.test(window.navigator.userAgent);
 
+		// 保存一个 callback，并返回其ID。
+		// - callbackID：必选，Function 类型。
+		// - return: String 类型
+		function OMAppSaveCallback(callback) {
+			var callbackID = "cb_" + Date.parse(new Date());
+		    _allCallbacks[callbackID] = callback;
+		    return callbackID;
+		}
+
+		// 根据 ID 找到并删除一个已保存的 callback 。
+		// - callbackID：必选，String 类型。
+		// - return: Function 类型
+		function OMAppRemoveCallback(callbackID) {
+			var callback = _allCallbacks[callbackID];
+			_allCallbacks[callbackID] = null;
+			return callback;
+		}
+
 		/* 向App发送消息：（消息类型，消息参数，回调）。*/
 		function OMAppMessageSend(message, parameterObject, callback) {
 	        if (!message) { return; }
@@ -106,9 +123,8 @@ if (!window.omApp) {
 	        
 	        var query = null;
 	        var callbackID = null;
-	        if (callback) { //
-				callbackID = "cb_" + Date.parse(new Date());
-		        _allCallbacks[callbackID] = callback;
+	        if (callback) {
+	        	callbackID = OMAppSaveCallback(callback)
 		        query = "callbackID=" + callbackID;
 	        }
 
@@ -134,13 +150,9 @@ if (!window.omApp) {
 	        	url += ("?" + query)
 	        }
 
-	        /* <iframe src='" + url + "' style='display: none;'></iframe> */
 	        var iframe = document.createElement('iframe');
 	        iframe.style.display = 'none';
 	        iframe.setAttribute('src', url);
-	        // $(iframe).ready(function() {
-	        //     document.body.removeChild(iframe);
-	        // });
 	        document.body.appendChild(iframe);
 	        setTimeout(function() {
 	        	document.body.removeChild(iframe);
@@ -293,11 +305,12 @@ if (!window.omApp) {
 			},
 			theme: {
 				get: function() {
-					setTimeout(function(){ alert("theme 属性已更名为 currentTheme ，请更正！"); }, 1000);
-					return null;
+					// setTimeout(function(){ alert("theme 属性已更名为 currentTheme ，请更正！"); }, 1000);
+					return this.currentTheme;
 				},
 				set: function(newValue) {
-					setTimeout(function(){ alert("theme 属性已更名为 currentTheme ，请更正！"); }, 1000);
+					// setTimeout(function(){ alert("theme 属性已更名为 currentTheme ，请更正！"); }, 1000);
+					this.currentTheme = newValue;
 				}
 			}
 		});
@@ -340,14 +353,15 @@ if (!window.omApp) {
 
 		// 7.1 HTTP
 		function _http(request, callback) {
-			if (request.params) {
-				setTimeout(function(){
-					alert("params 属性已更名为 data ，请更正！");
-				}, 1000);
-				return;
+			if (request.params && !request.data) {
+				// setTimeout(function(){ alert("params 属性已更名为 data ，请更正！"); }, 1000);
+				request.data = request.params;
 			};
 			if (!_isApp) {
-				OMAppAJAX(request, callback);
+				var callbackID = OMAppSaveCallback(callback);
+				OMAppAJAX(request, function(success, result, contentType) {
+					omApp.didFinishHTTPRequest(callbackID, success, result, contentType);
+				});
 				return;
 			};
 	        OMAppMessageSend(OMAppMessage.http, {"request": request}, callback);
@@ -382,17 +396,7 @@ if (!window.omApp) {
 
 
 function OMAppGetAppInfo() {
-	var string = OMAppGetURLQueryString("om_app_info");
-    var	info = JSON.parse(string);
-    if (info) {
-    	OMAppSetCookie("om_app_info", JSON.stringify(info));
-    	return info;
-    }
-    info = JSON.parse(OMAppGetCookie("om_app_info"));
-    if (info) {
-    	return info;
-    }
-    info = {
+    var info = {
 		currentTheme: OMAppTheme.day,
 		currentUser: {
 			id: "0",
@@ -421,11 +425,12 @@ function OMAppAJAX(request, callback) {
 			return;
 		}
 		var contentType = xmlhttp.getResponseHeader("Content-Type");
-		if (/json/.test(contentType)) {
-			callback(xmlhttp.status == 200, JSON.parse(xmlhttp.responseText));
-		} else {
-			callback(xmlhttp.status == 200, xmlhttp.responseText);
-		}
+		var success = (xmlhttp.status == 200);
+		var result = xmlhttp.responseText;
+		if (result) {
+			result = encodeURIComponent(result);
+		};
+		callback(success, result, contentType);
 	}
 	xmlhttp.open(request.method, request.url, true);
 	
@@ -453,6 +458,10 @@ function OMAppAJAX(request, callback) {
 		for (key in request.headers) {
 			xmlhttp.setRequestHeader(key, request.headers[key]);
 		}
+	}
+	
+	if(request.method=="POST"){  
+		xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");  
 	}
 
 	var data = null;
