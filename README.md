@@ -34,7 +34,7 @@
 ***
 ## 第一部分：HTML 访问 App 
 
-    HTML 页面通过调用 App 提供的 JavaScript 接口来实现对 App 功能的访问。
+    为了使 HTML 页面能访问 App 内容，App 在 `WebView` 中不仅要标注特殊的 User Agent ，而且要在 HTML 的 JavaScript 环境中注入相应的访问接口。
 
 ### 接口名称
 
@@ -46,25 +46,13 @@
     `omApp` 或 `window.omApp`
 
 
-### 准备工作
-
-- 为方便开发调试，HTML 页面可以引入 `OMApp.js` 文件，该文件：
-    1. 提供了 `omApp` 环境。
-    2. 模拟了一些基本行为。
-- 在 App 中，需提供给 `WebView` 提供 `omApp` 环境，有两种方式：
-    - 对象注入。
-        - 注入的对象 `omApp` 需实现本规范中已声明的。
-    - URL拦截：1. 在 iOS 中，即 `JSContext` 创建时。
-- App 通过 `` 进行交互，`OMApp.js` 文件封装了 URL 交互的相关协议
-
-
 ### 方法列表
 
 #### 1. login(*callback*)
 
 - 接口说明：
 
-    点击了 HTML 页面的登录按钮或 HTML 页面操作需要用户登录时。
+    当 HTML 页面需要调用 App 的 `登录` 功能时，调用此接口。
 
 - 参数说明：
 
@@ -84,7 +72,7 @@
 - 代码示例：
 
     ``` 
-    // 如非特殊声明，所有示例代码均为 Javascript
+    // 如非特殊声明，所有示例代码均为 JavaScript
     omApp.login(function(success) {
         if (success) {
             // do suceess actions.
@@ -110,7 +98,7 @@
 
 - 接口说明：
 
-    当 HTML 页面需要跳转到其它（原生）界面时，调用此接口。
+    当 HTML 页面需要跳转到 App 其它界面时，调用此接口。
 
 - 参数说明：
 
@@ -165,11 +153,13 @@
 
 #### 3. navigation
 
+    为了使 HTML 提供类似原生 App 的操作体验，`navigation` 接口给 HTML 提供了创建新窗口的能，并通过 `导航栈` 来管理这一系列窗口。
+
 ##### 3.1 navigation.push(*url*, *animated*)
 
 - 接口说明：
 
-    导航到下级页面。
+    创建一个新窗口并打开指定 URL，常用于导航到下级页面。新窗口将压入到导航栈顶。
 
 - 参数说明：
 
@@ -181,22 +171,20 @@
 - 代码示例：
 
     ```
-    // 支持相对根目录的路径
-    omApp.navigation.push('/relative/path/page.html'); 
-    // 完整URL
-    omApp.navigation.push('http://8.dev.arabsada.com/?userToken'); 
+    omApp.navigation.push('http://8.dev.arabsada.com/'); 
+    omApp.navigation.push('http://8.dev.arabsada.com/', true); 
     ```
 
 - 基于 URL 的交互方式:
     
-    - URL： `app://navigation.push/?url=...`
+    - URL： `app://navigation.push/?url=...&animated=...`
     
 
 ##### 3.2 navigation.pop(*animated*)
 
 - 接口说明：
 
-    返回到上级页面。
+    关闭当前窗口，并返回到上一个窗口，常用于返回到上级页面。当前窗口从导航栈中弹出。
 
 - 参数说明：
 
@@ -207,19 +195,19 @@
 - 代码示例：
 
     ```
-    omApp.navigation.pop(); 
+    omApp.navigation.pop(true); 
     ```
 
 - 基于 URL 的交互方式:
     
-    - URL：`app://navigation.pop/`
+    - URL：`app://navigation.pop/?animated=...`
 
 
 ##### 3.3 navigation.popTo(*index*, *animated*)
 
 - 接口说明：
 
-    返回到指定级页面。
+    返回到导航栈内指定级页面。如果当前导航栈内已经有很多页面，此方法可以快速回到指定页面。
 
 - 参数说明：
 
@@ -231,19 +219,19 @@
 - 代码示例：
 
     ```
-    omApp.navigation.popTo(0);
+    omApp.navigation.popTo(0, true);
     ```
 
 - 基于 URL 的交互方式:
     
-    - URL：`app://navigation.popto/?index=...`
+    - URL：`app://navigation.popto/?index=...&animated=...`
 
 
 ##### 3.4 navigation.bar
 
 - 接口说明：
 
-    Object，导航条对象，控制导航条外观的接口。
+    只读，Object。代表了 App 的原生导航条对象。通过此对象，可以控制导航条的外观。
 
 - 属性说明：
 
@@ -270,15 +258,16 @@
 
 #### 4. currentTheme
 
-    2017-06-17: 接口由 `theme` 改为 `currentTheme` 
+    变更日志：
+    2017-06-17: `theme` -> `currentTheme` 
 
 - 接口说明：
 
-    App 属性，当前主题名称。
+    此接口用于获取或设置 App 当前的主题外观，String 类型。
 
 - 属性说明：
 
-    可写，[OMAppTheme](#OMAppTheme) 枚举值。
+    非空，可写，[OMAppTheme](#OMAppTheme) 枚举值。
     
 - <a name="OMAppTheme">***OMAppTheme*枚举**</a>
 
@@ -342,18 +331,18 @@
 
 - 接口说明：
 
-    只读非空属性，Object，包含用户信息的对象。请用 `isOnline` 属性来区分用户是否登录。
+    只读，非空，Object 类型。当 HTML 需要获取 App 当前用户信息时，调用此接口。例如，判断用户是否登录可通过 `isOnline` 属性来确定。
 
 - 属性说明：
     
     | **Name**        | **Type**    | **Description** |
     | :-------------- | :---------- | :-------------- |
-    | isOnline        | Bool        | 是否已登录        |
-    | id              | String      | 用户ID           |
-    | name            | String      | 用户名           |
-    | type            | String      | 见 [OMAppUserType枚举](#OMAppUserType)    |
-    | coin            | Int         | 用户金币数        |
-    | token           | String      | user token        |
+    | isOnline        | Bool        | 只读。是否已登录        |
+    | id              | String      | 只读。用户ID           |
+    | name            | String      | 只读。用户名           |
+    | type            | String      | 只读。见 [OMAppUserType枚举](#OMAppUserType)    |
+    | coin            | Int         | 只读。用户金币数        |
+    | token           | String      | 只读。user token        |
 
     <font size=2>* 说明： token 字段对外并不是一个好的 API 设计，未来优化的版本中将去掉此值。</font>
 
@@ -379,16 +368,12 @@
     var userName = omApp.currentUser.name;
     ```
 
-- 基于 URL 的交互方式:
-    
-    - URL：`app://currentUser/?name=...`
-
 
 #### 7. http(*request*, *callback*)
 
 - 接口说明：
 
-    当 HTML 页面发送一个请求，需要携带用户身份信息的时候，使用此方法。出于安全等因素，HTML 页面不负责、保持用户状态，相关逻辑由 App 实现，HTML 直接使用结果。
+    当 HTML 页面发送一个请求，需要携带用户身份信息的时候，使用此接口。出于安全等因素，HTML 页面不负责、保持用户状态，相关逻辑由 App 实现，HTML 直接使用结果。
 
 - 参数说明：
 
@@ -403,10 +388,13 @@
     | :------------- | :---------- | :-------------- |
     | url            | String      | 必选。url             |
     | method         | String      | 必选。值必须是 GET/POST，区分大小写 |
-    | <del>params</del> data         | Object      | 可选。网络请求参数     |
+    | data           | Object      | 可选。网络请求参数     |
     | headers        | Object      | 可选。网络请求的header  |
     
-    <font size="2">* 字段变更：params -> data，2017-06-29，目前 SDK 对此改变进行兼容 </font>
+    <font size="2">
+    * 字段变更：
+    * 2017-06-29: params -> data，目前 SDK 对此改变保持兼容。
+    </font>
 
     - callback 函数参数：
     
@@ -458,7 +446,7 @@
         // var object = JSON.parse(aString);
         // JavaScript URL 编码函数：
         // var encodedString = encodeURIComponent(aString);
-
+        
         // 返回 String 数据的 JS 代码：
         omApp.didFinishHTTPRequest(callbackID, true, 'anEncodedString');
         // 返回 Object 数据的 JS 代码：

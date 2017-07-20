@@ -76,7 +76,8 @@ if (!window.OMAppMessage) {
 			open: 			{ get: function() { return "open"; 			} },
 			login: 			{ get: function() { return "login"; 		} },
 			currentTheme: 	{ get: function() { return "currenttheme";	} },
-			http: 			{ get: function() { return "http"; 			} }
+			http: 			{ get: function() { return "http"; 			} },
+			alert: 			{ get: function() { return "alert"; 		} }
 		});
 		return _object;
 	})();
@@ -221,7 +222,7 @@ if (!window.omApp) {
 		// 4. navigation
 		var _navigation = (function() {
 			// 进入下级页面。
-			var _push = function (url) {
+			var _push = function (url, animated) {
 				// 不是以 http、https 开头的，被视作为相对路径。
 	   			if (url.search(/(http|https|file):\/\//i) != 0) {
 	   				url = window.location.protocol + "//" + window.location.host + url;
@@ -230,26 +231,35 @@ if (!window.omApp) {
 					window.location.href = url;
 					return;
 				}
-	   		 	return OMAppMessageSend(OMAppMessage.navigation.push, {"url": url});
+				if (typeof animated != 'boolean') {
+					animated = true;
+				};
+	   		 	return OMAppMessageSend(OMAppMessage.navigation.push, {"url": url, "animated": animated});
 			}
 
 			// 推出当前页面，使栈内页面数量 -1。
-			var _pop = function () {
+			var _pop = function (animated) {
 				if (!_isApp) {
 					window.history.back();
 					return;
 				};
-				return OMAppMessageSend(OMAppMessage.navigation.pop);
+				if (typeof animated != 'boolean') {
+					animated = true;
+				};
+				return OMAppMessageSend(OMAppMessage.navigation.pop, {"animated": animated});
 			}
 
 			// 移除栈内索引大于 index 的所有页面，即将 index 页面所显示的内容展示出来。
-			var _popTo = function (index) {
+			var _popTo = function (index, animated) {
 				if (!_isApp) {
 					var i = index - window.history.length + 1;
 					window.history.go(i);
 					return;
 				};
-				return OMAppMessageSend(OMAppMessage.navigation.popTo, {"index": index});
+				if (typeof animated != 'boolean') {
+					animated = true;
+				};
+				return OMAppMessageSend(OMAppMessage.navigation.popTo, {"index": index, "animated": animated});
 			}
 
 			var _bar = (function() {
