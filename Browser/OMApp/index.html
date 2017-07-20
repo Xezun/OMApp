@@ -4,18 +4,10 @@
 	<title>Test</title>
 </head>
 <script type="text/javascript">
-Object.defineProperties(window, {
-	OMAppPage: {
-		get: function() {
-			return "_OMAppPage";
-		}
-	}
-});
-if (window.OMAppPage) {
-	alert(window.OMAppPage)
-} else {
-	alert('false')
+if (typeof OMAppInfo == 'undefined') {
+	window.OMAppInfo = {"name":"OMAppInfo"};
 }
+alert(OMAppInfo);
 </script>
 <body>
 

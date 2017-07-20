@@ -88,6 +88,10 @@ if (!window.OMAppMessage) {
 
 /* omApp 接口定义 */
 if (!window.omApp) {
+	if (!window.OMAppInfo) {
+		window.OMAppInfo = OMAppGetAppInfo();
+	}
+	
 	var _omApp = (function() {
 		var _object = {};
 
@@ -237,10 +241,10 @@ if (!window.omApp) {
 			}
 
 			var _bar = (function() {
-				var _title = null;
-				var _titleColor = null;
-				var _backgroundColor = null;
-				var _isHidden = false;
+				var _title			 = OMAppInfo.navigation.bar.title;
+				var _titleColor		 = OMAppInfo.navigation.bar.titleColor;
+				var _backgroundColor = OMAppInfo.navigation.bar.backgroundColor;
+				var _isHidden		 = OMAppInfo.navigation.bar.isHidden;
 
 				var _object = {};
 				Object.defineProperties(_object, {
@@ -276,7 +280,7 @@ if (!window.omApp) {
 		Object.defineProperty(_object, 'navigation', { get: function() { return _navigation; }});
 		
 		// 5. theme
-		var _currentTheme = OMAppTheme.day;
+		var _currentTheme = OMAppInfo.currentTheme;
 		Object.defineProperties(_object, {
 			currentTheme: {
 				get: function() { 
@@ -301,10 +305,10 @@ if (!window.omApp) {
 
 		// 6. 当前用户
 		var _currentUser = (function(){
-			var _id   = "";
-			var _name = "";
-			var _type = OMAppUserType.visitor;
-			var _coin = 0;
+			var _id   = OMAppInfo.currentUser.id;
+			var _name = OMAppInfo.currentUser.name;
+			var _type = OMAppInfo.currentUser.type;
+			var _coin = OMAppInfo.currentUser.coin;
 			
 			var _object = {};
 			Object.defineProperties(_object, {
@@ -343,7 +347,7 @@ if (!window.omApp) {
 				return;
 			};
 			if (!_isApp) {
-				_OMApp_HTTP_AJAX(request, callback);
+				OMAppAJAX(request, callback);
 				return;
 			};
 	        OMAppMessageSend(OMAppMessage.http, {"request": request}, callback);
@@ -372,15 +376,45 @@ if (!window.omApp) {
 	});
 };
 
-// 获取 URL 中的参数
-function _OMApp_URL_GetQueryString(parameterName) {
-	var reg = new RegExp("(^|&)"+ parameterName +"=([^&]*)(&|$)");
-	var r = window.location.search.substr(1).match(reg);
-	if(r!=null)return  unescape(r[2]); return null;
+
+
+
+
+
+function OMAppGetAppInfo() {
+	var string = OMAppGetURLQueryString("om_app_info");
+    var	info = JSON.parse(string);
+    if (info) {
+    	OMAppSetCookie("om_app_info", JSON.stringify(info));
+    	return info;
+    }
+    info = JSON.parse(OMAppGetCookie("om_app_info"));
+    if (info) {
+    	return info;
+    }
+    info = {
+		currentTheme: OMAppTheme.day,
+		currentUser: {
+			id: "0",
+			name: "Default",
+			type: OMAppUserType.facebook,
+			token: 'OM_API_TEST_TOKEN',
+			coin: 999
+		},
+		navigation: {
+			bar: {
+				title: "OMApp",
+				titleColor: "#000000",
+				isHidden: false,
+				backgroundColor: "#FFFFFF"
+			}
+		}
+	}
+	return info;
 }
 
 // 发送网路请求
-function _OMApp_HTTP_AJAX(request, callback) {
+function OMAppAJAX(request, callback) {
 	var xmlhttp = new XMLHttpRequest();
 	xmlhttp.onreadystatechange = function() {
 		if (xmlhttp.readyState != 4) {
@@ -396,7 +430,7 @@ function _OMApp_HTTP_AJAX(request, callback) {
 	xmlhttp.open(request.method, request.url, true);
 	
 	// 读取测试用的 user_token 和 access_token
-	var access_token = _OMApp_URL_GetQueryString("access_token");
+	var access_token = OMAppGetURLQueryString("access_token");
 	if (access_token) {
 		if (request.headers) {
 			request.headers["access-token"] = access_token;
@@ -404,7 +438,7 @@ function _OMApp_HTTP_AJAX(request, callback) {
 			request.headers = {"access-token": access_token};
 		}
 	};
-	var user_token = _OMApp_URL_GetQueryString("user_token");
+	var user_token = OMAppGetURLQueryString("user_token");
 	if (user_token) {
 		request.headers["user-token"] = user_token;
 		if (request.data) {  // 因西安接口不规范，这个做兼容
@@ -432,6 +466,29 @@ function _OMApp_HTTP_AJAX(request, callback) {
 		}
 	}
 	xmlhttp.send(data);
+}
+
+// 获取 URL 中的参数
+function OMAppGetURLQueryString(parameterName) {
+	var reg = new RegExp("(^|&)"+ parameterName +"=([^&]*)(&|$)");
+	var r = window.location.search.substr(1).match(reg);
+	if(r!=null)return  unescape(r[2]); return null;
+}
+
+
+function OMAppSetCookie(name,value) {
+	var Days = 30;
+	var exp = new Date();
+	exp.setTime(exp.getTime() + Days*24*60*60*1000);
+	document.cookie = name + "="+ escape (value) + ";expires=" + exp.toGMTString();
+}
+
+function OMAppGetCookie(name) {
+	var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+	if(arr=document.cookie.match(reg))
+	return unescape(arr[2]);
+	else
+	return null;
 }
 
 
