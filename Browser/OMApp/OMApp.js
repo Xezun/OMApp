@@ -95,26 +95,35 @@ if (!window.omApp) {
 	var _omApp = (function() {
 		var _object = {};
 
-		// 所有已保存的回调
-		var _allCallbacks = {};
 		var _isApp = /Onemena/.test(window.navigator.userAgent);
 
-		// 保存一个 callback，并返回其ID。
-		// - callbackID：必选，Function 类型。
-		// - return: String 类型
-		function OMAppSaveCallback(callback) {
-			var callbackID = "cb_" + Date.parse(new Date());
-		    _allCallbacks[callbackID] = callback;
-		    return callbackID;
-		}
+		var _callbacks = (function(){
+			var _store 	= {}; // 所有已保存的回调
+			var _id 	= 0;
 
-		// 根据 ID 找到并删除一个已保存的 callback 。
-		// - callbackID：必选，String 类型。
-		// - return: Function 类型
-		function OMAppRemoveCallback(callbackID) {
-			var callback = _allCallbacks[callbackID];
-			_allCallbacks[callbackID] = null;
-			return callback;
+			function _push(callback) {
+				_id += 1;
+				var callbackID = "om_" + _id;
+				_store[callbackID] = callback;
+				return callbackID;
+			}
+
+			function _pop(callbackID) {
+				var callback = _store[callbackID];
+				_store[callbackID] = null;
+				return callback;
+			}
+
+			var _object = {};
+			Object.defineProperties(_object, {
+				push: { get: function() { return _push; } },
+				pop:  { get: function() { return _pop;  } }
+			});
+			return _object;
+		})();
+
+		function _deprecate(oldMethod, newMethod) {
+			console.log("[OMApp] " + oldMethod + " 已废弃，请使用 " + newMethod + " 代替！");
 		}
 
 		/* 向App发送消息：（消息类型，消息参数，回调）。*/
@@ -125,7 +134,7 @@ if (!window.omApp) {
 	        var query = null;
 	        var callbackID = null;
 	        if (callback) {
-	        	callbackID = OMAppSaveCallback(callback)
+	        	callbackID = _callbacks.push(callback);
 		        query = "callbackID=" + callbackID;
 	        }
 
@@ -190,10 +199,10 @@ if (!window.omApp) {
 
 		// 2.2 原生通知JS登录已完成。
 		function _didFinishLogin(callbackID, success) {
-			if (_allCallbacks[callbackID]) {
-				_allCallbacks[callbackID](success);
-			}
-			_allCallbacks[callbackID] = null;
+		 	var callback = _callbacks.pop(callbackID);
+		 	if (callback) {
+		 		callback(success);
+		 	}
 		}
 	 	Object.defineProperty(_object, 'didFinishLogin', { get: function() { return _didFinishLogin; }});
 
@@ -212,10 +221,10 @@ if (!window.omApp) {
 
 		// 3.2
 		function _didSelectAlertActionAtIndex(callbackID, index) {
-			if (_allCallbacks[callbackID]) {
-				_allCallbacks[callbackID](index);
+			var callback = _callbacks.pop(callbackID);
+			if (callback) {
+				callback(index);
 			}
-			_allCallbacks[callbackID] = null;
 		}
 	 	Object.defineProperty(_object, 'didSelectAlertActionAtIndex', { get: function() { return _didSelectAlertActionAtIndex; }});
 
@@ -315,12 +324,12 @@ if (!window.omApp) {
 			},
 			theme: {
 				get: function() {
-					// setTimeout(function(){ alert("theme 属性已更名为 currentTheme ，请更正！"); }, 1000);
-					return this.currentTheme;
+					_deprecate("omApp.theme", "omApp.currentTheme");
+					return window.omApp.currentTheme;
 				},
 				set: function(newValue) {
-					// setTimeout(function(){ alert("theme 属性已更名为 currentTheme ，请更正！"); }, 1000);
-					this.currentTheme = newValue;
+					_deprecate("omApp.theme", "omApp.currentTheme");
+					window.omApp.currentTheme = newValue;
 				}
 			}
 		});
@@ -364,11 +373,11 @@ if (!window.omApp) {
 		// 7.1 HTTP
 		function _http(request, callback) {
 			if (request.params && !request.data) {
-				// setTimeout(function(){ alert("params 属性已更名为 data ，请更正！"); }, 1000);
+				_deprecate("omApp.http 参数字段 request.params", "request.data");
 				request.data = request.params;
 			};
 			if (!_isApp) {
-				var callbackID = OMAppSaveCallback(callback);
+				var callbackID = _callbacks.push(callback);
 				OMAppAJAX(request, function(success, result, contentType) {
 					omApp.didFinishHTTPRequest(callbackID, success, result, contentType);
 				});
@@ -379,16 +388,15 @@ if (!window.omApp) {
 		Object.defineProperty(_object, 'http', { get: function() { return _http; }});	
 		// 7.2 
 		function _didFinishHTTPRequest(callbackID, success, result, contentType) {
-			if (_allCallbacks[callbackID]) {
-				if (result) {
-					result = decodeURIComponent(result);
-					if (/json/.test(contentType)) {
-						result = JSON.parse(result);
-					}
+			var callback = _callbacks.pop(callbackID);
+			if (!callback) { return; };
+			if (result) {
+				result = decodeURIComponent(result);
+				if (/json/.test(contentType)) {
+					result = JSON.parse(result);
 				}
-				_allCallbacks[callbackID](success, result);
 			}
-			_allCallbacks[callbackID] = null;
+			callback(success, result);
 		}
 	 	Object.defineProperty(_object, 'didFinishHTTPRequest', { get: function() { return _didFinishHTTPRequest; }});
 
@@ -428,6 +436,7 @@ function OMAppGetAppInfo() {
 }
 
 // 发送网路请求
+// 回调参数：是否请求成功, 请求回来的数据（URL编码的字符串）, 文档类型.
 function OMAppAJAX(request, callback) {
 	var xmlhttp = new XMLHttpRequest();
 	xmlhttp.onreadystatechange = function() {
@@ -494,7 +503,7 @@ function OMAppGetURLQueryString(parameterName) {
 	if(r!=null)return  unescape(r[2]); return null;
 }
 
-
+// 设置 Cookie
 function OMAppSetCookie(name,value) {
 	var Days = 30;
 	var exp = new Date();
@@ -502,6 +511,7 @@ function OMAppSetCookie(name,value) {
 	document.cookie = name + "="+ escape (value) + ";expires=" + exp.toGMTString();
 }
 
+// 读取 Cookie
 function OMAppGetCookie(name) {
 	var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
 	if(arr=document.cookie.match(reg))
@@ -509,5 +519,8 @@ function OMAppGetCookie(name) {
 	else
 	return null;
 }
+
+
+
 
 
