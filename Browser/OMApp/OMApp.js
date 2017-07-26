@@ -88,10 +88,6 @@ if (!window.OMAppMessage) {
 
 /* omApp 接口定义 */
 if (!window.omApp) {
-	if (!window.OMAppInfo) {
-		window.OMAppInfo = OMAppGetAppInfo();
-	}
-	
 	var _omApp = (function() {
 		var _object = {};
 
@@ -272,10 +268,10 @@ if (!window.omApp) {
 			}
 
 			var _bar = (function() {
-				var _title			 = OMAppInfo.navigation.bar.title;
-				var _titleColor		 = OMAppInfo.navigation.bar.titleColor;
-				var _backgroundColor = OMAppInfo.navigation.bar.backgroundColor;
-				var _isHidden		 = OMAppInfo.navigation.bar.isHidden;
+				var _title			 = "Onemena";
+				var _titleColor		 = "#000000";
+				var _backgroundColor = "#FFFFFF";
+				var _isHidden		 = false;
 
 				var _object = {};
 				Object.defineProperties(_object, {
@@ -311,7 +307,7 @@ if (!window.omApp) {
 		Object.defineProperty(_object, 'navigation', { get: function() { return _navigation; }});
 		
 		// 5. theme
-		var _currentTheme = OMAppInfo.currentTheme;
+		var _currentTheme = OMAppTheme.day;
 		Object.defineProperties(_object, {
 			currentTheme: {
 				get: function() { 
@@ -337,10 +333,10 @@ if (!window.omApp) {
 
 		// 6. 当前用户
 		var _currentUser = (function(){
-			var _id   = OMAppInfo.currentUser.id;
-			var _name = OMAppInfo.currentUser.name;
-			var _type = OMAppInfo.currentUser.type;
-			var _coin = OMAppInfo.currentUser.coin;
+			var _id   = "0";
+			var _name = "None";
+			var _type = OMAppUserType.visitor;
+			var _coin = 0;
 			
 			var _object = {};
 			Object.defineProperties(_object, {
@@ -412,28 +408,6 @@ if (!window.omApp) {
 
 
 
-
-function OMAppGetAppInfo() {
-    var info = {
-		currentTheme: OMAppTheme.day,
-		currentUser: {
-			id: "0",
-			name: "Default",
-			type: OMAppUserType.facebook,
-			token: 'OM_API_TEST_TOKEN',
-			coin: 999
-		},
-		navigation: {
-			bar: {
-				title: "OMApp",
-				titleColor: "#000000",
-				isHidden: false,
-				backgroundColor: "#FFFFFF"
-			}
-		}
-	}
-	return info;
-}
 
 // 发送网路请求
 // 回调参数：是否请求成功, 请求回来的数据（URL编码的字符串）, 文档类型.
