@@ -71,13 +71,14 @@ if (!window.OMAppMessage) {
 
 		var _object = {};
 		Object.defineProperties(_object, {
-			scheme: 		{ get: function() { return "app"; 			} },
-			navigation: 	{ get: function() { return _navigation; 	} },
-			open: 			{ get: function() { return "open"; 			} },
-			login: 			{ get: function() { return "login"; 		} },
-			currentTheme: 	{ get: function() { return "currenttheme";	} },
-			http: 			{ get: function() { return "http"; 			} },
-			alert: 			{ get: function() { return "alert"; 		} }
+			scheme: 			{ get: function() { return "app"; 				} },
+			documentIsReady: 	{ get: function() { return "documentisready"; 	} },
+			navigation: 		{ get: function() { return _navigation; 		} },
+			open: 				{ get: function() { return "open"; 				} },
+			login: 				{ get: function() { return "login"; 			} },
+			currentTheme: 		{ get: function() { return "currenttheme";		} },
+			http: 				{ get: function() { return "http"; 				} },
+			alert: 				{ get: function() { return "alert"; 			} }
 		});
 		return _object;
 	})();
@@ -379,7 +380,7 @@ if (!window.omApp) {
 				});
 				return;
 			};
-	        OMAppMessageSend(OMAppMessage.http, {"request": request}, callback);
+	        return OMAppMessageSend(OMAppMessage.http, {"request": request}, callback);
 		}
 		Object.defineProperty(_object, 'http', { get: function() { return _http; }});	
 		// 7.2 
@@ -396,12 +397,36 @@ if (!window.omApp) {
 		}
 	 	Object.defineProperty(_object, 'didFinishHTTPRequest', { get: function() { return _didFinishHTTPRequest; }});
 
+	 	// 8. ready
+	 	var _ready = null;
+	 	Object.defineProperty(_object, 'ready', {
+	 		get: function() { 
+	 			return function(callback) { _ready = callback;}; 
+	 		}
+	 	});
+
+	 	// 9. 
+	 	function _documentIsReady() {
+	 	 	return OMAppMessageSend(OMAppMessage.documentIsReady, null, function() {
+	 			_ready();
+	 		});
+	 	}
+	 	Object.defineProperty(_object, 'documentIsReady', { get: function() { return _documentIsReady; }});
+
 		return _object;
 	})();
 
 	Object.defineProperties(window, {
 		omApp: { get: function () { return _omApp; } }
 	});
+
+	// 绑定事件
+	if (document.readyState === "complete") {   
+         setTimeout(omApp.documentIsReady);      
+	} else {
+        document.addEventListener("DOMContentLoaded", omApp.documentIsReady, false);
+　　　　 window.addEventListener("load", omApp.documentIsReady, false);   
+	}
 };
 
 
