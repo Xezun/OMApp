@@ -1014,53 +1014,44 @@ body .markdown-body
     page-break-after: avoid;
   }
 }
-</style><title>README</title></head><body><article class="markdown-body"><h1 id="apphtml"><a name="user-content-apphtml" href="#apphtml" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>App/HTML 交互协议</h1>
+</style><title>README</title></head><body><article class="markdown-body"><h1 id="onemena-apphtml"><a name="user-content-onemena-apphtml" href="#onemena-apphtml" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Onemena App／HTML 交互协议</h1>
 <h2 id="_1"><a name="user-content-_1" href="#_1" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>目录</h2>
 <div class="toc">
 <ul>
-<li><a href="#apphtml">App/HTML 交互协议</a><ul>
+<li><a href="#onemena-apphtml">Onemena App／HTML 交互协议</a><ul>
 <li><a href="#_1">目录</a></li>
 <li><a href="#_2">说明</a></li>
-<li><a href="#_3">环境</a></li>
-<li><a href="#_4">基本规范</a></li>
 <li><a href="#html-app">第一部分：HTML 访问 App</a><ul>
-<li><a href="#_5">接口名称</a></li>
-<li><a href="#_6">调用方式</a></li>
-<li><a href="#_7">准备工作</a></li>
-<li><a href="#_8">方法列表</a><ul>
-<li><a href="#1-logincallback">1. login(callback)</a></li>
-<li><a href="#2-openpage-parameters">2. open(page, parameters) [暂未启用]</a></li>
-<li><a href="#3-navigation">3. navigation</a><ul>
-<li><a href="#31-navigationpushurl-animated">3.1 navigation.push(url, animated)</a></li>
-<li><a href="#32-navigationpopanimated">3.2 navigation.pop(animated)</a></li>
-<li><a href="#33-navigationpoptoindex-animated">3.3 navigation.popTo(index, animated)</a></li>
-<li><a href="#34-navigationbar">3.4 navigation.bar</a></li>
+<li><a href="#1">1. 浏览器环境</a></li>
+<li><a href="#2">2. 接口获取方式</a></li>
+<li><a href="#3">3. 开发调试</a></li>
+<li><a href="#4">4. 接口列表</a><ul>
+<li><a href="#41-logincallback">4.1 login(callback)</a></li>
+<li><a href="#42-openpage-parameters">4.2 open(page, parameters) [暂未启用]</a></li>
+<li><a href="#43-navigation">4.3 navigation</a><ul>
+<li><a href="#431-navigationpushurl-animated">4.3.1 navigation.push(url, animated)</a></li>
+<li><a href="#432-navigationpopanimated">4.3.2 navigation.pop(animated)</a></li>
+<li><a href="#433-navigationpoptoindex-animated">4.3.3 navigation.popTo(index, animated)</a></li>
+<li><a href="#434-navigationbar">4.3.4 navigation.bar</a></li>
 </ul>
 </li>
-<li><a href="#4-currenttheme">4. currentTheme</a></li>
-<li><a href="#5-statistictype-parameters">5. statistic(type, parameters) [暂未启用]</a></li>
-<li><a href="#6-currentuser">6. <a name="currentUser">currentUser</a></a></li>
-<li><a href="#7-httprequest-callback">7. http(request, callback)</a></li>
-<li><a href="#8-alertmessage-callback">8. alert(message, callback)</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="#app-html">第二部分：App 访问 HTML</a><ul>
-<li><a href="#_9">接口名称</a></li>
-<li><a href="#_10">调用方式</a></li>
-<li><a href="#_11">方法列表</a><ul>
-<li><a href="#1">1. &hellip;</a></li>
+<li><a href="#44-currenttheme">4.4 currentTheme</a></li>
+<li><a href="#45-statistictype-parameters">4.5 statistic(type, parameters) [暂未启用]</a></li>
+<li><a href="#46-currentuser">4.6 <a name="currentUser">currentUser</a></a></li>
+<li><a href="#47-httprequest-callback">4.7 http(request, callback)</a></li>
+<li><a href="#48-alertmessage-callback">4.8 alert(message, callback)</a></li>
 </ul>
 </li>
 </ul>
 </li>
+<li><a href="#html">第二部分：HTML 开发调试</a></li>
 <li><a href="#omapp-url">第三部分：omApp 基于 URL 交互方式的实现</a><ul>
-<li><a href="#1_1">1. 基本规则</a><ul>
-<li><a href="#11-url">1.1 URL结构</a></li>
-<li><a href="#12">1.2 回调函数的处理</a></li>
-</ul>
-</li>
+<li><a href="#_3">基本规则</a></li>
+<li><a href="#_4">基本规范</a></li>
+<li><a href="#_5">基本环境</a></li>
+<li><a href="#url">URL 结构</a></li>
+<li><a href="#_6">回调函数的处理</a></li>
+<li><a href="#omapp">omApp 初始值</a></li>
 </ul>
 </li>
 </ul>
@@ -1068,57 +1059,37 @@ body .markdown-body
 </ul>
 </div>
 <h2 id="_2"><a name="user-content-_2" href="#_2" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>说明</h2>
-<p>为了规范并统一 HTML 与原生的交互方式，提高开发效率，降低维护成本，特制定本协议。</p>
-<ul>
-<li>规定的 HTML 访问 App 的接口协议和 App 访问 HTML 的接口协议。</li>
-<li>本协议规定了一套接口，但是不限制使用何种机制实现 App/HTML 交互。</li>
-</ul>
-<h2 id="_3"><a name="user-content-_3" href="#_3" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>环境</h2>
-<ul>
-<li>
-<p>App 提供的 <code>浏览器（WebView）</code> 环境，通过特殊的 <code>UserAgent</code> 来标识：</p>
-<pre><code>`原UserAgent` + `空格` + `Onemena/` + `App发行版本号`
-</code></pre>
-<p><font size=2>* 例： Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) &hellip; Safari/8536.25 <font color=red>Onemena/1.0.1</font></font></p>
-<pre><code>// 判断是否在 App 中
-var isApp = /Onemena/.test(window.navigator.userAgent)
-</code></pre>
-
-</li>
-</ul>
-<h2 id="_4"><a name="user-content-_4" href="#_4" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>基本规范</h2>
-<ol>
-<li>通过 URL 参数传递数据时，使用 <em>Key-Value</em> 形式，如果 Value 不是基本数据类型，则用 <code>URL 编码后的 JSON 串</code> 表示。 </li>
-</ol>
+<p>本协议，规范 App 内 HTML 页面与 App 的交互方式，提高开发效率，降低维护成本。</p>
 <hr />
 <h2 id="html-app"><a name="user-content-html-app" href="#html-app" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>第一部分：HTML 访问 App</h2>
-<pre><code>HTML 页面通过调用 App 提供的 JavaScript 接口来实现对 App 功能的访问。
+<p>HTML 页面通过 App 提供 JavaScript 接口，来实现对 App 功能的访问。</p>
+<h3 id="1"><a name="user-content-1" href="#1" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>1. 浏览器环境</h3>
+<p>HTML 若要判断是否处于 App 提供的浏览器环境，可以通过 <code>User-Agent</code> 判断。</p>
+<pre><code>// 无特殊说明，所有代码均为 JavaScript 代码。
+// 判断是否在 App 中。
+var isApp = /Onemena/.test(window.navigator.userAgent);
 </code></pre>
-<h3 id="_5"><a name="user-content-_5" href="#_5" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>接口名称</h3>
-<pre><code>`omApp`
+
+<h3 id="2"><a name="user-content-2" href="#2" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>2. 接口获取方式</h3>
+<p>App 提供的接口统一在 <code>omApp</code> 对象上定义，HTML 对 App 的访问都通过此对象进行。</p>
+<pre><code>// 打印 App 提供的 JavaScript 接口对象
+console.log(omApp); 
+// 或者
+console.log(window.omApp);
 </code></pre>
-<h3 id="_6"><a name="user-content-_6" href="#_6" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>调用方式</h3>
-<pre><code>`omApp` 或 `window.omApp`
-</code></pre>
-<h3 id="_7"><a name="user-content-_7" href="#_7" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>准备工作</h3>
+
+<h3 id="3"><a name="user-content-3" href="#3" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>3. 开发调试</h3>
 <ul>
-<li>为方便开发调试，HTML 页面可以引入 <code>OMApp.js</code> 文件，该文件：<ol>
-<li>提供了 <code>omApp</code> 环境；</li>
-<li>模拟了一些基本行为；</li>
-</ol>
-</li>
-<li>App 通过 <code>对象注入</code> 的方式进行交互，需要在 JS 环境初始化后立即注入对象。<ol>
-<li>在 iOS 中，即 <code>JSContext</code> 创建时。</li>
-</ol>
-</li>
-<li>App 通过 <code>URL拦截</code> 进行交互，<code>OMApp.js</code> 文件封装了 URL 交互的相关协议</li>
+<li>引入 <code>OMApp.js</code> 交互框架；</li>
+<li>在桌面浏览器中开发调试；</li>
+<li>在 App 中开发调试。</li>
 </ul>
-<h3 id="_8"><a name="user-content-_8" href="#_8" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>方法列表</h3>
-<h4 id="1-logincallback"><a name="user-content-1-logincallback" href="#1-logincallback" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>1. login(<em>callback</em>)</h4>
+<h3 id="4"><a name="user-content-4" href="#4" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4. 接口列表</h3>
+<h4 id="41-logincallback"><a name="user-content-41-logincallback" href="#41-logincallback" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.1 login(<em>callback</em>)</h4>
 <ul>
 <li>
 <p>接口说明：</p>
-<p>点击了 HTML 页面的登录按钮或 HTML 页面操作需要用户登录时。</p>
+<p>当 HTML 页面需要调用 App 的 <code>登录</code> 功能时，调用此接口。</p>
 </li>
 <li>
 <p>参数说明：</p>
@@ -1161,7 +1132,7 @@ var isApp = /Onemena/.test(window.navigator.userAgent)
 </li>
 <li>
 <p>代码示例：</p>
-<pre><code>// 如非特殊声明，所有示例代码均为 Javascript
+<pre><code>// 调起 App 的登录流程
 omApp.login(function(success) {
     if (success) {
         // do suceess actions.
@@ -1173,7 +1144,7 @@ omApp.login(function(success) {
 
 </li>
 <li>
-<p>基于 URL 的交互方式:</p>
+<p>基于 URL 的交互方式（供 App 开发人员使用，下同）:</p>
 <ul>
 <li>
 <p>URL： <code>app://login/?callbackID=...</code></p>
@@ -1205,11 +1176,11 @@ omApp.login(function(success) {
 </ul>
 </li>
 </ul>
-<h4 id="2-openpage-parameters"><a name="user-content-2-openpage-parameters" href="#2-openpage-parameters" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>2. open(<em>page</em>, <em>parameters</em>) [暂未启用]</h4>
+<h4 id="42-openpage-parameters"><a name="user-content-42-openpage-parameters" href="#42-openpage-parameters" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.2 open(<em>page</em>, <em>parameters</em>) [暂未启用]</h4>
 <ul>
 <li>
 <p>接口说明：</p>
-<p>当 HTML 页面需要跳转到其它（原生）界面时，调用此接口。</p>
+<p>当 HTML 页面需要跳转到 App 其它界面时，调用此接口。</p>
 </li>
 <li>
 <p>参数说明：</p>
@@ -1338,12 +1309,14 @@ omApp.open(OMAppPage.task);
 </ul>
 </li>
 </ul>
-<h4 id="3-navigation"><a name="user-content-3-navigation" href="#3-navigation" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>3. navigation</h4>
-<h5 id="31-navigationpushurl-animated"><a name="user-content-31-navigationpushurl-animated" href="#31-navigationpushurl-animated" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>3.1 navigation.push(<em>url</em>, <em>animated</em>)</h5>
+<h4 id="43-navigation"><a name="user-content-43-navigation" href="#43-navigation" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.3 navigation</h4>
+<pre><code>为了使 HTML 提供类似原生 App 的操作体验，`navigation` 接口给 HTML 提供了创建新窗口的能，并通过 `导航栈` 来管理这一系列窗口。
+</code></pre>
+<h5 id="431-navigationpushurl-animated"><a name="user-content-431-navigationpushurl-animated" href="#431-navigationpushurl-animated" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.3.1 navigation.push(<em>url</em>, <em>animated</em>)</h5>
 <ul>
 <li>
 <p>接口说明：</p>
-<p>导航到下级页面。</p>
+<p>创建一个新窗口并打开指定 URL，常用于导航到下级页面。新窗口将压入到导航栈顶。</p>
 </li>
 <li>
 <p>参数说明：</p>
@@ -1371,25 +1344,23 @@ omApp.open(OMAppPage.task);
 </li>
 <li>
 <p>代码示例：</p>
-<pre><code>// 支持相对根目录的路径
-omApp.navigation.push('/relative/path/page.html'); 
-// 完整URL
-omApp.navigation.push('http://8.dev.arabsada.com/?userToken'); 
+<pre><code>omApp.navigation.push('http://8.dev.arabsada.com/'); 
+omApp.navigation.push('http://8.dev.arabsada.com/', true); 
 </code></pre>
 
 </li>
 <li>
 <p>基于 URL 的交互方式:</p>
 <ul>
-<li>URL： <code>app://navigation.push/?url=...</code></li>
+<li>URL： <code>app://navigation.push/?url=...&amp;animated=...</code></li>
 </ul>
 </li>
 </ul>
-<h5 id="32-navigationpopanimated"><a name="user-content-32-navigationpopanimated" href="#32-navigationpopanimated" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>3.2 navigation.pop(<em>animated</em>)</h5>
+<h5 id="432-navigationpopanimated"><a name="user-content-432-navigationpopanimated" href="#432-navigationpopanimated" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.3.2 navigation.pop(<em>animated</em>)</h5>
 <ul>
 <li>
 <p>接口说明：</p>
-<p>返回到上级页面。</p>
+<p>关闭当前窗口，并返回到上一个窗口，常用于返回到上级页面。当前窗口从导航栈中弹出。</p>
 </li>
 <li>
 <p>参数说明：</p>
@@ -1412,22 +1383,22 @@ omApp.navigation.push('http://8.dev.arabsada.com/?userToken');
 </li>
 <li>
 <p>代码示例：</p>
-<pre><code>omApp.navigation.pop(); 
+<pre><code>omApp.navigation.pop(true); 
 </code></pre>
 
 </li>
 <li>
 <p>基于 URL 的交互方式:</p>
 <ul>
-<li>URL：<code>app://navigation.pop/</code></li>
+<li>URL：<code>app://navigation.pop/?animated=...</code></li>
 </ul>
 </li>
 </ul>
-<h5 id="33-navigationpoptoindex-animated"><a name="user-content-33-navigationpoptoindex-animated" href="#33-navigationpoptoindex-animated" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>3.3 navigation.popTo(<em>index</em>, <em>animated</em>)</h5>
+<h5 id="433-navigationpoptoindex-animated"><a name="user-content-433-navigationpoptoindex-animated" href="#433-navigationpoptoindex-animated" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.3.3 navigation.popTo(<em>index</em>, <em>animated</em>)</h5>
 <ul>
 <li>
 <p>接口说明：</p>
-<p>返回到指定级页面。</p>
+<p>返回到导航栈内指定级页面。如果当前导航栈内已经有很多页面，此方法可以快速回到指定页面。</p>
 </li>
 <li>
 <p>参数说明：</p>
@@ -1455,22 +1426,22 @@ omApp.navigation.push('http://8.dev.arabsada.com/?userToken');
 </li>
 <li>
 <p>代码示例：</p>
-<pre><code>omApp.navigation.popTo(0);
+<pre><code>omApp.navigation.popTo(0, true);
 </code></pre>
 
 </li>
 <li>
 <p>基于 URL 的交互方式:</p>
 <ul>
-<li>URL：<code>app://navigation.popto/?index=...</code></li>
+<li>URL：<code>app://navigation.popto/?index=...&amp;animated=...</code></li>
 </ul>
 </li>
 </ul>
-<h5 id="34-navigationbar"><a name="user-content-34-navigationbar" href="#34-navigationbar" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>3.4 navigation.bar</h5>
+<h5 id="434-navigationbar"><a name="user-content-434-navigationbar" href="#434-navigationbar" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.3.4 navigation.bar</h5>
 <ul>
 <li>
 <p>接口说明：</p>
-<p>Object，导航条对象，控制导航条外观的接口。</p>
+<p>只读，Object。代表了 App 的原生导航条对象。通过此对象，可以控制导航条的外观。</p>
 </li>
 <li>
 <p>属性说明：</p>
@@ -1522,17 +1493,18 @@ omApp.navigation.bar.backgroundColor = '#0000FF';
 </ul>
 </li>
 </ul>
-<h4 id="4-currenttheme"><a name="user-content-4-currenttheme" href="#4-currenttheme" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4. currentTheme</h4>
-<pre><code>2017-06-17: 接口由 `theme` 改为 `currentTheme`
+<h4 id="44-currenttheme"><a name="user-content-44-currenttheme" href="#44-currenttheme" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.4 currentTheme</h4>
+<pre><code>变更日志：
+2017-06-17: `theme` -&gt; `currentTheme`
 </code></pre>
 <ul>
 <li>
 <p>接口说明：</p>
-<p>App 属性，当前主题名称。</p>
+<p>此接口用于获取或设置 App 当前的主题外观，String 类型。</p>
 </li>
 <li>
 <p>属性说明：</p>
-<p>可写，<a href="#OMAppTheme">OMAppTheme</a> 枚举值。</p>
+<p>非空，可写，<a href="#OMAppTheme">OMAppTheme</a> 枚举值。</p>
 </li>
 <li>
 <p><a name="OMAppTheme"><strong><em>OMAppTheme</em>枚举</strong></a></p>
@@ -1575,7 +1547,7 @@ omApp.navigation.bar.backgroundColor = '#0000FF';
 </ul>
 </li>
 </ul>
-<h4 id="5-statistictype-parameters"><a name="user-content-5-statistictype-parameters" href="#5-statistictype-parameters" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>5. statistic(<em>type</em>, <em>parameters</em>) [暂未启用]</h4>
+<h4 id="45-statistictype-parameters"><a name="user-content-45-statistictype-parameters" href="#45-statistictype-parameters" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.5 statistic(<em>type</em>, <em>parameters</em>) [暂未启用]</h4>
 <ul>
 <li>
 <p>接口说明：</p>
@@ -1656,11 +1628,11 @@ omApp.statistic(OMStatisticType.openMall, {&quot;type&quot;: 3});
 
 </li>
 </ul>
-<h4 id="6-currentuser"><a name="user-content-6-currentuser" href="#6-currentuser" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>6. <a name="currentUser">currentUser</a></h4>
+<h4 id="46-currentuser"><a name="user-content-46-currentuser" href="#46-currentuser" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.6 <a name="currentUser">currentUser</a></h4>
 <ul>
 <li>
 <p>接口说明：</p>
-<p>只读非空属性，Object，包含用户信息的对象。请用 <code>isOnline</code> 属性来区分用户是否登录。</p>
+<p>只读，非空，Object 类型。当 HTML 需要获取 App 当前用户信息时，调用此接口。例如，判断用户是否登录可通过 <code>isOnline</code> 属性来确定。</p>
 </li>
 <li>
 <p>属性说明：</p>
@@ -1676,32 +1648,32 @@ omApp.statistic(OMStatisticType.openMall, {&quot;type&quot;: 3});
 <tr>
 <td>isOnline</td>
 <td>Bool</td>
-<td>是否已登录</td>
+<td>只读。是否已登录</td>
 </tr>
 <tr>
 <td>id</td>
 <td>String</td>
-<td>用户ID</td>
+<td>只读。用户ID</td>
 </tr>
 <tr>
 <td>name</td>
 <td>String</td>
-<td>用户名</td>
+<td>只读。用户名</td>
 </tr>
 <tr>
 <td>type</td>
 <td>String</td>
-<td>见 <a href="#OMAppUserType">OMAppUserType枚举</a></td>
+<td>只读。见 <a href="#OMAppUserType">OMAppUserType枚举</a></td>
 </tr>
 <tr>
 <td>coin</td>
 <td>Int</td>
-<td>用户金币数</td>
+<td>只读。用户金币数</td>
 </tr>
 <tr>
 <td>token</td>
 <td>String</td>
-<td>user token</td>
+<td>只读。user token</td>
 </tr>
 </tbody>
 </table>
@@ -1754,18 +1726,12 @@ var userName = omApp.currentUser.name;
 </code></pre>
 
 </li>
-<li>
-<p>基于 URL 的交互方式:</p>
-<ul>
-<li>URL：<code>app://currentUser/?name=...</code></li>
 </ul>
-</li>
-</ul>
-<h4 id="7-httprequest-callback"><a name="user-content-7-httprequest-callback" href="#7-httprequest-callback" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>7. http(<em>request</em>, <em>callback</em>)</h4>
+<h4 id="47-httprequest-callback"><a name="user-content-47-httprequest-callback" href="#47-httprequest-callback" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.7 http(<em>request</em>, <em>callback</em>)</h4>
 <ul>
 <li>接口说明：</li>
 </ul>
-<p>当 HTML 页面发送一个请求，需要携带用户身份信息的时候，使用此方法。出于安全等因素，HTML 页面不负责、保持用户状态，相关逻辑由 App 实现，HTML 直接使用结果。</p>
+<p>当 HTML 页面发送一个请求，需要携带用户身份信息的时候，使用此接口。出于安全等因素，HTML 页面不负责、保持用户状态，相关逻辑由 App 实现，HTML 直接使用结果。</p>
 <ul>
 <li>
 <p>参数说明：</p>
@@ -1813,7 +1779,7 @@ var userName = omApp.currentUser.name;
 <td>必选。值必须是 GET/POST，区分大小写</td>
 </tr>
 <tr>
-<td><del>params</del> data</td>
+<td>data</td>
 <td>Object</td>
 <td>可选。网络请求参数</td>
 </tr>
@@ -1824,7 +1790,10 @@ var userName = omApp.currentUser.name;
 </tr>
 </tbody>
 </table>
-<p><font size="2">* 字段变更：params -&gt; data，2017-06-29，目前 SDK 对此改变进行兼容 </font></p>
+<p><font size="2"><br />
+<em> 字段变更：<br />
+</em> 2017-06-29: params -&gt; data，目前 SDK 对此改变保持兼容。<br />
+</font></p>
 <ul>
 <li>callback 函数参数：</li>
 </ul>
@@ -1929,7 +1898,7 @@ omApp.didFinishHTTPRequest(callbackID, true, 'anEncodedString', 'application/jso
 </ul>
 </li>
 </ul>
-<h4 id="8-alertmessage-callback"><a name="user-content-8-alertmessage-callback" href="#8-alertmessage-callback" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>8. alert(<em>message</em>, <em>callback</em>)</h4>
+<h4 id="48-alertmessage-callback"><a name="user-content-48-alertmessage-callback" href="#48-alertmessage-callback" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.8 alert(<em>message</em>, <em>callback</em>)</h4>
 <ul>
 <li>
 <p>接口说明：</p>
@@ -2064,66 +2033,40 @@ omApp.didSelectAlertActionAtIndex(callbackID, 0);
 </li>
 </ul>
 <hr />
-<h2 id="app-html"><a name="user-content-app-html" href="#app-html" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>第二部分：App 访问 HTML</h2>
-<pre><code>HTML 提供 Javascript 接口实现，App 通过调用该接口实现对 HTML 的访问。
-</code></pre>
-<h3 id="_9"><a name="user-content-_9" href="#_9" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>接口名称</h3>
-<pre><code>`omHTML`
-</code></pre>
-<h3 id="_10"><a name="user-content-_10" href="#_10" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>调用方式</h3>
-<pre><code>`omHTML` 或 `window.omHTML`
-</code></pre>
-<h3 id="_11"><a name="user-content-_11" href="#_11" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>方法列表</h3>
-<h4 id="1"><a name="user-content-1" href="#1" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>1. &hellip;</h4>
-<ul>
-<li>
-<p>接口说明：<br />
-    ***</p>
-</li>
-<li>
-<p>参数说明：</p>
-<table>
-<thead>
-<tr>
-<th><strong>Name</strong></th>
-<th><strong>Type</strong></th>
-<th><strong>Description</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-</tbody>
-</table>
-</li>
-<li>
-<p>代码示例：</p>
-<pre><code>
-</code></pre>
-
-</li>
-</ul>
+<h2 id="html"><a name="user-content-html" href="#html" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>第二部分：HTML 开发调试</h2>
+<p>交互框架 <code>OMApp.js</code> 为桌面浏览器模拟了 <code>omApp</code> 对象的一些基本的功能和交互方式。</p>
 <hr />
 <h2 id="omapp-url"><a name="user-content-omapp-url" href="#omapp-url" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>第三部分：<code>omApp</code> 基于 URL 交互方式的实现</h2>
-<pre><code>通过注入 `OMApp.js` 文件，为 HTML 页面提供与原生的交互环境。
+<h3 id="_3"><a name="user-content-_3" href="#_3" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>基本规则</h3>
+<ul>
+<li>App 通过拦截特定 URL 协议的请求，通过解析 URL 来判断 HTML 要执行的操作。</li>
+<li>URL 方式无法实现带返回值的函数，只能通过回调来实现。</li>
+</ul>
+<h3 id="_4"><a name="user-content-_4" href="#_4" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>基本规范</h3>
+<ol>
+<li>通过 URL 参数传递数据时，使用 <em>Key-Value</em> 形式，如果 Value 不是基本数据类型，则用 <code>URL 编码后的 JSON 串</code> 表示。 </li>
+</ol>
+<h3 id="_5"><a name="user-content-_5" href="#_5" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>基本环境</h3>
+<p>App 需设置 WebView 的 <code>User-Agent</code>，格式：</p>
+<pre><code>`原UserAgent` + `空格` + `Onemena/` + `App发行版本号`
 </code></pre>
-<h3 id="1_1"><a name="user-content-1_1" href="#1_1" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>1. 基本规则</h3>
-<h4 id="11-url"><a name="user-content-11-url" href="#11-url" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>1.1 URL结构</h4>
+<p><font size=2>* 例： Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) &hellip; Safari/8536.25 <font color=red>Onemena/1.0.1</font></font></p>
+<h3 id="url"><a name="user-content-url" href="#url" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>URL 结构</h3>
+<pre><code>基本形式：app://method.name/?param1=...&amp;param2=...
+
+- 协议名：`app`，App 通过拦截此协议名的 URL 来区分普通请求与交互请求。
+- 方法：URL 的 host 部分表示 HTML 要调用 App 的方法名。
+- 参数：URL 的 query 部分表示方法所需的参数。
+    - 参数值为基本数据类型。
+    - 参数值为 Object 时，为 URL 编码后的 JSON 字符串。
+</code></pre>
+<h3 id="_6"><a name="user-content-_6" href="#_6" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>回调函数的处理</h3>
 <ul>
-<li>基本形式：app://method.name/?param1=&hellip;&amp;param2=&hellip;</li>
-<li>协议名：<code>app</code>，App 通过拦截此协议名的 URL 来区分普通请求与交互请求。</li>
-<li>方法：URL 的 host 部分表示 HTML 要调用 App 的方法名。</li>
-<li>参数：URL 的 query 部分表示方法所需的参数。<ul>
-<li>参数值为基本数据类型。</li>
-<li>参数值为 Object 时，为 URL 编码后的 JSON 字符串。</li>
+<li>在有回调方法中，URL 协议会将回调函数ID，通过 <code>callbackID</code> 字段传递给 App 。</li>
+<li>原生在执行任务后，通过调用相应 JS 的方法（大部分为 omApp.didFinish**）触发回调函数。</li>
 </ul>
-</li>
-</ul>
-<h4 id="12"><a name="user-content-12" href="#12" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>1.2 回调函数的处理</h4>
+<h3 id="omapp"><a name="user-content-omapp" href="#omapp" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>omApp 初始值</h3>
 <ul>
-<li>在有回调方法中，URL 协议会将回调函数（函数ID），通过 <code>callbackID</code> 字段传递给原生。</li>
-<li>原生在执行任务后，通过调用 JS 的 omApp.didFinish** 等方法执行回调。</li>
+<li>拦截 HTML 页面加载 OMApp.js 文件。</li>
+<li>加载 App 内置 OMApp.js 文件，并在文件末尾添加设置初值的代码。</li>
 </ul></article></body></html>

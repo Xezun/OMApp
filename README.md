@@ -1,51 +1,51 @@
 # Onemena App／HTML 交互协议
 
 ## 目录
-[TOC] 
 
+[TOC] 
 
 
 ## 说明
 
-    HTML 与原生 App 交互。
-
-## 环境
-
-- App 提供的 `浏览器（WebView）` 环境，通过特殊的 `UserAgent` 来标识：
-
-        `原UserAgent` + `空格` + `Onemena/` + `App发行版本号`
-     
-    <font size=2>* 例： Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) ... Safari/8536.25 <font color=red>Onemena/1.0.1</font></font>
-
-    ```
-    // 判断是否在 App 中
-    var isApp = /Onemena/.test(window.navigator.userAgent)
-    ```
-
-
-## 基本规范
-
-1. 通过 URL 参数传递数据时，使用 *Key-Value* 形式，如果 Value 不是基本数据类型，则用 `URL 编码后的 JSON 串` 表示。 
+本协议，规范 App 内 HTML 页面与 App 的交互方式，提高开发效率，降低维护成本。
 
 
 ***
-## 第一部分：HTML 访问 App 
+## 第一部分：HTML 访问 App
 
-    为了使 HTML 页面能访问 App 内容，App 在 `WebView` 中不仅要标注特殊的 User Agent ，而且要在 HTML 的 JavaScript 环境中注入相应的访问接口。
+HTML 页面通过 App 提供 JavaScript 接口，来实现对 App 功能的访问。
 
-### 接口名称
+### 1. 浏览器环境
 
-    `omApp`
+HTML 若要判断是否处于 App 提供的浏览器环境，可以通过 `User-Agent` 判断。
+
+```
+// 无特殊说明，所有代码均为 JavaScript 代码。
+// 判断是否在 App 中。
+var isApp = /Onemena/.test(window.navigator.userAgent);
+```
+
+### 2. 接口获取方式
+
+App 提供的接口统一在 `omApp` 对象上定义，HTML 对 App 的访问都通过此对象进行。
+
+```
+// 打印 App 提供的 JavaScript 接口对象
+console.log(omApp); 
+// 或者
+console.log(window.omApp);
+```
+
+### 3. 开发调试
+
+- 引入 `OMApp.js` 交互框架；
+- 在桌面浏览器中开发调试；
+- 在 App 中开发调试。
 
 
-### 调用方式
+### 4. 接口列表
 
-    `omApp` 或 `window.omApp`
-
-
-### 方法列表
-
-#### 1. login(*callback*)
+#### 4.1 login(*callback*)
 
 - 接口说明：
 
@@ -69,7 +69,7 @@
 - 代码示例：
 
     ``` 
-    // 如非特殊声明，所有示例代码均为 JavaScript
+    // 调起 App 的登录流程
     omApp.login(function(success) {
         if (success) {
             // do suceess actions.
@@ -79,7 +79,7 @@
     });
     ```
 
-- 基于 URL 的交互方式:
+- 基于 URL 的交互方式（供 App 开发人员使用，下同）:
     
     - URL： `app://login/?callbackID=...`
 
@@ -91,7 +91,7 @@
         | success      | Bool   | 登录是否成功 |
 
 
-#### 2. open(*page*, *parameters*) [暂未启用]
+#### 4.2 open(*page*, *parameters*) [暂未启用]
 
 - 接口说明：
 
@@ -148,11 +148,11 @@
     - URL： `app://open/?page=...`
 
 
-#### 3. navigation
+#### 4.3 navigation
 
     为了使 HTML 提供类似原生 App 的操作体验，`navigation` 接口给 HTML 提供了创建新窗口的能，并通过 `导航栈` 来管理这一系列窗口。
 
-##### 3.1 navigation.push(*url*, *animated*)
+##### 4.3.1 navigation.push(*url*, *animated*)
 
 - 接口说明：
 
@@ -177,7 +177,7 @@
     - URL： `app://navigation.push/?url=...&animated=...`
     
 
-##### 3.2 navigation.pop(*animated*)
+##### 4.3.2 navigation.pop(*animated*)
 
 - 接口说明：
 
@@ -200,7 +200,7 @@
     - URL：`app://navigation.pop/?animated=...`
 
 
-##### 3.3 navigation.popTo(*index*, *animated*)
+##### 4.3.3 navigation.popTo(*index*, *animated*)
 
 - 接口说明：
 
@@ -224,7 +224,7 @@
     - URL：`app://navigation.popto/?index=...&animated=...`
 
 
-##### 3.4 navigation.bar
+##### 4.3.4 navigation.bar
 
 - 接口说明：
 
@@ -253,7 +253,7 @@
     - URL：`app://navigation.bar/?isHidden=...&title=...&titleColor=...`
 
 
-#### 4. currentTheme
+#### 4.4 currentTheme
 
     变更日志：
     2017-06-17: `theme` -> `currentTheme` 
@@ -288,7 +288,7 @@
     - URL：`app://currenttheme/?name=...`
 
 
-#### 5. statistic(*type*, *parameters*) [暂未启用]
+#### 4.5 statistic(*type*, *parameters*) [暂未启用]
 
 - 接口说明：
 
@@ -324,7 +324,7 @@
     ```
 
 
-#### 6. <a name="currentUser">currentUser</a>
+#### 4.6 <a name="currentUser">currentUser</a>
 
 - 接口说明：
 
@@ -366,7 +366,7 @@
     ```
 
 
-#### 7. http(*request*, *callback*)
+#### 4.7 http(*request*, *callback*)
 
 - 接口说明：
 
@@ -451,7 +451,7 @@
         ```
 
 
-#### 8. alert(*message*, *callback*)
+#### 4.8 alert(*message*, *callback*)
 
 - 接口说明：
 
@@ -514,43 +514,11 @@
         ```
 
 
-
-
 ***
 
-## 第二部分：App 访问 HTML
+## 第二部分：HTML 开发调试
 
-    HTML 提供 Javascript 接口实现，App 通过调用该接口实现对 HTML 的访问。
-
-### 接口名称
-
-    `omHTML`
-
-### 调用方式
-
-    `omHTML` 或 `window.omHTML`
-
-### 方法列表
-
-#### 1. ...
-
-- 接口说明：
-    ***
-
-- 参数说明：
-
-    | **Name**       | **Type**    | **Description** |
-    | :------------- | :---------- | :-------------- |
-    |        |     |  |
-
-
-- 代码示例：
-
-    ```
-
-    ```
-
-
+交互框架 `OMApp.js` 为桌面浏览器模拟了 `omApp` 对象的一些基本的功能和交互方式。
 
 
 
@@ -558,23 +526,43 @@
 
 ## 第三部分：`omApp` 基于 URL 交互方式的实现
 
-    通过注入 `OMApp.js` 文件，为 HTML 页面提供与原生的交互环境。
+### 基本规则
 
-### 1. 基本规则
+- App 通过拦截特定 URL 协议的请求，通过解析 URL 来判断 HTML 要执行的操作。
+- URL 方式无法实现带返回值的函数，只能通过回调来实现。
 
-#### 1.1 URL结构
+### 基本规范
 
-- 基本形式：app://method.name/?param1=...&param2=...
-- 协议名：`app`，App 通过拦截此协议名的 URL 来区分普通请求与交互请求。
-- 方法：URL 的 host 部分表示 HTML 要调用 App 的方法名。
-- 参数：URL 的 query 部分表示方法所需的参数。
-    - 参数值为基本数据类型。
-    - 参数值为 Object 时，为 URL 编码后的 JSON 字符串。
+1. 通过 URL 参数传递数据时，使用 *Key-Value* 形式，如果 Value 不是基本数据类型，则用 `URL 编码后的 JSON 串` 表示。 
 
-#### 1.2 回调函数的处理
+### 基本环境
 
-- 在有回调方法中，URL 协议会将回调函数（函数ID），通过 `callbackID` 字段传递给原生。
-- 原生在执行任务后，通过调用 JS 的 omApp.didFinish** 等方法执行回调。
+App 需设置 WebView 的 `User-Agent`，格式：
+
+    `原UserAgent` + `空格` + `Onemena/` + `App发行版本号`
+
+<font size=2>* 例： Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) ... Safari/8536.25 <font color=red>Onemena/1.0.1</font></font>
+
+### URL 结构
+
+    基本形式：app://method.name/?param1=...&param2=...
+
+    - 协议名：`app`，App 通过拦截此协议名的 URL 来区分普通请求与交互请求。
+    - 方法：URL 的 host 部分表示 HTML 要调用 App 的方法名。
+    - 参数：URL 的 query 部分表示方法所需的参数。
+        - 参数值为基本数据类型。
+        - 参数值为 Object 时，为 URL 编码后的 JSON 字符串。
+
+### 回调函数的处理
+
+- 在有回调方法中，URL 协议会将回调函数ID，通过 `callbackID` 字段传递给 App 。
+- 原生在执行任务后，通过调用相应 JS 的方法（大部分为 omApp.didFinish**）触发回调函数。
+
+### omApp 初始值
+
+- 拦截 HTML 页面加载 OMApp.js 文件。
+- 加载 App 内置 OMApp.js 文件，并在文件末尾添加设置初值的代码。
+
 
 
 
