@@ -1026,6 +1026,7 @@ body .markdown-body
 <li><a href="#2">2. 接口获取方式</a></li>
 <li><a href="#3">3. 开发调试</a></li>
 <li><a href="#4">4. 接口列表</a><ul>
+<li><a href="#40-readycallback">4.0 ready(callback)</a></li>
 <li><a href="#41-logincallback">4.1 login(callback)</a></li>
 <li><a href="#42-openpage-parameters">4.2 open(page, parameters) [暂未启用]</a></li>
 <li><a href="#43-navigation">4.3 navigation</a><ul>
@@ -1064,14 +1065,14 @@ body .markdown-body
 <h2 id="html-app"><a name="user-content-html-app" href="#html-app" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>第一部分：HTML 访问 App</h2>
 <p>HTML 页面通过 App 提供 JavaScript 接口，来实现对 App 功能的访问。</p>
 <h3 id="1"><a name="user-content-1" href="#1" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>1. 浏览器环境</h3>
-<p>HTML 若要判断是否处于 App 提供的浏览器环境，可以通过 <code>User-Agent</code> 判断。</p>
+<p>HTML 若要判断是否处于 App 提供的浏览器环境中，可以通过 <code>User-Agent</code> 判断。</p>
 <pre><code>// 无特殊说明，所有代码均为 JavaScript 代码。
 // 判断是否在 App 中。
 var isApp = /Onemena/.test(window.navigator.userAgent);
 </code></pre>
 
 <h3 id="2"><a name="user-content-2" href="#2" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>2. 接口获取方式</h3>
-<p>App 提供的接口统一在 <code>omApp</code> 对象上定义，HTML 对 App 的访问都通过此对象进行。</p>
+<p>App 提供的接口统一定义在 <code>omApp</code> 对象上，所有 HTML 与 App 的交互都通过此对象进行。</p>
 <pre><code>// 打印 App 提供的 JavaScript 接口对象
 console.log(omApp); 
 // 或者
@@ -1085,6 +1086,53 @@ console.log(window.omApp);
 <li>在 App 中开发调试。</li>
 </ul>
 <h3 id="4"><a name="user-content-4" href="#4" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4. 接口列表</h3>
+<h4 id="40-readycallback"><a name="user-content-40-readycallback" href="#40-readycallback" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.0 ready(<em>callback</em>)</h4>
+<pre><code>2017-07-27: 新增接口。
+</code></pre>
+<ul>
+<li>
+<p>接口说明：</p>
+<p>在使用 omApp 对象之前，App 可能需要对其进行一些初始化设置。为保证能正常使用 omApp 对象，请将操作放在此方法回调中进行。</p>
+</li>
+<li>
+<p>参数说明：</p>
+<table>
+<thead>
+<tr>
+<th><strong>Name</strong></th>
+<th><strong>Type</strong></th>
+<th><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>callback</td>
+<td>Function</td>
+<td>回调函数，无参数</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>代码示例：</p>
+<pre><code>omApp.ready(function() {
+    // ready 方法类似于 JQuery.ready 方法。
+});
+</code></pre>
+
+</li>
+<li>
+<p>基于 URL 的交互方式（供 App 开发人员使用，下同）:</p>
+<ul>
+<li>
+<p>URL： <code>app://documentisready</code> </p>
+</li>
+<li>
+<p>回调： <code>omApp.didFinishLoading()</code></p>
+</li>
+</ul>
+</li>
+</ul>
 <h4 id="41-logincallback"><a name="user-content-41-logincallback" href="#41-logincallback" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.1 login(<em>callback</em>)</h4>
 <ul>
 <li>
@@ -1144,7 +1192,7 @@ omApp.login(function(success) {
 
 </li>
 <li>
-<p>基于 URL 的交互方式（供 App 开发人员使用，下同）:</p>
+<p>基于 URL 的交互方式:</p>
 <ul>
 <li>
 <p>URL： <code>app://login/?callbackID=...</code></p>

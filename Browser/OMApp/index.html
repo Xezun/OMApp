@@ -3,13 +3,17 @@
 <head>
 	<title>Test</title>
 </head>
+<script type="text/javascript" src="jquery-3.1.1.min.js"></script>
 <script type="text/javascript">
-if (typeof OMAppInfo == 'undefined') {
-	window.OMAppInfo = {"name":"OMAppInfo"};
-}
-alert(OMAppInfo);
+	$(document).ready(function() {
+		$("#ithome").on("load", function(event){//判断 iframe是否加载完成  这一步很重要
+		　　$("#divId", this.contentDocument).click(function(){//添加点击事件
+		　　　　alert("就是这样");
+		　　});
+		});
+	});
 </script>
 <body>
-
+<iframe src="blank.html" id="ithome" width="100%" height="400"></iframe>
 </body>
 </html>

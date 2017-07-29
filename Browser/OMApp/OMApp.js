@@ -54,39 +54,6 @@ if (!window.OMAppTheme) {
 
 
 
-/* OMAppMessage 消息类型枚举定义 */
-if (!window.OMAppMessage) {
-	var _OMAppMessage = (function() {
-
-		var _navigation = (function(){
-			var _object = {};
-			Object.defineProperties(_object, {
-				pop: 	{ get: function () { return "navigation.pop";	} },
-				popTo: 	{ get: function () { return "navigation.popto";	} },
-				push: 	{ get: function () { return "navigation.push";	} },
-				bar: 	{ get: function () { return "navigation.bar";	} }
-			});
-			return _object;
-		})();
-
-		var _object = {};
-		Object.defineProperties(_object, {
-			scheme: 			{ get: function() { return "app"; 				} },
-			documentIsReady: 	{ get: function() { return "documentisready"; 	} },
-			navigation: 		{ get: function() { return _navigation; 		} },
-			open: 				{ get: function() { return "open"; 				} },
-			login: 				{ get: function() { return "login"; 			} },
-			currentTheme: 		{ get: function() { return "currenttheme";		} },
-			http: 				{ get: function() { return "http"; 				} },
-			alert: 				{ get: function() { return "alert"; 			} }
-		});
-		return _object;
-	})();
-	Object.defineProperties(window, {
-		OMAppMessage: 		{ get: function() { return _OMAppMessage; 	}}
-	});
-}
-
 /* omApp 接口定义 */
 if (!window.omApp) {
 	var _omApp = (function() {
@@ -123,10 +90,25 @@ if (!window.omApp) {
 			console.log("[OMApp] " + oldMethod + " 已废弃，请使用 " + newMethod + " 代替！");
 		}
 
+		var _OMAppMessage = {
+			documentIsReady: "documentisready",
+			navigation: {
+				pop: 	"navigation.pop",
+				popTo: 	"navigation.popto",
+				push: 	"navigation.push",
+				bar: 	"navigation.bar"
+			},
+			open: 				"open",
+			login: 				"login",
+			currentTheme: 		"currenttheme",
+			http: 				"http",
+			alert: 				"alert" 			
+		};
+
 		/* 向App发送消息：（消息类型，消息参数，回调）。*/
-		function OMAppMessageSend(message, parameterObject, callback) {
+		function _OMAppMessageSend(message, parameterObject, callback) {
 	        if (!message) { return; }
-	        var url = OMAppMessage.scheme + '://' + encodeURIComponent(message);
+	        var url = 'app://' + encodeURIComponent(message);
 	        
 	        var query = null;
 	        var callbackID = null;
@@ -176,7 +158,7 @@ if (!window.omApp) {
 			}
 			var param = { "page": page };
 			if (parameters) { param.parameters = parameters; }
-			return OMAppMessageSend(OMAppMessage.open, param);
+			return _OMAppMessageSend(_OMAppMessage.open, param);
 		}
 		Object.defineProperty(_object, 'open', { get: function() { return _open; }});
 
@@ -190,7 +172,7 @@ if (!window.omApp) {
 				}
 				return;
 			}
-			return OMAppMessageSend(OMAppMessage.login, null, callback);
+			return _OMAppMessageSend(_OMAppMessage.login, null, callback);
 		}
 		Object.defineProperty(_object, 'login', { get: function() { return _login; }});
 
@@ -212,7 +194,7 @@ if (!window.omApp) {
 				}, 100);
 				return;
 			};
-			return OMAppMessageSend(OMAppMessage.alert, {"message": message}, callback);
+			return _OMAppMessageSend(_OMAppMessage.alert, {"message": message}, callback);
 		}
 		Object.defineProperty(_object, 'alert', { get: function() { return _alert; }});
 
@@ -240,7 +222,7 @@ if (!window.omApp) {
 				if (typeof animated != 'boolean') {
 					animated = true;
 				};
-	   		 	return OMAppMessageSend(OMAppMessage.navigation.push, {"url": url, "animated": animated});
+	   		 	return _OMAppMessageSend(_OMAppMessage.navigation.push, {"url": url, "animated": animated});
 			}
 
 			// 推出当前页面，使栈内页面数量 -1。
@@ -252,7 +234,7 @@ if (!window.omApp) {
 				if (typeof animated != 'boolean') {
 					animated = true;
 				};
-				return OMAppMessageSend(OMAppMessage.navigation.pop, {"animated": animated});
+				return _OMAppMessageSend(_OMAppMessage.navigation.pop, {"animated": animated});
 			}
 
 			// 移除栈内索引大于 index 的所有页面，即将 index 页面所显示的内容展示出来。
@@ -265,7 +247,7 @@ if (!window.omApp) {
 				if (typeof animated != 'boolean') {
 					animated = true;
 				};
-				return OMAppMessageSend(OMAppMessage.navigation.popTo, {"index": index, "animated": animated});
+				return _OMAppMessageSend(_OMAppMessage.navigation.popTo, {"index": index, "animated": animated});
 			}
 
 			var _bar = (function() {
@@ -278,19 +260,19 @@ if (!window.omApp) {
 				Object.defineProperties(_object, {
 					title: {
 						get: function() { return _title; },
-						set: function(newValue) { _title = newValue; OMAppMessageSend(OMAppMessage.navigation.bar, {"title": newValue}); }
+						set: function(newValue) { _title = newValue; _OMAppMessageSend(_OMAppMessage.navigation.bar, {"title": newValue}); }
 					},
 					titleColor: {
 						get: function() { return _titleColor; },
-						set: function(newValue) { _titleColor = newValue; OMAppMessageSend(OMAppMessage.navigation.bar, {"titleColor": newValue}) }
+						set: function(newValue) { _titleColor = newValue; _OMAppMessageSend(_OMAppMessage.navigation.bar, {"titleColor": newValue}) }
 					},
 					backgroundColor: {
 						get: function() { return _backgroundColor; },
-						set: function(newValue) { _backgroundColor = newValue; OMAppMessageSend(OMAppMessage.navigation.bar, {"backgroundColor": newValue})}
+						set: function(newValue) { _backgroundColor = newValue; _OMAppMessageSend(_OMAppMessage.navigation.bar, {"backgroundColor": newValue})}
 					},
 					isHidden: {
 						get: function() { return _isHidden; },
-						set: function(newValue) { _isHidden = newValue; OMAppMessageSend(OMAppMessage.navigation.bar, {"isHidden": newValue}) }
+						set: function(newValue) { _isHidden = newValue; _OMAppMessageSend(_OMAppMessage.navigation.bar, {"isHidden": newValue}) }
 					}
 				});
 				return _object;
@@ -316,7 +298,7 @@ if (!window.omApp) {
 				},
 				set: function(newValue) {
 					_currentTheme = newValue;
-					OMAppMessageSend(OMAppMessage.currentTheme, {"name": newValue});
+					_OMAppMessageSend(_OMAppMessage.currentTheme, {"name": newValue});
 				}
 			},
 			theme: {
@@ -380,7 +362,7 @@ if (!window.omApp) {
 				});
 				return;
 			};
-	        return OMAppMessageSend(OMAppMessage.http, {"request": request}, callback);
+	        return _OMAppMessageSend(_OMAppMessage.http, {"request": request}, callback);
 		}
 		Object.defineProperty(_object, 'http', { get: function() { return _http; }});	
 		// 7.2 
@@ -398,34 +380,73 @@ if (!window.omApp) {
 	 	Object.defineProperty(_object, 'didFinishHTTPRequest', { get: function() { return _didFinishHTTPRequest; }});
 
 	 	// 8. ready
-	 	var _ready = null;
+	 	var _readyHandlers = [function() { 
+ 			console.log('[OMApp] 为了保证 omApp 在使用时已完成初始化，请将操作放在 omApp.ready(function(){/*代码*/}) 中。'); 
+ 		}];
 	 	Object.defineProperty(_object, 'ready', {
 	 		get: function() { 
-	 			return function(callback) { _ready = callback;}; 
+	 			return function(callback) {
+	 				if (!callback) { return; };
+		 			if (document.readyState === 'complete') {
+		 				setTimeout(callback);
+					} else {
+						_readyHandlers.push(callback);
+					}
+	 			};
 	 		}
 	 	});
 
-	 	// 9. 
+		// 9.1
+	 	var _isReady = false;
+	 	Object.defineProperty(_object, 'isReady', { 
+	 		get: function() { return _isReady; },
+	 	});
+
+	 	// 9.2
 	 	function _documentIsReady() {
-	 	 	return OMAppMessageSend(OMAppMessage.documentIsReady, null, function() {
-	 			_ready();
-	 		});
+	 		if (omApp.isReady) { return; };
+	 		if (!_isApp) {
+	 			setTimeout(omApp.didFinishLoading());
+	 			return;
+	 		};
+	 		_OMAppMessageSend(_OMAppMessage.documentIsReady, null, null);
 	 	}
 	 	Object.defineProperty(_object, 'documentIsReady', { get: function() { return _documentIsReady; }});
+
+	 	// 9.3
+	 	function _didFinishLoading() {
+	 		for (var i = _readyHandlers.length - 1; i >= 0; i--) {
+	 			var callback = _readyHandlers.pop();
+	 			callback();
+	 		};
+	 		_isReady = true;
+	 	}
+	 	Object.defineProperty(_object, 'didFinishLoading', { get: function() { return _didFinishLoading; }});
+
+	
+	 	
 
 		return _object;
 	})();
 
 	Object.defineProperties(window, {
-		omApp: { get: function () { return _omApp; } }
+		omApp: { get: function() { return _omApp; } }
 	});
 
-	// 绑定事件
+	// 当页面加载完成时，向 App 发送消息，初始化 omApp 对象。
 	if (document.readyState === "complete") {   
          setTimeout(omApp.documentIsReady);      
 	} else {
-        document.addEventListener("DOMContentLoaded", omApp.documentIsReady, false);
-　　　　 window.addEventListener("load", omApp.documentIsReady, false);   
+		var _documentIsReady = omApp.documentIsReady;
+		var _eventListener = function() {
+			if (!_documentIsReady) {
+				return;
+			};
+			_documentIsReady();
+			_documentIsReady = null;
+		}
+        document.addEventListener("DOMContentLoaded", _eventListener, false);
+　　　　 window.addEventListener("load", _eventListener, false);   
 	}
 };
 

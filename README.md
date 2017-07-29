@@ -17,7 +17,7 @@ HTML 页面通过 App 提供 JavaScript 接口，来实现对 App 功能的访�
 
 ### 1. 浏览器环境
 
-HTML 若要判断是否处于 App 提供的浏览器环境，可以通过 `User-Agent` 判断。
+HTML 若要判断是否处于 App 提供的浏览器环境中，可以通过 `User-Agent` 判断。
 
 ```
 // 无特殊说明，所有代码均为 JavaScript 代码。
@@ -27,7 +27,7 @@ var isApp = /Onemena/.test(window.navigator.userAgent);
 
 ### 2. 接口获取方式
 
-App 提供的接口统一在 `omApp` 对象上定义，HTML 对 App 的访问都通过此对象进行。
+App 提供的接口统一定义在 `omApp` 对象上，所有 HTML 与 App 的交互都通过此对象进行。
 
 ```
 // 打印 App 提供的 JavaScript 接口对象
@@ -36,7 +36,7 @@ console.log(omApp);
 console.log(window.omApp);
 ```
 
-### 3. 开发调试
+### 3. 开发调试 
 
 - 引入 `OMApp.js` 交互框架；
 - 在桌面浏览器中开发调试；
@@ -44,6 +44,35 @@ console.log(window.omApp);
 
 
 ### 4. 接口列表
+
+#### 4.0 ready(*callback*)
+
+    2017-07-27: 新增接口。
+
+- 接口说明：
+
+    在使用 omApp 对象之前，App 可能需要对其进行一些初始化设置。为保证能正常使用 omApp 对象，请将操作放在此方法回调中进行。
+
+- 参数说明：
+
+    | **Name**       | **Type**    | **Description** |
+    | :------------- | :---------- | :-------------- |
+    | callback       | Function    | 回调函数，无参数 |
+
+- 代码示例：
+
+    ``` 
+    omApp.ready(function() {
+        // ready 方法类似于 JQuery.ready 方法。
+    });
+    ```
+
+- 基于 URL 的交互方式（供 App 开发人员使用，下同）:
+    
+    - URL： `app://documentisready` 
+
+    - 回调： `omApp.didFinishLoading()`
+
 
 #### 4.1 login(*callback*)
 
@@ -79,7 +108,7 @@ console.log(window.omApp);
     });
     ```
 
-- 基于 URL 的交互方式（供 App 开发人员使用，下同）:
+- 基于 URL 的交互方式:
     
     - URL： `app://login/?callbackID=...`
 
