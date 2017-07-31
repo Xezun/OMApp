@@ -1026,7 +1026,7 @@ body .markdown-body
 <li><a href="#2">2. 接口获取方式</a></li>
 <li><a href="#3">3. 开发调试</a></li>
 <li><a href="#4">4. 接口列表</a><ul>
-<li><a href="#40-readycallback">4.0 ready(callback)</a></li>
+<li><a href="#40-readycallback">4.0 ready(callback) [暂未启用]</a></li>
 <li><a href="#41-logincallback">4.1 login(callback)</a></li>
 <li><a href="#42-openpage-parameters">4.2 open(page, parameters) [暂未启用]</a></li>
 <li><a href="#43-navigation">4.3 navigation</a><ul>
@@ -1045,7 +1045,11 @@ body .markdown-body
 </li>
 </ul>
 </li>
-<li><a href="#html">第二部分：HTML 开发调试</a></li>
+<li><a href="#html">第二部分：HTML 开发调试</a><ul>
+<li><a href="#1_1">1. 如何在桌面浏览器中测试某个页面已登陆后的情况？</a></li>
+<li><a href="#1-omapp">1. 如何在桌面浏览器中设置 omApp 的初始属性？</a></li>
+</ul>
+</li>
 <li><a href="#omapp-url">第三部分：omApp 基于 URL 交互方式的实现</a><ul>
 <li><a href="#_3">基本规则</a></li>
 <li><a href="#_4">基本规范</a></li>
@@ -1086,7 +1090,7 @@ console.log(window.omApp);
 <li>在 App 中开发调试。</li>
 </ul>
 <h3 id="4"><a name="user-content-4" href="#4" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4. 接口列表</h3>
-<h4 id="40-readycallback"><a name="user-content-40-readycallback" href="#40-readycallback" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.0 ready(<em>callback</em>)</h4>
+<h4 id="40-readycallback"><a name="user-content-40-readycallback" href="#40-readycallback" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.0 ready(<em>callback</em>) [暂未启用]</h4>
 <pre><code>2017-07-27: 新增接口。
 </code></pre>
 <ul>
@@ -2083,6 +2087,10 @@ omApp.didSelectAlertActionAtIndex(callbackID, 0);
 <hr />
 <h2 id="html"><a name="user-content-html" href="#html" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>第二部分：HTML 开发调试</h2>
 <p>交互框架 <code>OMApp.js</code> 为桌面浏览器模拟了 <code>omApp</code> 对象的一些基本的功能和交互方式。</p>
+<h3 id="1_1"><a name="user-content-1_1" href="#1_1" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>1. 如何在桌面浏览器中测试某个页面已登陆后的情况？</h3>
+<p>omApp 提供的 http 方法，在浏览器中，默认没有附带用户登录状态信息（user_token) ，所以获取不到已登陆后用户的数据。在这种情况下，可以在浏览器地址栏的 URL 后拼接用户真实 user_token 参数，再次加载页面即可。</p>
+<h3 id="1-omapp"><a name="user-content-1-omapp" href="#1-omapp" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>1. 如何在桌面浏览器中设置 omApp 的初始属性？</h3>
+<p>由于暂未提供配置 omApp 的方法。可以在 OMApp.js 末尾打个断点，然后在控制台手动设置 omApp 对象的属性。</p>
 <hr />
 <h2 id="omapp-url"><a name="user-content-omapp-url" href="#omapp-url" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>第三部分：<code>omApp</code> 基于 URL 交互方式的实现</h2>
 <h3 id="_3"><a name="user-content-_3" href="#_3" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>基本规则</h3>

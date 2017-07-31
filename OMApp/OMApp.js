@@ -365,6 +365,7 @@ if (!window.omApp) {
 	        return _OMAppMessageSend(_OMAppMessage.http, {"request": request}, callback);
 		}
 		Object.defineProperty(_object, 'http', { get: function() { return _http; }});	
+
 		// 7.2 
 		function _didFinishHTTPRequest(callbackID, success, result, contentType) {
 			var callback = _callbacks.pop(callbackID);
@@ -379,10 +380,8 @@ if (!window.omApp) {
 		}
 	 	Object.defineProperty(_object, 'didFinishHTTPRequest', { get: function() { return _didFinishHTTPRequest; }});
 
-	 	// 8. ready
-	 	var _readyHandlers = [function() { 
- 			console.log('[OMApp] 为了保证 omApp 在使用时已完成初始化，请将操作放在 omApp.ready(function(){/*代码*/}) 中。'); 
- 		}];
+	 	// 8. _readyHandlers 用于保存 omApp.ready 方法传递的所有函数，并且在 app ready 后依次执行。
+	 	var _readyHandlers = null;
 	 	Object.defineProperty(_object, 'ready', {
 	 		get: function() { 
 	 			return function(callback) {
@@ -390,19 +389,23 @@ if (!window.omApp) {
 		 			if (document.readyState === 'complete') {
 		 				setTimeout(callback);
 					} else {
-						_readyHandlers.push(callback);
+						if (!_readyHandlers) {
+							_readyHandlers = [callback];
+						} else {
+							_readyHandlers.push(callback);
+						}
 					}
 	 			};
 	 		}
 	 	});
 
 		// 9.1
-	 	var _isReady = false;
+	 	var _isReady = false; // 标识 omApp 是否初始化完成
 	 	Object.defineProperty(_object, 'isReady', { 
 	 		get: function() { return _isReady; },
 	 	});
 
-	 	// 9.2
+	 	// 9.2 向 App 发送消息，HTML 页面准备完成，可以初始化 omApp 对象了。
 	 	function _documentIsReady() {
 	 		if (omApp.isReady) { return; };
 	 		if (!_isApp) {
@@ -413,8 +416,12 @@ if (!window.omApp) {
 	 	}
 	 	Object.defineProperty(_object, 'documentIsReady', { get: function() { return _documentIsReady; }});
 
-	 	// 9.3
+	 	// 9.3 App 在完成初始化 omApp 后调用此方法，告诉 HTML 初始化已完成。
 	 	function _didFinishLoading() {
+	 		if (!_readyHandlers) {
+	 			console.log('[OMApp] 为了保证 omApp 在使用时已完成初始化，请将操作放在 omApp.ready(function(){/*代码*/}) 中。'); 
+	 			return;
+	 		};
 	 		for (var i = _readyHandlers.length - 1; i >= 0; i--) {
 	 			var callback = _readyHandlers.pop();
 	 			callback();
@@ -422,10 +429,7 @@ if (!window.omApp) {
 	 		_isReady = true;
 	 	}
 	 	Object.defineProperty(_object, 'didFinishLoading', { get: function() { return _didFinishLoading; }});
-
-	
-	 	
-
+	 
 		return _object;
 	})();
 
@@ -437,16 +441,13 @@ if (!window.omApp) {
 	if (document.readyState === "complete") {   
          setTimeout(omApp.documentIsReady);      
 	} else {
-		var _documentIsReady = omApp.documentIsReady;
 		var _eventListener = function() {
-			if (!_documentIsReady) {
-				return;
-			};
-			_documentIsReady();
-			_documentIsReady = null;
+			document.removeEventListener("DOMContentLoaded", _eventListener);
+			window.removeEventListener("load", _eventListener);
+			omApp.documentIsReady();
 		}
         document.addEventListener("DOMContentLoaded", _eventListener, false);
-　　　　 window.addEventListener("load", _eventListener, false);   
+		window.addEventListener("load", _eventListener, false);   
 	}
 };
 
@@ -475,13 +476,14 @@ function OMAppAJAX(request, callback) {
 	
 	// 读取测试用的 user_token 和 access_token
 	var access_token = OMAppGetURLQueryString("access_token");
-	if (access_token) {
-		if (request.headers) {
-			request.headers["access-token"] = access_token;
-		} else {
-			request.headers = {"access-token": access_token};
-		}
-	};
+	if (!access_token) {
+		access_token = "Test";
+	}
+	if (request.headers) {
+		request.headers["access-token"] = access_token;
+	} else {
+		request.headers = {"access-token": access_token};
+	}
 	var user_token = OMAppGetURLQueryString("user_token");
 	if (user_token) {
 		request.headers["user-token"] = user_token;

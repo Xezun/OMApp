@@ -43,15 +43,15 @@
     }
 </style>
 <script src="jquery-3.1.1.min.js"></script>
-<script src="OMApp.js"></script>
+<script src="../../OMApp/OMApp.js"></script>
 <script type="text/javascript">
 
 	window.onerror = function(error) { alert(error); }
-    window.onload = function() {
-        omApp.navigation.bar.title              = "OnemenaAppBridge";
+    omApp.ready(function() {
+		omApp.navigation.bar.title              = "OnemenaAppBridge";
         omApp.navigation.bar.titleColor         = "#FFFFFF";
         omApp.navigation.bar.backgroundColor    = "#3e84e0";
-    }
+    });
 
 </script>
 <body> 
