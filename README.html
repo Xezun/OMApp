@@ -1047,7 +1047,7 @@ body .markdown-body
 </li>
 <li><a href="#html">第二部分：HTML 开发调试</a><ul>
 <li><a href="#1_1">1. 如何在桌面浏览器中测试某个页面已登陆后的情况？</a></li>
-<li><a href="#1-omapp">1. 如何在桌面浏览器中设置 omApp 的初始属性？</a></li>
+<li><a href="#2-omapp">2. 如何在桌面浏览器中设置 omApp 的初始属性？</a></li>
 </ul>
 </li>
 <li><a href="#omapp-url">第三部分：omApp 基于 URL 交互方式的实现</a><ul>
@@ -1085,7 +1085,7 @@ console.log(window.omApp);
 
 <h3 id="3"><a name="user-content-3" href="#3" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>3. 开发调试</h3>
 <ul>
-<li>引入 <code>OMApp.js</code> 交互框架；</li>
+<li>引入 <code>OMApp.js</code> 交互框架，文件在 OMApp 目录下；</li>
 <li>在桌面浏览器中开发调试；</li>
 <li>在 App 中开发调试。</li>
 </ul>
@@ -2089,7 +2089,7 @@ omApp.didSelectAlertActionAtIndex(callbackID, 0);
 <p>交互框架 <code>OMApp.js</code> 为桌面浏览器模拟了 <code>omApp</code> 对象的一些基本的功能和交互方式。</p>
 <h3 id="1_1"><a name="user-content-1_1" href="#1_1" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>1. 如何在桌面浏览器中测试某个页面已登陆后的情况？</h3>
 <p>omApp 提供的 http 方法，在浏览器中，默认没有附带用户登录状态信息（user_token) ，所以获取不到已登陆后用户的数据。在这种情况下，可以在浏览器地址栏的 URL 后拼接用户真实 user_token 参数，再次加载页面即可。</p>
-<h3 id="1-omapp"><a name="user-content-1-omapp" href="#1-omapp" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>1. 如何在桌面浏览器中设置 omApp 的初始属性？</h3>
+<h3 id="2-omapp"><a name="user-content-2-omapp" href="#2-omapp" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>2. 如何在桌面浏览器中设置 omApp 的初始属性？</h3>
 <p>由于暂未提供配置 omApp 的方法。可以在 OMApp.js 末尾打个断点，然后在控制台手动设置 omApp 对象的属性。</p>
 <hr />
 <h2 id="omapp-url"><a name="user-content-omapp-url" href="#omapp-url" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>第三部分：<code>omApp</code> 基于 URL 交互方式的实现</h2>
