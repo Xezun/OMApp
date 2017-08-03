@@ -2,10 +2,10 @@ PODS:
   - OMKit (1.0.0):
     - SDWebImage (~> 4.0)
     - XZKit
-  - SDWebImage (4.0.0):
-    - SDWebImage/Core (= 4.0.0)
-  - SDWebImage/Core (4.0.0)
-  - XZKit (2.0.8)
+  - SDWebImage (4.1.0):
+    - SDWebImage/Core (= 4.1.0)
+  - SDWebImage/Core (4.1.0)
+  - XZKit (2.0.13)
 
 DEPENDENCIES:
   - OMKit (from `https://github.com/mlibai/OMKit.git`)
@@ -18,13 +18,13 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   OMKit:
-    :commit: 7a3c3bfdb81e4f4760bd8c0afc277c83f72d7ccf
+    :commit: 2f771b125eda50e53de777c1714d0d0b5e12dd94
     :git: https://github.com/mlibai/OMKit.git
 
 SPEC CHECKSUMS:
   OMKit: 1a41fd4fb509ad46e8dbd2f96861d8f600f01abd
-  SDWebImage: 76a6348bdc74eb5a55dd08a091ef298e56b55e41
-  XZKit: a22e5cf600a15000a486c0cb41c103d6aac8ab2c
+  SDWebImage: 0e435c14e402a6730315a0fb79f95e68654d55a4
+  XZKit: d56d9126cfebaf1773473787ab31ab3a65a2edab
 
 PODFILE CHECKSUM: d0b65b5b7cc2f26fc8b4a043474a71bfb5772e74
 

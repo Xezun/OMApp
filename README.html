@@ -1041,6 +1041,7 @@ body .markdown-body
 <li><a href="#46-currentuser">4.6 <a name="currentUser">currentUser</a></a></li>
 <li><a href="#47-httprequest-callback">4.7 http(request, callback)</a></li>
 <li><a href="#48-alertmessage-callback">4.8 alert(message, callback)</a></li>
+<li><a href="#49-network">4.9 network</a></li>
 </ul>
 </li>
 </ul>
@@ -1069,13 +1070,25 @@ body .markdown-body
 <h2 id="html-app"><a name="user-content-html-app" href="#html-app" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>第一部分：HTML 访问 App</h2>
 <p>HTML 页面通过 App 提供 JavaScript 接口，来实现对 App 功能的访问。</p>
 <h3 id="1"><a name="user-content-1" href="#1" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>1. 浏览器环境</h3>
+<ul>
+<li>
 <p>HTML 若要判断是否处于 App 提供的浏览器环境中，可以通过 <code>User-Agent</code> 判断。</p>
 <pre><code>// 无特殊说明，所有代码均为 JavaScript 代码。
 // 判断是否在 App 中。
 var isApp = /Onemena/.test(window.navigator.userAgent);
 </code></pre>
 
+</li>
+<li>
+<p>交互说明：</p>
+<ul>
+<li>App 须在初始化 WebView 时修改 <code>User-Agent</code> 。</li>
+</ul>
+</li>
+</ul>
 <h3 id="2"><a name="user-content-2" href="#2" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>2. 接口获取方式</h3>
+<ul>
+<li>
 <p>App 提供的接口统一定义在 <code>omApp</code> 对象上，所有 HTML 与 App 的交互都通过此对象进行。</p>
 <pre><code>// 打印 App 提供的 JavaScript 接口对象
 console.log(omApp); 
@@ -1083,6 +1096,14 @@ console.log(omApp);
 console.log(window.omApp);
 </code></pre>
 
+</li>
+<li>
+<p>交互说明：</p>
+<ul>
+<li>基于对象注入的方式，须在 WebView 创建 JavaScript 环境时注入 <code>omApp</code> 对象。</li>
+</ul>
+</li>
+</ul>
 <h3 id="3"><a name="user-content-3" href="#3" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>3. 开发调试</h3>
 <ul>
 <li>引入 <code>OMApp.js</code> 交互框架，文件在 OMApp 目录下；</li>
@@ -1091,7 +1112,7 @@ console.log(window.omApp);
 </ul>
 <h3 id="4"><a name="user-content-4" href="#4" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4. 接口列表</h3>
 <h4 id="40-readycallback"><a name="user-content-40-readycallback" href="#40-readycallback" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.0 ready(<em>callback</em>) [暂未启用]</h4>
-<pre><code>2017-07-27: 新增接口。
+<pre><code>2017-07-27： 新增接口。
 </code></pre>
 <ul>
 <li>
@@ -1126,13 +1147,21 @@ console.log(window.omApp);
 
 </li>
 <li>
-<p>基于 URL 的交互方式（供 App 开发人员使用，下同）:</p>
+<p>交互说明：</p>
+<ul>
+<li>
+<p>基于 URL 的交互方式， <code>omApp</code> 对象属性的初始值在此接口触发时设置，详见各接口。</p>
+</li>
+<li>
+<p>交互协议：</p>
 <ul>
 <li>
 <p>URL： <code>app://documentisready</code> </p>
 </li>
 <li>
 <p>回调： <code>omApp.didFinishLoading()</code></p>
+</li>
+</ul>
 </li>
 </ul>
 </li>
@@ -1196,7 +1225,7 @@ omApp.login(function(success) {
 
 </li>
 <li>
-<p>基于 URL 的交互方式:</p>
+<p>基于 URL 的交互方式：</p>
 <ul>
 <li>
 <p>URL： <code>app://login/?callbackID=...</code></p>
@@ -1355,15 +1384,20 @@ omApp.open(OMAppPage.task);
 
 </li>
 <li>
-<p>基于 URL 的交互方式:</p>
+<p>基于 URL 的交互方式：</p>
 <ul>
 <li>URL： <code>app://open/?page=...</code></li>
 </ul>
 </li>
 </ul>
 <h4 id="43-navigation"><a name="user-content-43-navigation" href="#43-navigation" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.3 navigation</h4>
-<pre><code>为了使 HTML 提供类似原生 App 的操作体验，`navigation` 接口给 HTML 提供了创建新窗口的能，并通过 `导航栈` 来管理这一系列窗口。
-</code></pre>
+<ul>
+<li>
+<p>接口说明：</p>
+<p>Object，只读，非空。<br />
+为了使 HTML 提供类似原生 App 的操作体验，<code>navigation</code> 接口给 HTML 提供了创建新窗口的能，并通过 <code>导航栈</code> 来管理这一系列窗口。</p>
+</li>
+</ul>
 <h5 id="431-navigationpushurl-animated"><a name="user-content-431-navigationpushurl-animated" href="#431-navigationpushurl-animated" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.3.1 navigation.push(<em>url</em>, <em>animated</em>)</h5>
 <ul>
 <li>
@@ -1402,7 +1436,7 @@ omApp.navigation.push('http://8.dev.arabsada.com/', true);
 
 </li>
 <li>
-<p>基于 URL 的交互方式:</p>
+<p>基于 URL 的交互方式：</p>
 <ul>
 <li>URL： <code>app://navigation.push/?url=...&amp;animated=...</code></li>
 </ul>
@@ -1440,7 +1474,7 @@ omApp.navigation.push('http://8.dev.arabsada.com/', true);
 
 </li>
 <li>
-<p>基于 URL 的交互方式:</p>
+<p>基于 URL 的交互方式：</p>
 <ul>
 <li>URL：<code>app://navigation.pop/?animated=...</code></li>
 </ul>
@@ -1483,7 +1517,7 @@ omApp.navigation.push('http://8.dev.arabsada.com/', true);
 
 </li>
 <li>
-<p>基于 URL 的交互方式:</p>
+<p>基于 URL 的交互方式：</p>
 <ul>
 <li>URL：<code>app://navigation.popto/?index=...&amp;animated=...</code></li>
 </ul>
@@ -1539,15 +1573,19 @@ omApp.navigation.bar.backgroundColor = '#0000FF';
 
 </li>
 <li>
-<p>基于 URL 的交互方式:</p>
+<p>交互说明：</p>
 <ul>
+<li>基于 URL 的交互方式 App 需在 ready 方法中初始化 bar 的初始状态。 </li>
+<li>交互协议：<ul>
 <li>URL：<code>app://navigation.bar/?isHidden=...&amp;title=...&amp;titleColor=...</code></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
 <h4 id="44-currenttheme"><a name="user-content-44-currenttheme" href="#44-currenttheme" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.4 currentTheme</h4>
 <pre><code>变更日志：
-2017-06-17: `theme` -&gt; `currentTheme`
+2017-06-17： `theme` -&gt; `currentTheme`
 </code></pre>
 <ul>
 <li>
@@ -1593,9 +1631,13 @@ omApp.navigation.bar.backgroundColor = '#0000FF';
 
 </li>
 <li>
-<p>基于 URL 的交互方式:</p>
+<p>交互说明：</p>
 <ul>
+<li>基于 URL 的交互方式，需在 ready 中初始化此属性。</li>
+<li>交互协议：<ul>
 <li>URL：<code>app://currenttheme/?name=...</code></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -1778,13 +1820,19 @@ var userName = omApp.currentUser.name;
 </code></pre>
 
 </li>
+<li>
+<p>交互说明：</p>
+<ul>
+<li>基于 URL 的交互方式，需在 ready 方法中初始化此属性。</li>
+</ul>
+</li>
 </ul>
 <h4 id="47-httprequest-callback"><a name="user-content-47-httprequest-callback" href="#47-httprequest-callback" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.7 http(<em>request</em>, <em>callback</em>)</h4>
 <ul>
-<li>接口说明：</li>
-</ul>
-<p>当 HTML 页面发送一个请求，需要携带用户身份信息的时候，使用此接口。出于安全等因素，HTML 页面不负责、保持用户状态，相关逻辑由 App 实现，HTML 直接使用结果。</p>
-<ul>
+<li>
+<p>接口说明：</p>
+<p>在业务逻辑设计上，HTML 只负责静态展示内容，不需要处理用户状态。但是如果 HTML  页面需要发送一个包括用户状态的请求的时候，可以通过此接口实现。HTML 通过此接口将要请求的网络接口、参数告诉 App，由 App 负责请求，并把结果回调给 HTML。</p>
+</li>
 <li>
 <p>参数说明：</p>
 <table>
@@ -1844,7 +1892,7 @@ var userName = omApp.currentUser.name;
 </table>
 <p><font size="2"><br />
 <em> 字段变更：<br />
-</em> 2017-06-29: params -&gt; data，目前 SDK 对此改变保持兼容。<br />
+</em> 2017-06-29： params -&gt; data，目前 SDK 对此改变保持兼容。<br />
 </font></p>
 <ul>
 <li>callback 函数参数：</li>
@@ -1870,6 +1918,7 @@ var userName = omApp.currentUser.name;
 </tr>
 </tbody>
 </table>
+<p><font size="2" color="gray"><em>如果请求结果是 JSON 数据，则 result 是解析后的 JSON 对象，否则 result 将是一个 String 。</em></font></p>
 </li>
 <li>
 <p>代码示例：</p>
@@ -1889,7 +1938,7 @@ omApp.http(request, function(success, result) {
 
 </li>
 <li>
-<p>基于 URL 的交互方式:</p>
+<p>基于 URL 的交互方式：</p>
 <ul>
 <li>
 <p>URL： <code>app://http/?callbackID=...&amp;request={url: ..., method: ...}</code></p>
@@ -2045,7 +2094,7 @@ omApp.didFinishHTTPRequest(callbackID, true, 'anEncodedString', 'application/jso
 
 </li>
 <li>
-<p>基于 URL 的交互方式:</p>
+<p>基于 URL 的交互方式：</p>
 <ul>
 <li>
 <p>URL： <code>app://alert/?callbackID=...&amp;message={title: ..., body: ...}</code></p>
@@ -2081,6 +2130,110 @@ omApp.didSelectAlertActionAtIndex(callbackID, 0);
 </code></pre>
 
 </li>
+</ul>
+</li>
+</ul>
+<h4 id="49-network"><a name="user-content-49-network" href="#49-network" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.9 network</h4>
+<ul>
+<li>
+<p>接口说明：</p>
+<p>只读，非空，Object 类型。判断是否可联网 <code>isReachable</code> 属性来确定。</p>
+</li>
+<li>
+<p>属性说明：</p>
+<table>
+<thead>
+<tr>
+<th><strong>Name</strong></th>
+<th><strong>Type</strong></th>
+<th><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>isReachable</td>
+<td>Bool</td>
+<td>只读。是否能联网。</td>
+</tr>
+<tr>
+<td>isViaWiFi</td>
+<td>Bool</td>
+<td>只读。是否是 WiFi 。</td>
+</tr>
+<tr>
+<td>type</td>
+<td>OMAppNetworkType</td>
+<td>只读。见 <a href="#OMAppNetworkType">OMAppNetworkType枚举</a></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p><a name="OMAppNetworkType"><strong><em>OMAppNetworkType</em>枚举</strong></a></p>
+<table>
+<thead>
+<tr>
+<th><strong>Name</strong></th>
+<th><strong>Type</strong></th>
+<th><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><em>OMAppNetworkType.<strong>none</strong></em></td>
+<td>String</td>
+<td>无网络</td>
+</tr>
+<tr>
+<td><em>OMAppNetworkType.<strong>WiFi</strong></em></td>
+<td>String</td>
+<td>WiFi</td>
+</tr>
+<tr>
+<td><em>OMAppNetworkType.WWan<strong>2G</strong></em></td>
+<td>String</td>
+<td>蜂窝网 2G</td>
+</tr>
+<tr>
+<td><em>OMAppNetworkType.WWan<strong>3G</strong></em></td>
+<td>String</td>
+<td>蜂窝网 3G</td>
+</tr>
+<tr>
+<td><em>OMAppNetworkType.WWan<strong>4G</strong></em></td>
+<td>String</td>
+<td>蜂窝网 4G</td>
+</tr>
+<tr>
+<td><em>OMAppNetworkType.<strong>unknown</strong></em></td>
+<td>String</td>
+<td>未知的联网方式</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>代码示例：</p>
+<pre><code>// 判断是否联网
+if (omApp.network.isReachable) {
+    // 已联网
+} else {
+    // 未联网
+}
+// 判断是否 WiFi
+if (omApp.network.isViaWiFi) {
+    // 正通过 Wi-Fi 上网
+}
+// 显示网络类型
+document.getElementById(&quot;app_network_type&quot;).innerHTML = omApp.network.type;
+</code></pre>
+
+</li>
+<li>
+<p>交互说明：</p>
+<ul>
+<li>App 需在 ready 消息中初始化 <code>omApp.network.type</code> 的值。</li>
+<li>后期考虑加入网络变化 <code>change</code> 事件，暂不支持。</li>
 </ul>
 </li>
 </ul>

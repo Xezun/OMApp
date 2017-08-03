@@ -17,24 +17,33 @@ HTML 页面通过 App 提供 JavaScript 接口，来实现对 App 功能的访�
 
 ### 1. 浏览器环境
 
-HTML 若要判断是否处于 App 提供的浏览器环境中，可以通过 `User-Agent` 判断。
+- HTML 若要判断是否处于 App 提供的浏览器环境中，可以通过 `User-Agent` 判断。
 
-```
-// 无特殊说明，所有代码均为 JavaScript 代码。
-// 判断是否在 App 中。
-var isApp = /Onemena/.test(window.navigator.userAgent);
-```
+    ```
+    // 无特殊说明，所有代码均为 JavaScript 代码。
+    // 判断是否在 App 中。
+    var isApp = /Onemena/.test(window.navigator.userAgent);
+    ```
+
+- 交互说明：
+    
+    - App 须在初始化 WebView 时修改 `User-Agent` 。
 
 ### 2. 接口获取方式
 
-App 提供的接口统一定义在 `omApp` 对象上，所有 HTML 与 App 的交互都通过此对象进行。
+- App 提供的接口统一定义在 `omApp` 对象上，所有 HTML 与 App 的交互都通过此对象进行。
 
-```
-// 打印 App 提供的 JavaScript 接口对象
-console.log(omApp); 
-// 或者
-console.log(window.omApp);
-```
+    ```
+    // 打印 App 提供的 JavaScript 接口对象
+    console.log(omApp); 
+    // 或者
+    console.log(window.omApp);
+    ```
+
+- 交互说明：
+
+    - 基于对象注入的方式，须在 WebView 创建 JavaScript 环境时注入 `omApp` 对象。
+
 
 ### 3. 开发调试 
 
@@ -47,7 +56,7 @@ console.log(window.omApp);
 
 #### 4.0 ready(*callback*) [暂未启用]
 
-    2017-07-27: 新增接口。
+    2017-07-27： 新增接口。
 
 - 接口说明：
 
@@ -67,11 +76,15 @@ console.log(window.omApp);
     });
     ```
 
-- 基于 URL 的交互方式（供 App 开发人员使用，下同）:
-    
-    - URL： `app://documentisready` 
+- 交互说明：
 
-    - 回调： `omApp.didFinishLoading()`
+    - 基于 URL 的交互方式， `omApp` 对象属性的初始值在此接口触发时设置，详见各接口。
+
+    - 交互协议：
+        
+        - URL： `app://documentisready` 
+
+        - 回调： `omApp.didFinishLoading()`
 
 
 #### 4.1 login(*callback*)
@@ -108,7 +121,7 @@ console.log(window.omApp);
     });
     ```
 
-- 基于 URL 的交互方式:
+- 基于 URL 的交互方式：
     
     - URL： `app://login/?callbackID=...`
 
@@ -172,13 +185,16 @@ console.log(window.omApp);
     omApp.open(OMAppPage.task); 
     ```
 
-- 基于 URL 的交互方式:
+- 基于 URL 的交互方式：
     
     - URL： `app://open/?page=...`
 
 
 #### 4.3 navigation
 
+- 接口说明：
+
+    Object，只读，非空。
     为了使 HTML 提供类似原生 App 的操作体验，`navigation` 接口给 HTML 提供了创建新窗口的能，并通过 `导航栈` 来管理这一系列窗口。
 
 ##### 4.3.1 navigation.push(*url*, *animated*)
@@ -201,7 +217,7 @@ console.log(window.omApp);
     omApp.navigation.push('http://8.dev.arabsada.com/', true); 
     ```
 
-- 基于 URL 的交互方式:
+- 基于 URL 的交互方式：
     
     - URL： `app://navigation.push/?url=...&animated=...`
     
@@ -224,7 +240,7 @@ console.log(window.omApp);
     omApp.navigation.pop(true); 
     ```
 
-- 基于 URL 的交互方式:
+- 基于 URL 的交互方式：
     
     - URL：`app://navigation.pop/?animated=...`
 
@@ -248,7 +264,7 @@ console.log(window.omApp);
     omApp.navigation.popTo(0, true);
     ```
 
-- 基于 URL 的交互方式:
+- 基于 URL 的交互方式：
     
     - URL：`app://navigation.popto/?index=...&animated=...`
 
@@ -277,15 +293,17 @@ console.log(window.omApp);
     omApp.navigation.bar.backgroundColor = '#0000FF';
     ```
 
-- 基于 URL 的交互方式:
+- 交互说明：
     
-    - URL：`app://navigation.bar/?isHidden=...&title=...&titleColor=...`
+    - 基于 URL 的交互方式 App 需在 ready 方法中初始化 bar 的初始状态。 
+    - 交互协议：
+        - URL：`app://navigation.bar/?isHidden=...&title=...&titleColor=...`
 
 
 #### 4.4 currentTheme
 
     变更日志：
-    2017-06-17: `theme` -> `currentTheme` 
+    2017-06-17： `theme` -> `currentTheme` 
 
 - 接口说明：
 
@@ -312,9 +330,11 @@ console.log(window.omApp);
     }
     ```
 
-- 基于 URL 的交互方式:
-    
-    - URL：`app://currenttheme/?name=...`
+- 交互说明：
+
+    - 基于 URL 的交互方式，需在 ready 中初始化此属性。
+    - 交互协议：
+        - URL：`app://currenttheme/?name=...`
 
 
 #### 4.5 statistic(*type*, *parameters*) [暂未启用]
@@ -394,12 +414,16 @@ console.log(window.omApp);
     var userName = omApp.currentUser.name;
     ```
 
+- 交互说明：
+
+    - 基于 URL 的交互方式，需在 ready 方法中初始化此属性。
+
 
 #### 4.7 http(*request*, *callback*)
 
 - 接口说明：
 
-    当 HTML 页面发送一个请求，需要携带用户身份信息的时候，使用此接口。出于安全等因素，HTML 页面不负责、保持用户状态，相关逻辑由 App 实现，HTML 直接使用结果。
+    在业务逻辑设计上，HTML 只负责静态展示内容，不需要处理用户状态。但是如果 HTML  页面需要发送一个包括用户状态的请求的时候，可以通过此接口实现。HTML 通过此接口将要请求的网络接口、参数告诉 App，由 App 负责请求，并把结果回调给 HTML。
 
 - 参数说明：
 
@@ -419,7 +443,7 @@ console.log(window.omApp);
     
     <font size="2">
     * 字段变更：
-    * 2017-06-29: params -> data，目前 SDK 对此改变保持兼容。
+    * 2017-06-29： params -> data，目前 SDK 对此改变保持兼容。
     </font>
 
     - callback 函数参数：
@@ -429,7 +453,8 @@ console.log(window.omApp);
     | success        | Bool        | 网络请求是否成功   |
     | result         | Any         | 网络请求返回的数据（如果有） |
 
-
+    <font size="2" color="gray">*如果请求结果是 JSON 数据，则 result 是解析后的 JSON 对象，否则 result 将是一个 String 。*</font>
+    
 - 代码示例：
 
     ```
@@ -447,7 +472,7 @@ console.log(window.omApp);
     });
     ```
 
-- 基于 URL 的交互方式:
+- 基于 URL 的交互方式：
     
     - URL： `app://http/?callbackID=...&request={url: ..., method: ...}`
 
@@ -524,7 +549,7 @@ console.log(window.omApp);
     });
     ```
 
-- 基于 URL 的交互方式:
+- 基于 URL 的交互方式：
     
     - URL： `app://alert/?callbackID=...&message={title: ..., body: ...}`
 
@@ -541,6 +566,56 @@ console.log(window.omApp);
         // 点击了第 0 个按钮
         omApp.didSelectAlertActionAtIndex(callbackID, 0);
         ```
+
+
+#### 4.9 network
+
+- 接口说明：
+
+    只读，非空，Object 类型。判断是否可联网 `isReachable` 属性来确定。
+
+- 属性说明：
+    
+    | **Name**        | **Type**        | **Description** |
+    | :-------------- | :-------------- | :-------------- |
+    | isReachable     | Bool            | 只读。是否能联网。  |
+    | isViaWiFi       | Bool            | 只读。是否是 WiFi 。  |
+    | type            | OMAppNetworkType   | 只读。见 [OMAppNetworkType枚举](#OMAppNetworkType)  |
+
+
+- <a name="OMAppNetworkType">***OMAppNetworkType*枚举**</a>
+
+    | **Name**                       | **Type**    | **Description** |
+    | :----------------------------- | :---------- | :-------------- |
+    | *OMAppNetworkType.**none***    | String      | 无网络           |
+    | *OMAppNetworkType.**WiFi***    | String      | WiFi            |
+    | *OMAppNetworkType.WWan**2G***  | String      | 蜂窝网 2G        |
+    | *OMAppNetworkType.WWan**3G***  | String      | 蜂窝网 3G        |
+    | *OMAppNetworkType.WWan**4G***  | String      | 蜂窝网 4G      |
+    | *OMAppNetworkType.**unknown*** | String      | 未知的联网方式  |
+
+
+- 代码示例：
+
+    ```
+    // 判断是否联网
+    if (omApp.network.isReachable) {
+        // 已联网
+    } else {
+        // 未联网
+    }
+    // 判断是否 WiFi
+    if (omApp.network.isViaWiFi) {
+        // 正通过 Wi-Fi 上网
+    }
+    // 显示网络类型
+    document.getElementById("app_network_type").innerHTML = omApp.network.type;
+    ```
+
+- 交互说明：
+    
+    - App 需在 ready 消息中初始化 `omApp.network.type` 的值。
+    - 后期考虑加入网络变化 `change` 事件，暂不支持。
 
 
 ***

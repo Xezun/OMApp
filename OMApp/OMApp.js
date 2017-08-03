@@ -52,15 +52,37 @@ if (!window.OMAppTheme) {
 	});
 };
 
+/* OMAppNetworkType 网路类型 */
+if (!window.OMAppNetworkType) {
+	var _OMAppNetworkType = (function(){
+		var _OMAppNetworkTypeObject = {};
+		Object.defineProperties(_OMAppNetworkTypeObject, {
+			none: 			{ get: function() { return "none"; 			} },
+			WiFi: 			{ get: function() { return "WiFi";			} },
+			WWan2G: 		{ get: function() { return "2G";			} },
+			WWan3G: 		{ get: function() { return "3G";			} },
+			WWan4G: 		{ get: function() { return "4G";			} },
+			unknown: 		{ get: function() { return "unknown";		} } 
+		});
+		return _OMAppNetworkTypeObject;
+	})();
+	Object.defineProperties(window, {
+		OMAppNetworkType: { get: function() {return _OMAppNetworkType;} }
+	});
+};
 
 
 /* omApp 接口定义 */
 if (!window.omApp) {
 	var _omApp = (function() {
-		var _object = {};
+		var _omAppObject = {};
 
 		var _isApp = /Onemena/.test(window.navigator.userAgent);
 
+		// _callbacks 负责管理所有回调函数。
+		// 主要方法: 
+		// - 1，push 保存一个回调函数并返回其ID。
+		// - 2，pop 通过 ID 取出一个回调函数。
 		var _callbacks = (function(){
 			var _store 	= {}; // 所有已保存的回调
 			var _id 	= 0;
@@ -86,10 +108,12 @@ if (!window.omApp) {
 			return _object;
 		})();
 
+		// 在控制台打印方法废气的消息。
 		function _deprecate(oldMethod, newMethod) {
 			console.log("[OMApp] " + oldMethod + " 已废弃，请使用 " + newMethod + " 代替！");
 		}
 
+		// _OMAppMessage 定义了所有消息类型。
 		var _OMAppMessage = {
 			documentIsReady: "documentisready",
 			navigation: {
@@ -105,8 +129,8 @@ if (!window.omApp) {
 			alert: 				"alert" 			
 		};
 
-		/* 向App发送消息：（消息类型，消息参数，回调）。*/
-		function _OMAppMessageSend(message, parameterObject, callback) {
+		// 向 App 发送消息：（消息类型，消息参数，回调）。
+		function _OMAppMessageSend(message, parameters, callback) {
 	        if (!message) { return; }
 	        var url = 'app://' + encodeURIComponent(message);
 	        
@@ -126,8 +150,8 @@ if (!window.omApp) {
 	        	return value.toString();
 	        }
 
-	        for (key in parameterObject) {
-	        	var value = encodeURIComponent(toQueryValue(parameterObject[key]));
+	        for (key in parameters) {
+	        	var value = encodeURIComponent(toQueryValue(parameters[key]));
 	        	if (query) {
 	        		query = query + "&" + key + "=" + value;
 	        	} else {
@@ -150,7 +174,80 @@ if (!window.omApp) {
 	        return callbackID;
 	    }
 
-		// 1. 打开指定页面
+	 	// 0.0 _readyHandlers，数组。用于保存 omApp.ready 方法传递的所有函数，并且在 app ready 后依次执行。
+	 	var _readyHandlers = null;
+	 	function _addReadyHander(callback) {
+	 		if (!callback) { 
+	 			return; 
+	 		}
+	 		// 如果文档已加载，异步执行。
+ 			if (document.readyState === 'complete') {
+ 				setTimeout(callback);
+			} else {
+				if (!_readyHandlers) {
+					_readyHandlers = [callback];
+				} else {
+					_readyHandlers.push(callback);
+				}
+			}
+	 	}
+	 	Object.defineProperty(_omAppObject, 'ready', {
+	 		get: function() { 
+	 			return _addReadyHander;
+	 		}
+	 	});
+
+		// 0.1
+	 	var _isReady = false; // 标识 omApp 是否初始化完成
+	 	Object.defineProperty(_omAppObject, 'isReady', { 
+	 		get: function() { return _isReady; },
+	 	});
+
+	 	// 0.2 向 App 发送消息，HTML 页面准备完成，可以初始化 omApp 对象了。
+	 	function _documentIsReady() {
+	 		if (omApp.isReady) { return; };
+	 		if (!_isApp) {
+	 			setTimeout(omApp.didFinishLoading());
+	 			return;
+	 		};
+	 		_OMAppMessageSend(_OMAppMessage.documentIsReady, null, null);
+	 	}
+	 	Object.defineProperty(_omAppObject, 'documentIsReady', { get: function() { return _documentIsReady; }});
+
+	 	// 0.3 App 在完成初始化 omApp 后调用此方法，告诉 HTML 初始化已完成。
+	 	function _didFinishLoading() {
+	 		if (!_readyHandlers) {
+	 			console.log('[OMApp] 为了保证 omApp 在使用时已完成初始化，请将操作放在 omApp.ready(function(){/*代码*/}) 中。'); 
+	 			return;
+	 		};
+	 		for (var i = _readyHandlers.length - 1; i >= 0; i--) {
+	 			var callback = _readyHandlers.pop();
+	 			callback();
+	 		};
+	 		_isReady = true;
+	 	}
+	 	Object.defineProperty(_omAppObject, 'didFinishLoading', { get: function() { return _didFinishLoading; }});
+
+		// 1.1 HTML 调用原生的登录。
+		function _login(callback) {
+			if (!_isApp) {
+				setTimeout(callback(confirm('点击按钮确定登陆！ \n[确定] -> 登录成功 \n[取消] -> 登录失败')));
+				return;
+			}
+			return _OMAppMessageSend(_OMAppMessage.login, null, callback);
+		}
+		Object.defineProperty(_omAppObject, 'login', { get: function() { return _login; }});
+
+		// 1.2 原生通知JS登录已完成。
+		function _didFinishLogin(callbackID, success) {
+		 	var callback = _callbacks.pop(callbackID);
+		 	if (callback) {
+		 		callback(success);
+		 	}
+		}
+	 	Object.defineProperty(_omAppObject, 'didFinishLogin', { get: function() { return _didFinishLogin; }});
+
+		// 2. 打开指定页面(页面名称，参数)
 		function _open(page, parameters) {
 			if (!_isApp) {
 				window.open(page + "[" + parameters + "]");
@@ -160,56 +257,11 @@ if (!window.omApp) {
 			if (parameters) { param.parameters = parameters; }
 			return _OMAppMessageSend(_OMAppMessage.open, param);
 		}
-		Object.defineProperty(_object, 'open', { get: function() { return _open; }});
+		Object.defineProperty(_omAppObject, 'open', { get: function() { return _open; }});
 
-		// 2.1 HTML 调用原生的登录。
-		function _login(callback) {
-			if (!_isApp) {
-				if (confirm('Click to select the login result! \n[OK] -> true \n[Cancel] -> false')) {
-					callback(true);
-				} else {
-					callback(false);
-				}
-				return;
-			}
-			return _OMAppMessageSend(_OMAppMessage.login, null, callback);
-		}
-		Object.defineProperty(_object, 'login', { get: function() { return _login; }});
-
-		// 2.2 原生通知JS登录已完成。
-		function _didFinishLogin(callbackID, success) {
-		 	var callback = _callbacks.pop(callbackID);
-		 	if (callback) {
-		 		callback(success);
-		 	}
-		}
-	 	Object.defineProperty(_object, 'didFinishLogin', { get: function() { return _didFinishLogin; }});
-
-	 	// 3.1 alert
-		function _alert(message, callback) {
-			if (!_isApp) {
-				setTimeout(function(){
-					window.alert('title: ' + message.title + "\nbody: "+ message.body + "\nactions:" + message.actions);
-					callback(-1);
-				}, 100);
-				return;
-			};
-			return _OMAppMessageSend(_OMAppMessage.alert, {"message": message}, callback);
-		}
-		Object.defineProperty(_object, 'alert', { get: function() { return _alert; }});
-
-		// 3.2
-		function _didSelectAlertActionAtIndex(callbackID, index) {
-			var callback = _callbacks.pop(callbackID);
-			if (callback) {
-				callback(index);
-			}
-		}
-	 	Object.defineProperty(_object, 'didSelectAlertActionAtIndex', { get: function() { return _didSelectAlertActionAtIndex; }});
-
-		// 4. navigation
+		// 3. navigation
 		var _navigation = (function() {
-			// 进入下级页面。
+			// 3.1 进入下级页面。
 			var _push = function (url, animated) {
 				// 不是以 http、https 开头的，被视作为相对路径。
 	   			if (url.search(/(http|https|file):\/\//i) != 0) {
@@ -225,7 +277,7 @@ if (!window.omApp) {
 	   		 	return _OMAppMessageSend(_OMAppMessage.navigation.push, {"url": url, "animated": animated});
 			}
 
-			// 推出当前页面，使栈内页面数量 -1。
+			// 3.2 推出当前页面，使栈内页面数量 -1。
 			var _pop = function (animated) {
 				if (!_isApp) {
 					window.history.back();
@@ -237,7 +289,7 @@ if (!window.omApp) {
 				return _OMAppMessageSend(_OMAppMessage.navigation.pop, {"animated": animated});
 			}
 
-			// 移除栈内索引大于 index 的所有页面，即将 index 页面所显示的内容展示出来。
+			// 3.3 移除栈内索引大于 index 的所有页面，即将 index 页面所显示的内容展示出来。
 			var _popTo = function (index, animated) {
 				if (!_isApp) {
 					var i = index - window.history.length + 1;
@@ -250,14 +302,15 @@ if (!window.omApp) {
 				return _OMAppMessageSend(_OMAppMessage.navigation.popTo, {"index": index, "animated": animated});
 			}
 
+			// 3.4 Bar
 			var _bar = (function() {
 				var _title			 = "Onemena";
 				var _titleColor		 = "#000000";
 				var _backgroundColor = "#FFFFFF";
 				var _isHidden		 = false;
 
-				var _object = {};
-				Object.defineProperties(_object, {
+				var _navigationBarObject = {};
+				Object.defineProperties(_navigationBarObject, {
 					title: {
 						get: function() { return _title; },
 						set: function(newValue) { _title = newValue; _OMAppMessageSend(_OMAppMessage.navigation.bar, {"title": newValue}); }
@@ -275,23 +328,23 @@ if (!window.omApp) {
 						set: function(newValue) { _isHidden = newValue; _OMAppMessageSend(_OMAppMessage.navigation.bar, {"isHidden": newValue}) }
 					}
 				});
-				return _object;
+				return _navigationBarObject;
 			})();
 
-			var _object = {};
-			Object.defineProperties(_object, {
+			var _navigationObject = {};
+			Object.defineProperties(_navigationObject, {
 				push:	{ get: function() { return _push; 	} },
 				pop: 	{ get: function() { return _pop; 	} },
 				popTo: 	{ get: function() { return _popTo; 	} },
 				bar: 	{ get: function() { return _bar; 	} }
 			});
-			return _object;
+			return _navigationObject;
 		})();
-		Object.defineProperty(_object, 'navigation', { get: function() { return _navigation; }});
-		
-		// 5. theme
+		Object.defineProperty(_omAppObject, 'navigation', { get: function() { return _navigation; }});
+
+		// 4. currentTheme
 		var _currentTheme = OMAppTheme.day;
-		Object.defineProperties(_object, {
+		Object.defineProperties(_omAppObject, {
 			currentTheme: {
 				get: function() { 
 					return _currentTheme; 
@@ -313,9 +366,10 @@ if (!window.omApp) {
 			}
 		});
 
+		// 5. statistic 统计 
 
 		// 6. 当前用户
-		var _currentUser = (function(){
+		var _currentUser = (function() {
 			var _id   = "0";
 			var _name = "None";
 			var _type = OMAppUserType.visitor;
@@ -347,7 +401,7 @@ if (!window.omApp) {
 			});
 			return _object;
 		})();
-		Object.defineProperty(_object, 'currentUser', { get: function() { return _currentUser; }});
+		Object.defineProperty(_omAppObject, 'currentUser', { get: function() { return _currentUser; }});
 
 		// 7.1 HTTP
 		function _http(request, callback) {
@@ -364,9 +418,9 @@ if (!window.omApp) {
 			};
 	        return _OMAppMessageSend(_OMAppMessage.http, {"request": request}, callback);
 		}
-		Object.defineProperty(_object, 'http', { get: function() { return _http; }});	
+		Object.defineProperty(_omAppObject, 'http', { get: function() { return _http; }});	
 
-		// 7.2 
+		// 7.2 HTTP 回调 （回调函数ID，是否成功，数据（Base64字符串），数据类型）
 		function _didFinishHTTPRequest(callbackID, success, result, contentType) {
 			var callback = _callbacks.pop(callbackID);
 			if (!callback) { return; };
@@ -378,64 +432,62 @@ if (!window.omApp) {
 			}
 			callback(success, result);
 		}
-	 	Object.defineProperty(_object, 'didFinishHTTPRequest', { get: function() { return _didFinishHTTPRequest; }});
+	 	Object.defineProperty(_omAppObject, 'didFinishHTTPRequest', { get: function() { return _didFinishHTTPRequest; }});
 
-	 	// 8. _readyHandlers 用于保存 omApp.ready 方法传递的所有函数，并且在 app ready 后依次执行。
-	 	var _readyHandlers = null;
-	 	Object.defineProperty(_object, 'ready', {
-	 		get: function() { 
-	 			return function(callback) {
-	 				if (!callback) { return; };
-		 			if (document.readyState === 'complete') {
-		 				setTimeout(callback);
-					} else {
-						if (!_readyHandlers) {
-							_readyHandlers = [callback];
-						} else {
-							_readyHandlers.push(callback);
-						}
-					}
-	 			};
-	 		}
-	 	});
+	 	// 8.1 alert
+		function _alert(message, callback) {
+			if (!_isApp) {
+				setTimeout(function(){
+					window.alert('title: ' + message.title + "\nbody: "+ message.body + "\nactions:" + message.actions);
+					callback(-1);
+				}, 100);
+				return;
+			};
+			return _OMAppMessageSend(_OMAppMessage.alert, {"message": message}, callback);
+		}
+		Object.defineProperty(_omAppObject, 'alert', { get: function() { return _alert; }});
 
-		// 9.1
-	 	var _isReady = false; // 标识 omApp 是否初始化完成
-	 	Object.defineProperty(_object, 'isReady', { 
-	 		get: function() { return _isReady; },
-	 	});
+		// 8.2
+		function _didSelectAlertActionAtIndex(callbackID, index) {
+			var callback = _callbacks.pop(callbackID);
+			if (callback) {
+				callback(index);
+			}
+		}
+	 	Object.defineProperty(_omAppObject, 'didSelectAlertActionAtIndex', { get: function() { return _didSelectAlertActionAtIndex; }});
 
-	 	// 9.2 向 App 发送消息，HTML 页面准备完成，可以初始化 omApp 对象了。
-	 	function _documentIsReady() {
-	 		if (omApp.isReady) { return; };
-	 		if (!_isApp) {
-	 			setTimeout(omApp.didFinishLoading());
-	 			return;
-	 		};
-	 		_OMAppMessageSend(_OMAppMessage.documentIsReady, null, null);
-	 	}
-	 	Object.defineProperty(_object, 'documentIsReady', { get: function() { return _documentIsReady; }});
+	 	// 9. 网络状态
+	 	var _network = (function() {
+	 		var _networkObject = {};
+	 		var _type = OMAppNetworkType.unknown;
+	 		Object.defineProperties(_object, {
+				type: {
+					get: function() { return _type; },
+		 			set: function(newValue) { _type = newValue; }
+				},
+				isReachable: {
+					get: function() { return (_type != OMAppNetworkType.none); }
+				},
+				isViaWiFi: {
+					get: function() { return (_type == OMAppNetworkType.WiFi); }
+				}
+			});
+	 	})();
+	 	Object.defineProperty(_omAppObject, 'network', { get: function() { return _network; }});
 
-	 	// 9.3 App 在完成初始化 omApp 后调用此方法，告诉 HTML 初始化已完成。
-	 	function _didFinishLoading() {
-	 		if (!_readyHandlers) {
-	 			console.log('[OMApp] 为了保证 omApp 在使用时已完成初始化，请将操作放在 omApp.ready(function(){/*代码*/}) 中。'); 
-	 			return;
-	 		};
-	 		for (var i = _readyHandlers.length - 1; i >= 0; i--) {
-	 			var callback = _readyHandlers.pop();
-	 			callback();
-	 		};
-	 		_isReady = true;
-	 	}
-	 	Object.defineProperty(_object, 'didFinishLoading', { get: function() { return _didFinishLoading; }});
-	 
-		return _object;
+		return _omAppObject;
 	})();
 
 	Object.defineProperties(window, {
 		omApp: { get: function() { return _omApp; } }
 	});
+
+
+
+
+
+
+
 
 	// 当页面加载完成时，向 App 发送消息，初始化 omApp 对象。
 	if (document.readyState === "complete") {   

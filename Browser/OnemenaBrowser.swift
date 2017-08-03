@@ -10,29 +10,33 @@ import UIKit
 import XZKit
 import OMKit
 
-//extension Notification.Name {
-//    static let OMHTMLOpenPageTest = Notification.Name(rawValue: "OMHTMLOpenPageTest")
-//}
-//
-//extension WebViewEvent {
-//    static let theme = WebViewEvent(rawValue: "theme")
-//}
-//
-//
-//class OMWebView: UIWebView {
-//    deinit {
-//        print("WebView is deinit.")
-//    }
-//}
 
 class OnemenaBrowser: UIViewController, NavigationBarCustomizable, NavigationGestureDrivable, UIWebViewDelegate, WebViewDelegate {
     
-    var webView: UIWebView
+    var webView: XZKit.WebView
+    
+    weak var appExport: AppExport?
+    
     
     init(url: URL) {
-        self.webView = XZKit.WebView()
-        webView.loadRequest(URLRequest(url: url))
+        webView = XZKit.WebView()
         super.init(nibName: nil, bundle: nil)
+        
+        let export = AppExport()
+        export.currentTheme = AppTheme.day.rawValue
+        export.network.type = AppNetworkType.WWan2G
+        webView.export(export, toJavaScript: "omApp")
+        webView.export(AppThemeExport(), toJavaScript: "OMAppTheme")
+        webView.export(AppUserTypeExport(), toJavaScript: "OMAppUserTypeExport")
+//        let block: @convention(block) (String) -> String =  { (_ name: String) -> String in
+//            return "2G";
+//        }
+        webView.export(AppNetworkTypeExport(), toJavaScript: "OMAppNetworkType")
+        
+        appExport = export
+        appExport?.delegate = self
+        
+        webView.loadRequest(URLRequest(url: url))
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -40,22 +44,29 @@ class OnemenaBrowser: UIViewController, NavigationBarCustomizable, NavigationGes
     }
     
     var logsVC = LogsTableViewController()
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.dataf.dateFormat = "yyyy-MM-dd hh:mm:ss"
         
-        webView.frame = view.bounds
-        webView.delegate = self
-        webView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        webView.frame               = view.bounds
+        webView.delegate            = self
+        webView.autoresizingMask    = [.flexibleWidth, .flexibleHeight]
         view.addSubview(webView)
-        // webView.stringByEvaluatingJavaScript(from: "window.onerror = function(error) { setTimeout(function(){alert(error)}, 2000); }")
-        customNavigationBar.barTintColor = UIColor(rgb: 0x3e84e0)
         
+        customNavigationBar.barTintColor = UIColor(rgb: 0x3e84e0)
         customNavigationBar.infoButton.setImage(#imageLiteral(resourceName: "btn_nav_more_white"), for: .normal)
         customNavigationBar.infoButton.addTarget(self, action: #selector(console(_:)), for: .touchUpInside)
         customNavigationBar.backButton.setImage(UIImage(named: "btn_nav_back_white"), for: .normal)
         customNavigationBar.backButton.addTarget(self, action: #selector(navBack(_:)), for: .touchUpInside);
+        
+
+        
+    }
+    
+    func webView(_ webView: WebView, didCatchAJavaScriptException expection: JSValue?) {
+        print(expection?.toString() ?? "")
     }
     
     func console(_ button: UIButton) -> Void {
@@ -75,19 +86,6 @@ class OnemenaBrowser: UIViewController, NavigationBarCustomizable, NavigationGes
     func viewControllerForPushGestureInteration(_ navigationController: UINavigationController) -> UIViewController? {
         return logsVC
     }
-
-    
-    func webView(_ webView: XZKit.WebView, didCreateJavaScriptContext context: JSContext) {
-        let app = AppExport.init(context: context, delegate: self)
-        app.currentTheme = "day"
-        self.export = app
-        print("【事件】JavaScript 环境初始化完成")
-        
-        
-        webView.stringByEvaluatingJavaScript(from: "JSON.parse(decodeURIComponent(''))")
-    }
-    
-    weak var export: AppExport?
     
     var loginCompletion: ((Bool)->Void)?
     var httpCompletion: ((Bool, Any?)->Void)?
@@ -105,11 +103,11 @@ class OnemenaBrowser: UIViewController, NavigationBarCustomizable, NavigationGes
 extension OnemenaBrowser: LoginTableViewControllerDelegate {
     
     func loginViewController(_ viewController: LoginTableViewController, didFinishLoginingWith result: (id: String, name: String, type: String, coin: String, token: String, success: Bool)) {
-        export?.currentUser.id      = result.id
-        export?.currentUser.name    = result.name
-        export?.currentUser.type    = result.type
-        export?.currentUser.coin    = Int(forceCast: result.coin)
-        export?.currentUser.token   = result.token
+        appExport?.currentUser.id      = result.id
+        appExport?.currentUser.name    = result.name
+        appExport?.currentUser.type    = result.type
+        appExport?.currentUser.coin    = Int(forceCast: result.coin)
+        appExport?.currentUser.token   = result.token
         loginCompletion?(result.success)
         loginCompletion = nil
     }
