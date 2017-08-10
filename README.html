@@ -1037,7 +1037,10 @@ body .markdown-body
 </ul>
 </li>
 <li><a href="#44-currenttheme">4.4 currentTheme</a></li>
-<li><a href="#45-statistictype-parameters">4.5 statistic(type, parameters) [暂未启用]</a></li>
+<li><a href="#45-analytics">4.5 analytics</a><ul>
+<li><a href="#451-trackevent-parameters">4.5.1 track(event, parameters)</a></li>
+</ul>
+</li>
 <li><a href="#46-currentuser">4.6 <a name="currentUser">currentUser</a></a></li>
 <li><a href="#47-httprequest-callback">4.7 http(request, callback)</a></li>
 <li><a href="#48-alertmessage-callback">4.8 alert(message, callback)</a></li>
@@ -1641,11 +1644,18 @@ omApp.navigation.bar.backgroundColor = '#0000FF';
 </ul>
 </li>
 </ul>
-<h4 id="45-statistictype-parameters"><a name="user-content-45-statistictype-parameters" href="#45-statistictype-parameters" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.5 statistic(<em>type</em>, <em>parameters</em>) [暂未启用]</h4>
+<h4 id="45-analytics"><a name="user-content-45-analytics" href="#45-analytics" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.5 analytics</h4>
 <ul>
 <li>
 <p>接口说明：</p>
-<p>用户行为统计，埋点。</p>
+<p>App 统计分析模块。</p>
+</li>
+</ul>
+<h5 id="451-trackevent-parameters"><a name="user-content-451-trackevent-parameters" href="#451-trackevent-parameters" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.5.1 track(<em>event</em>, <em>parameters</em>)</h5>
+<ul>
+<li>
+<p>接口说明：</p>
+<p>记录一条用户行为。</p>
 </li>
 <li>
 <p>参数说明：</p>
@@ -1659,67 +1669,30 @@ omApp.navigation.bar.backgroundColor = '#0000FF';
 </thead>
 <tbody>
 <tr>
-<td>type</td>
-<td>OMStatisticType</td>
-<td>见 <a href="#OMStatisticType">OMStatisticType枚举</a></td>
+<td>event</td>
+<td>String</td>
+<td>统计名称</td>
 </tr>
 <tr>
 <td>parameters</td>
 <td>Object</td>
-<td>见 <a href="#OMStatisticType">OMStatisticType枚举</a></td>
+<td>参数</td>
 </tr>
 </tbody>
 </table>
-</li>
-<li>
-<p><a name="OMStatisticType"><strong><em>OMStatisticType</em>枚举</strong></a></p>
-<ol>
-<li>
-<p>跳转金币商城：<em>OMStatisticType.<strong>openMall</strong></em></p>
-<table>
-<thead>
-<tr>
-<th>Name</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>type</td>
-<td>String</td>
-<td>根据需求文档，从金币任务内容页跳转到金币商城值为 2</td>
-</tr>
-</tbody>
-</table>
-</li>
-<li>
-<p>跳转金币任务：<em>OMStatisticType.<strong>openTask</strong></em></p>
-<table>
-<thead>
-<tr>
-<th>Name</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>type</td>
-<td>String</td>
-<td>根据需求文档，从金币商城内容页跳转到金币任务值为 3</td>
-</tr>
-</tbody>
-</table>
-</li>
-</ol>
 </li>
 <li>
 <p>代码示例：</p>
-<pre><code>omApp.statistic(OMStatisticType.openMall, {&quot;type&quot;: 2});
-omApp.statistic(OMStatisticType.openMall, {&quot;type&quot;: 3});
+<pre><code>omApp.analytics.track(&quot;click&quot;);
+omApp.analytics.track(&quot;read&quot;, {&quot;id&quot;: &quot;2&quot;, &quot;type&quot;: &quot;news&quot;});
 </code></pre>
 
+</li>
+<li>
+<p>交互说明：</p>
+<ul>
+<li>URL： <code>app://analytics.track/?event=...&amp;parameters={...}</code></li>
+</ul>
 </li>
 </ul>
 <h4 id="46-currentuser"><a name="user-content-46-currentuser" href="#46-currentuser" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.6 <a name="currentUser">currentUser</a></h4>

@@ -359,7 +359,7 @@ HTML 页面通过 App 提供 JavaScript 接口，来实现对 App 功能的访�
 - 代码示例：
 
     ```
-    omApp.analytics.analytics("click");
+    omApp.analytics.track("click");
     omApp.analytics.track("read", {"id": "2", "type": "news"});
     ```
 
