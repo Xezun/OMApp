@@ -337,40 +337,35 @@ HTML 页面通过 App 提供 JavaScript 接口，来实现对 App 功能的访�
         - URL：`app://currenttheme/?name=...`
 
 
-#### 4.5 statistic(*type*, *parameters*) [暂未启用]
+#### 4.5 analytics 
 
 - 接口说明：
 
-    用户行为统计，埋点。
+    App 统计分析模块。
+
+##### 4.5.1 track(*event*, *parameters*)
+
+- 接口说明：
+
+    记录一条用户行为。
 
 - 参数说明：
 
-    | **Name**  | **Type**        | **Description** |
-    | :-------- | :-------------- | :-------------- |
-    | type      | OMStatisticType | 见 [OMStatisticType枚举](#OMStatisticType)  |
-    | parameters | Object         | 见 [OMStatisticType枚举](#OMStatisticType)  |
-
-- <a name="OMStatisticType">***OMStatisticType*枚举**</a>
-
-    1. 跳转金币商城：*OMStatisticType.**openMall***
-
-        | Name | Type | Description | 
-        | :------------- | :---------- | :-------------- |
-        | type | String | 根据需求文档，从金币任务内容页跳转到金币商城值为 2 |
-
-    2. 跳转金币任务：*OMStatisticType.**openTask***
-  
-        | Name | Type | Description | 
-        | :------------- | :---------- | :-------------- |
-        | type | String | 根据需求文档，从金币商城内容页跳转到金币任务值为 3 |
-
+    | **Name**     | **Type**    | **Description** |
+    | :----------- | :---------- | :-------------- |
+    | event        | String      | 统计名称         |
+    | parameters   | Object      | 参数            |
 
 - 代码示例：
 
     ```
-    omApp.statistic(OMStatisticType.openMall, {"type": 2});
-    omApp.statistic(OMStatisticType.openMall, {"type": 3});
+    omApp.analytics.analytics("click");
+    omApp.analytics.track("read", {"id": "2", "type": "news"});
     ```
+
+- 交互说明：
+
+    - URL： `app://analytics.track/?event=...&parameters={...}`
 
 
 #### 4.6 <a name="currentUser">currentUser</a>

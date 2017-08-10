@@ -126,7 +126,10 @@ if (!window.omApp) {
 			login: 				"login",
 			currentTheme: 		"currenttheme",
 			http: 				"http",
-			alert: 				"alert" 			
+			alert: 				"alert",
+			analytics: {
+				track: "analytics.track"
+			}			
 		};
 
 		// 向 App 发送消息：（消息类型，消息参数，回调）。
@@ -141,6 +144,7 @@ if (!window.omApp) {
 		        query = "callbackID=" + callbackID;
 	        }
 
+	        // value 不能为空。
 	        function toQueryValue(value) {
 	        	if (typeof value == 'string') {
 	        		return value;
@@ -151,6 +155,9 @@ if (!window.omApp) {
 	        }
 
 	        for (key in parameters) {
+	        	if (!parameters[key]) {
+	        		continue;
+	        	}
 	        	var value = encodeURIComponent(toQueryValue(parameters[key]));
 	        	if (query) {
 	        		query = query + "&" + key + "=" + value;
@@ -366,7 +373,18 @@ if (!window.omApp) {
 			}
 		});
 
-		// 5. statistic 统计 
+		// 5. analytics 统计 
+
+		var _analytics = (function() {
+			function _track(event, parameters) {
+				return _OMAppMessageSend(_OMAppMessage.analytics.track, {"event": event, "parameters": parameters}, null);
+			}
+
+			var _analyticsObject = {};
+			Object.defineProperty(_analyticsObject, 'track', { get: function() { return _track; }});
+			return _analyticsObject;
+		})();
+		Object.defineProperty(_omAppObject, 'analytics', { get: function() { return _analytics; }});
 
 		// 6. 当前用户
 		var _currentUser = (function() {
@@ -375,8 +393,8 @@ if (!window.omApp) {
 			var _type = OMAppUserType.visitor;
 			var _coin = 0;
 			
-			var _object = {};
-			Object.defineProperties(_object, {
+			var _currentUserObject = {};
+			Object.defineProperties(_currentUserObject, {
 				isOnline: {
 					get: function () {
 						return (_type != OMAppUserType.visitor)
@@ -399,7 +417,7 @@ if (!window.omApp) {
 					set: function(newValue) { _coin = newValue; }
 				}
 			});
-			return _object;
+			return _currentUserObject;
 		})();
 		Object.defineProperty(_omAppObject, 'currentUser', { get: function() { return _currentUser; }});
 
@@ -460,7 +478,8 @@ if (!window.omApp) {
 	 	var _network = (function() {
 	 		var _networkObject = {};
 	 		var _type = OMAppNetworkType.unknown;
-	 		Object.defineProperties(_object, {
+	 		var _networkObject = {};
+	 		Object.defineProperties(_networkObject, {
 				type: {
 					get: function() { return _type; },
 		 			set: function(newValue) { _type = newValue; }
@@ -472,6 +491,7 @@ if (!window.omApp) {
 					get: function() { return (_type == OMAppNetworkType.WiFi); }
 				}
 			});
+	 		return _networkObject;
 	 	})();
 	 	Object.defineProperty(_omAppObject, 'network', { get: function() { return _network; }});
 
