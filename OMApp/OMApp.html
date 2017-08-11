@@ -43,7 +43,7 @@
     }
 </style>
 <script src="jquery-3.1.1.min.js"></script>
-<script src="../../OMApp/OMApp.js"></script>
+<script src="OMApp.js"></script>
 <script type="text/javascript">
 
 	window.onerror = function(error) { alert(error); }
@@ -245,15 +245,46 @@
         <tbody>
             <tr>
                 <th class="title">Name</th>
-                <th align="left">location</th>
+                <th align="left">analysic</th>
             </tr>
             <tr>
                 <td>JS</td>
-                <td><button onclick="javascript:document.location='http://www.baidu.com/'">document.location</button></td>
+                <script type="text/javascript">
+                	function doAnalytics() {
+                		omApp.analytics.track("read", {"id": "2", "type": "news"})
+                	}
+                </script>
+                <td><button onclick="javascript:doAnalytics();">统计</button></td>
             </tr> 
             
         </tbody>
     </table> 
+    <br />
+    
+    
+    <table cellpadding="5" cellspacing="0" border="1" width="100%">
+        <tbody>
+            <tr>
+                <th class="title">Name</th>
+                <th align="left">Input</th>
+            </tr>
+            <tr>
+                <td>JS</td>
+                <script type="text/javascript">
+                	function setInputFocus() {
+                        var ele = document.getElementById("focus_input");
+                        ele.style.display = "inline";
+                		ele.focus();
+                	}
+                </script>
+                <td>
+                	<button onclick="javascript:setInputFocus();">获取焦点</button>
+                	<input id="focus_input" name="focus_input" style="display: none">
+                </td>
+            </tr>
+            
+        </tbody>
+    </table>
     <br />
     
     <!--

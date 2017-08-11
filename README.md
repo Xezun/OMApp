@@ -49,7 +49,8 @@ HTML 页面通过 App 提供 JavaScript 接口，来实现对 App 功能的访�
 
 - 引入 `OMApp.js` 交互框架，文件在 OMApp 目录下；
 - 在桌面浏览器中开发调试；
-- 在 App 中开发调试。
+- 在 App 中开发调试；
+- 请尽量保持 `OMApp.js` 为最新版本。
 
 
 ### 4. 接口列表
@@ -343,7 +344,7 @@ HTML 页面通过 App 提供 JavaScript 接口，来实现对 App 功能的访�
 
     App 统计分析模块。
 
-##### 4.5.1 track(*event*, *parameters*)
+##### 4.5.1 analytics.track(*event*, *parameters*)
 
 - 接口说明：
 
@@ -353,8 +354,8 @@ HTML 页面通过 App 提供 JavaScript 接口，来实现对 App 功能的访�
 
     | **Name**     | **Type**    | **Description** |
     | :----------- | :---------- | :-------------- |
-    | event        | String      | 统计名称         |
-    | parameters   | Object      | 参数            |
+    | event        | String      | 必选，非空。统计名称 |
+    | parameters   | Object      | 可选。额外参数 *Key-Value* 为基本数据类型 |
 
 - 代码示例：
 

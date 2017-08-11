@@ -1,4 +1,5 @@
 // OMApp
+// Version: 2.0.0
 
 /* OMAppPage 页面类型枚举定义 */
 if (!window.OMAppPage) {
@@ -79,11 +80,16 @@ if (!window.omApp) {
 
 		var _isApp = /Onemena/.test(window.navigator.userAgent);
 
-		// _callbacks 负责管理所有回调函数。
+		// 在控制台打印方法废弃的消息。
+		function _deprecate(oldMethod, newMethod) {
+			console.log("[OMApp] " + oldMethod + " 已废弃，请使用 " + newMethod + " 代替！");
+		}
+
+		// _callbackManager 负责管理所有回调函数。
 		// 主要方法: 
 		// - 1，push 保存一个回调函数并返回其ID。
 		// - 2，pop 通过 ID 取出一个回调函数。
-		var _callbacks = (function(){
+		var _callbackManager = (function(){
 			var _store 	= {}; // 所有已保存的回调
 			var _id 	= 0;
 
@@ -107,11 +113,6 @@ if (!window.omApp) {
 			});
 			return _object;
 		})();
-
-		// 在控制台打印方法废气的消息。
-		function _deprecate(oldMethod, newMethod) {
-			console.log("[OMApp] " + oldMethod + " 已废弃，请使用 " + newMethod + " 代替！");
-		}
 
 		// _OMAppMessage 定义了所有消息类型。
 		var _OMAppMessage = {
@@ -137,10 +138,10 @@ if (!window.omApp) {
 	        if (!message) { return; }
 	        var url = 'app://' + encodeURIComponent(message);
 	        
-	        var query = null;
+	        var query = null; // ? 以后的部分，不包括 ?
 	        var callbackID = null;
 	        if (callback) {
-	        	callbackID = _callbacks.push(callback);
+	        	callbackID = _callbackManager.push(callback);
 		        query = "callbackID=" + callbackID;
 	        }
 
@@ -155,14 +156,15 @@ if (!window.omApp) {
 	        }
 
 	        for (key in parameters) {
-	        	if (!parameters[key]) {
-	        		continue;
+	        	var value = parameters[key];
+	        	var string = key;
+	        	if (value) {
+	        		string = key + "=" + toQueryValue(value);
 	        	}
-	        	var value = encodeURIComponent(toQueryValue(parameters[key]));
 	        	if (query) {
-	        		query = query + "&" + key + "=" + value;
+	        		query = query + "&" + string;
 	        	} else {
-	        		query = key + "=" + value;
+	        		query = string;
 	        	}
 	        }
 
@@ -184,7 +186,7 @@ if (!window.omApp) {
 	 	// 0.0 _readyHandlers，数组。用于保存 omApp.ready 方法传递的所有函数，并且在 app ready 后依次执行。
 	 	var _readyHandlers = null;
 	 	function _addReadyHander(callback) {
-	 		if (!callback) { 
+	 		if (typeof callback != 'function') { 
 	 			return; 
 	 		}
 	 		// 如果文档已加载，异步执行。
@@ -228,8 +230,7 @@ if (!window.omApp) {
 	 			return;
 	 		};
 	 		for (var i = _readyHandlers.length - 1; i >= 0; i--) {
-	 			var callback = _readyHandlers.pop();
-	 			callback();
+	 			(_readyHandlers.pop())();
 	 		};
 	 		_isReady = true;
 	 	}
@@ -247,7 +248,7 @@ if (!window.omApp) {
 
 		// 1.2 原生通知JS登录已完成。
 		function _didFinishLogin(callbackID, success) {
-		 	var callback = _callbacks.pop(callbackID);
+		 	var callback = _callbackManager.pop(callbackID);
 		 	if (callback) {
 		 		callback(success);
 		 	}
@@ -428,7 +429,7 @@ if (!window.omApp) {
 				request.data = request.params;
 			};
 			if (!_isApp) {
-				var callbackID = _callbacks.push(callback);
+				var callbackID = _callbackManager.push(callback);
 				OMAppAJAX(request, function(success, result, contentType) {
 					omApp.didFinishHTTPRequest(callbackID, success, result, contentType);
 				});
@@ -440,7 +441,7 @@ if (!window.omApp) {
 
 		// 7.2 HTTP 回调 （回调函数ID，是否成功，数据（Base64字符串），数据类型）
 		function _didFinishHTTPRequest(callbackID, success, result, contentType) {
-			var callback = _callbacks.pop(callbackID);
+			var callback = _callbackManager.pop(callbackID);
 			if (!callback) { return; };
 			if (result) {
 				result = decodeURIComponent(result);
@@ -467,7 +468,7 @@ if (!window.omApp) {
 
 		// 8.2
 		function _didSelectAlertActionAtIndex(callbackID, index) {
-			var callback = _callbacks.pop(callbackID);
+			var callback = _callbackManager.pop(callbackID);
 			if (callback) {
 				callback(index);
 			}

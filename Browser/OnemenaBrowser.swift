@@ -25,13 +25,7 @@ class OnemenaBrowser: UIViewController, NavigationBarCustomizable, NavigationGes
         let export = AppExport()
         export.currentTheme = AppTheme.day.rawValue
         export.network.type = AppNetworkType.WWan2G
-        webView.export(export, toJavaScript: "omApp")
-        webView.export(AppThemeExport(), toJavaScript: "OMAppTheme")
-        webView.export(AppUserTypeExport(), toJavaScript: "OMAppUserTypeExport")
-//        let block: @convention(block) (String) -> String =  { (_ name: String) -> String in
-//            return "2G";
-//        }
-        webView.export(AppNetworkTypeExport(), toJavaScript: "OMAppNetworkType")
+        webView.setObject(export, forJavaScriptInterface: "omApp")
         
         appExport = export
         appExport?.delegate = self
@@ -60,9 +54,6 @@ class OnemenaBrowser: UIViewController, NavigationBarCustomizable, NavigationGes
         customNavigationBar.infoButton.addTarget(self, action: #selector(console(_:)), for: .touchUpInside)
         customNavigationBar.backButton.setImage(UIImage(named: "btn_nav_back_white"), for: .normal)
         customNavigationBar.backButton.addTarget(self, action: #selector(navBack(_:)), for: .touchUpInside);
-        
-
-        
     }
     
     func webView(_ webView: WebView, didCatchAJavaScriptException expection: JSValue?) {
@@ -151,6 +142,11 @@ extension OnemenaBrowser: HTTPViewControllerDelegate {
 }
 
 extension OnemenaBrowser: AppExportDelegate {
+    
+    func appExport(_ appExport: AppExport, analyticsTrack event: String, parameters: [String : Any]) {
+        print("Event: \(event) \nParameters: \(parameters)")
+    }
+
     
     func appExport(_ appExport: AppExport, currentTheme theme: AppTheme) {
         print("【事件】currentTheme：\(theme)")
