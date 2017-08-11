@@ -9,6 +9,11 @@
 
 本协议，规范 App 内 HTML 页面与 App 的交互方式，提高开发效率，降低维护成本。
 
+## 基本规范
+
+1. 通过 URL 参数传递数据时，使用 *Key-Value* 形式，如果 Value 不是基本数据类型，则用 `URL 编码后的 JSON 串` 表示。 
+2. 所有标注为只读的属性，请在业务逻辑中，不要去修改这些值。它们虽然可写，但只是供 App 初始化值时使用。
+3. 只读的属性，即使修改其值，也不会影响 App 里的内容。
 
 ***
 ## 第一部分：HTML 访问 App
@@ -34,7 +39,7 @@ HTML 页面通过 App 提供 JavaScript 接口，来实现对 App 功能的访�
 - App 提供的接口统一定义在 `omApp` 对象上，所有 HTML 与 App 的交互都通过此对象进行。
 
     ```
-    // 打印 App 提供的 JavaScript 接口对象
+    // 打印 App 提供的 JavaScript 接口
     console.log(omApp); 
     // 或者
     console.log(window.omApp);
@@ -43,6 +48,7 @@ HTML 页面通过 App 提供 JavaScript 接口，来实现对 App 功能的访�
 - 交互说明：
 
     - 基于对象注入的方式，须在 WebView 创建 JavaScript 环境时注入 `omApp` 对象。
+    - 需保证 `omApp` 对象在使用前已初始化完成。
 
 
 ### 3. 开发调试 
@@ -55,13 +61,13 @@ HTML 页面通过 App 提供 JavaScript 接口，来实现对 App 功能的访�
 
 ### 4. 接口列表
 
-#### 4.0 ready(*callback*) [暂未启用]
+#### 4.0 ready(*callback*) 
 
     2017-07-27： 新增接口。
 
 - 接口说明：
 
-    在使用 omApp 对象之前，App 可能需要对其进行一些初始化设置。为保证能正常使用 omApp 对象，请将操作放在此方法回调中进行。
+    此接口主要是提供一个时机，在 HTML 页面的 JavaScript 代码执行前，对 `omApp` 对象进行初始化。因此，为保证能正常使用 omApp 对象，请将操作放在此方法中进行。
 
 - 参数说明：
 
@@ -71,16 +77,44 @@ HTML 页面通过 App 提供 JavaScript 接口，来实现对 App 功能的访�
 
 - 代码示例：
 
+    - 常规用法。
     ``` 
+    // 本方法类似但不能替代 JQuery.ready 方法。
+    // 在基于URL拦截的交互方式中，该方法监听的是 DOMContentLoaded 事件，与 JQuery 一样。
+    // 在基于对象注入的交互方式中，调用该方法时，回调可能被立即执行。
     omApp.ready(function() {
-        // ready 方法类似于 JQuery.ready 方法。
+        // 基于 omApp 对象的业务逻辑代码。比如：获取 App 的主题设置。
+        console.log(omApp.currentTheme);
     });
     ```
 
+    - 与 angular JS 一起使用。
+    ```
+    // 因为基于 omApp 的业务逻辑需要在 ready 方法中执行，但是往往第三方框架有自己的执行机制。
+    // 下面就是设置 angular 延迟执行的步骤。
+
+    // 1. 删除 HTML 标签中的 `ng-app` 属性，因为添加了该属性 angular 在加载时就会自动执行。
+
+    // 2. 定义 angular 模块。
+    var moduleName = angular.module('moduleName', []); 
+    // more settings such as `moduleName.controller`, `moduleName.directive`
+
+    // 3. 在 omApp.ready 中启动模块。
+    omApp.ready(function () {
+        // 为了兼容性，建议在 angular 的 ready 中启动模块。
+        angular.element(document).ready(function() {
+            // 第一个参数表示 angular 的根 DOM
+            // 第二个参数就是`步骤2`中定义的模块名字。
+            // `步骤2`模块的定义也可以放在这里进行，也就是在调用 bootstrap 方法前，模块必须被定义。
+            angular.bootstrap(document, ['moduleName']);
+        });
+    });
+    ```
+    
 - 交互说明：
 
-    - 基于 URL 的交互方式， `omApp` 对象属性的初始值在此接口触发时设置，详见各接口。
-
+    - 基于 URL 的交互方式， `omApp` 对象的初始化，请在监听到此事件时进行。
+    - 需初始化的属性，详见各接口。
     - 交互协议：
         
         - URL： `app://documentisready` 
@@ -296,7 +330,7 @@ HTML 页面通过 App 提供 JavaScript 接口，来实现对 App 功能的访�
 
 - 交互说明：
     
-    - 基于 URL 的交互方式 App 需在 ready 方法中初始化 bar 的初始状态。 
+    - 基于 URL 的交互方式 App 需在 ready 方法中初始化 bar 各属性的初始值。 
     - 交互协议：
         - URL：`app://navigation.bar/?isHidden=...&title=...&titleColor=...`
 
@@ -414,7 +448,9 @@ HTML 页面通过 App 提供 JavaScript 接口，来实现对 App 功能的访�
 
 - 交互说明：
 
-    - 基于 URL 的交互方式，需在 ready 方法中初始化此属性。
+    - 基于 URL 的交互方式，需在 ready 方法中初始化 currentUser 的各个属性。
+    - currentUser 属性声明为只读，表示在业务逻辑中，不要去修改它，但是它们实际上是可修改的。
+    - 因此在 ready 事件中，直接调用 JS 修改各属性值即可。
 
 
 #### 4.7 http(*request*, *callback*)
@@ -640,9 +676,7 @@ omApp 提供的 http 方法，在浏览器中，默认没有附带用户登录�
 - App 通过拦截特定 URL 协议的请求，通过解析 URL 来判断 HTML 要执行的操作。
 - URL 方式无法实现带返回值的函数，只能通过回调来实现。
 
-### 基本规范
 
-1. 通过 URL 参数传递数据时，使用 *Key-Value* 形式，如果 Value 不是基本数据类型，则用 `URL 编码后的 JSON 串` 表示。 
 
 ### 基本环境
 
