@@ -103,7 +103,7 @@ HTML 页面通过 App 提供 JavaScript 接口，来实现对 App 功能的访�
     omApp.ready(function () {
         // 为了兼容性，建议在 angular 的 ready 中启动模块。
         angular.element(document).ready(function() {
-            // 第一个参数表示 angular 的根 DOM
+            // 第一个参数表示 angular 的根 DOM 元素。
             // 第二个参数就是`步骤2`中定义的模块名字。
             // `步骤2`模块的定义也可以放在这里进行，也就是在调用 bootstrap 方法前，模块必须被定义。
             angular.bootstrap(document, ['moduleName']);
