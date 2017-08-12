@@ -91,7 +91,7 @@ HTML 页面通过 App 提供 JavaScript 接口，来实现对 App 功能的访�
     - 与 angular JS 一起使用。
     ```
     // 因为基于 omApp 的业务逻辑需要在 ready 方法中执行，但是往往第三方框架有自己的执行机制。
-    // 下面就是设置 angular 延迟执行的步骤。
+    // 所以需要设置 angular 延迟执行，步骤如下。
 
     // 1. 删除 HTML 标签中的 `ng-app` 属性，因为添加了该属性 angular 在加载时就会自动执行。
 
