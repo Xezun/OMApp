@@ -45,6 +45,9 @@ HTML 页面通过 App 提供 JavaScript 接口，来实现对 App 功能的访�
     console.log(window.omApp);
     ```
 
+- 在不同的环境下，`omApp` 可能并不是相同的对象，因此除本文档提供的方法、属性外，不要对 `omApp` 的其它属性或方法产生依赖。
+
+
 - 交互说明：
 
     - 基于对象注入的方式，须在 WebView 创建 JavaScript 环境时注入 `omApp` 对象。
@@ -57,6 +60,7 @@ HTML 页面通过 App 提供 JavaScript 接口，来实现对 App 功能的访�
 - 在桌面浏览器中开发调试；
 - 在 App 中开发调试；
 - 请尽量保持 `OMApp.js` 为最新版本。
+
 
 
 ### 4. 接口列表

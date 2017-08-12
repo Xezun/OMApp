@@ -1107,6 +1107,9 @@ console.log(window.omApp);
 
 </li>
 <li>
+<p>在不同的环境下，<code>omApp</code> 可能并不是相同的对象，因此除本文档提供的方法、属性外，不要对 <code>omApp</code> 的其它属性或方法产生依赖。</p>
+</li>
+<li>
 <p>交互说明：</p>
 <ul>
 <li>基于对象注入的方式，须在 WebView 创建 JavaScript 环境时注入 <code>omApp</code> 对象。</li>
@@ -1166,7 +1169,7 @@ omApp.ready(function() {
 <li>
 <p>与 angular JS 一起使用。<br />
 <pre><code>// 因为基于 omApp 的业务逻辑需要在 ready 方法中执行，但是往往第三方框架有自己的执行机制。
-// 下面就是设置 angular 延迟执行的步骤。
+// 所以需要设置 angular 延迟执行，步骤如下。
 
 // 1. 删除 HTML 标签中的 `ng-app` 属性，因为添加了该属性 angular 在加载时就会自动执行。
 
@@ -1178,7 +1181,7 @@ var moduleName = angular.module('moduleName', []);
 omApp.ready(function () {
     // 为了兼容性，建议在 angular 的 ready 中启动模块。
     angular.element(document).ready(function() {
-        // 第一个参数表示 angular 的根 DOM
+        // 第一个参数表示 angular 的根 DOM 元素。
         // 第二个参数就是`步骤2`中定义的模块名字。
         // `步骤2`模块的定义也可以放在这里进行，也就是在调用 bootstrap 方法前，模块必须被定义。
         angular.bootstrap(document, ['moduleName']);
