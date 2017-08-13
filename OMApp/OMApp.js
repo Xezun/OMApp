@@ -153,6 +153,25 @@ if (!window.omApp) {
 			}			
 		};
 
+		// 将对象序列化成 URLQuery 部分。
+		function _URLQueryStringFromObject(anObject) {
+			if (!anObject) { return null; }
+			var query = null;
+			for (key in anObject) {
+				if (query) { query = query + "&" + key; } else { query = key; }
+	        	var value = anObject[key];
+	        	if (value) {
+	        		if (typeof value == 'object') {
+	        			value = JSON.stringify(value);
+	        		} else {
+	        			value = value.toString();
+	        		}
+	        		query += ("=" + encodeURIComponent(value));
+	        	}
+			}
+			return query;
+		}
+
 		// 向 App 发送消息：（消息类型，消息参数，回调）。
 		function _OMAppMessageSend(message, parameters, callback) {
 	        if (!message) { return; }
@@ -165,32 +184,11 @@ if (!window.omApp) {
 		        query = "callbackID=" + callbackID;
 	        }
 
-	        // value 不能为空。
-	        function toQueryValue(value) {
-	        	if (typeof value == 'string') {
-	        		return value;
-	        	} else if (typeof value == 'object') {
-	        		return JSON.stringify(value);
-	        	}
-	        	return value.toString();
+	        var dataQuery = _URLQueryStringFromObject(parameters);
+	        if (dataQuery) {
+	        	if (query) { query += ("&" + dataQuery); } else { query = dataQuery; }
 	        }
-
-	        for (key in parameters) {
-	        	var value = parameters[key];
-	        	var string = key;
-	        	if (value) {
-	        		string = key + "=" + toQueryValue(value);
-	        	}
-	        	if (query) {
-	        		query = query + "&" + string;
-	        	} else {
-	        		query = string;
-	        	}
-	        }
-
-	        if (query) {
-	        	url += ("?" + query)
-	        }
+	        if (query) { url += ("?" + query); }
 
 	        var iframe = document.createElement('iframe');
 	        iframe.style.display = 'none';
@@ -205,31 +203,29 @@ if (!window.omApp) {
 
 	 	// 0.0 _readyHandlers，数组。用于保存 omApp.ready 方法传递的所有函数，并且在 app ready 后依次执行。
 	 	var _readyHandlers = null;
-	 	function _addReadyHander(callback) {
+	 	function _ready(callback) {
 	 		if (typeof callback != 'function') { 
 	 			return; 
 	 		}
 	 		// 如果文档已加载，异步执行。
  			if (document.readyState === 'complete') {
  				setTimeout(callback);
+			} else if (!_readyHandlers) {
+				_readyHandlers = [callback];
 			} else {
-				if (!_readyHandlers) {
-					_readyHandlers = [callback];
-				} else {
-					_readyHandlers.push(callback);
-				}
+				_readyHandlers.push(callback);
 			}
 	 	}
 	 	Object.defineProperty(_omAppObject, 'ready', {
 	 		get: function() { 
-	 			return _addReadyHander;
+	 			return _ready;
 	 		}
 	 	});
 
 		// 0.1
 	 	var _isReady = false; // 标识 omApp 是否初始化完成
 	 	Object.defineProperty(_omAppObject, 'isReady', { 
-	 		get: function() { return _isReady; },
+	 		get: function() { return _isReady; }
 	 	});
 
 	 	// 0.2 向 App 发送消息，HTML 页面准备完成，可以初始化 omApp 对象了。
@@ -249,10 +245,10 @@ if (!window.omApp) {
 	 			console.log('[OMApp] 为了保证 omApp 在使用时已完成初始化，请将操作放在 omApp.ready(function(){/*代码*/}) 中。'); 
 	 			return;
 	 		};
+	 		_isReady = true;
 	 		for (var i = _readyHandlers.length - 1; i >= 0; i--) {
 	 			(_readyHandlers.pop())();
 	 		};
-	 		_isReady = true;
 	 	}
 	 	Object.defineProperty(_omAppObject, 'didFinishLoading', { get: function() { return _didFinishLoading; }});
 
@@ -622,6 +618,19 @@ if (!window.omApp) {
 	 	}
 	 	Object.defineProperty(_omAppObject, 'debug', { get: function() { return _debug; } });
 
+	 	// 当页面加载完成时，向 App 发送消息，初始化 omApp 对象。
+		if (document.readyState === "complete") {   
+	         setTimeout(omApp.documentIsReady);      
+		} else {
+			var _eventListener = function() {
+				document.removeEventListener("DOMContentLoaded", _eventListener);
+				window.removeEventListener("load", _eventListener);
+				omApp.documentIsReady();
+			}
+	        document.addEventListener("DOMContentLoaded", _eventListener, false);
+			window.addEventListener("load", _eventListener, false);   
+		}
+
 		return _omAppObject;
 	})();
 
@@ -629,28 +638,11 @@ if (!window.omApp) {
 		omApp: { get: function() { return _omApp; } }
 	});
 
-	define("omApp",[],function(){
-		return window.omApp;
-	});
-
-
-
-
-	// 当页面加载完成时，向 App 发送消息，初始化 omApp 对象。
-	if (document.readyState === "complete") {   
-         setTimeout(omApp.documentIsReady);      
-	} else {
-		var _eventListener = function() {
-			document.removeEventListener("DOMContentLoaded", _eventListener);
-			window.removeEventListener("load", _eventListener);
-			omApp.documentIsReady();
-		}
-        document.addEventListener("DOMContentLoaded", _eventListener, false);
-		window.addEventListener("load", _eventListener, false);   
+	if ("function"==typeof define && define.amd) {
+		define("omApp", [], function(){
+			return window.omApp;
+		});
 	}
-
-
-
 };
 
 

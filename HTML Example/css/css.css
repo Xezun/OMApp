@@ -1,0 +1,35 @@
+body {
+		margin: 0;
+		padding: 10px;
+	}
+	td table {
+		width: 96%;
+		margin: 2%;
+        font-size:14px;
+	}
+	tr:first-child {
+		color: white;
+		background-color: black;
+	}
+	tr td:first-child {
+		width: 50px;
+		text-align: center;
+	}
+    body>table {
+    	width: 100%;
+    	max-width: 100%;
+    	overflow: hidden;
+    }
+    a {
+    	text-decoration: none;
+    }
+    .title {
+    	width: 50px;
+    }
+    pre {
+    	overflow: hidden;
+    	max-width: 100%;
+    }
+    .url {
+    	color: red;
+    }
