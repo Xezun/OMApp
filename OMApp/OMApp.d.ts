@@ -1,4 +1,4 @@
-// Type definitions for mlibai-OMApp 2.0.1
+// Type definitions for OMApp 2.0.1
 
 interface OMAppPage_Static {
 	mall: 			OMAppPage_Instance;
@@ -40,73 +40,84 @@ interface OMAppNetworkType_Static {
 interface OMAppNetworkType_Instance { }
 declare var OMAppNetworkType: OMAppNetworkType_Static;
 
-// module 定义模块。
-module omApp {
-
-    function ready(callback: () => void): void;
-
-    function login(callback: (success: boolean) => void): void;
-
-	interface PageOptions {
-		id: string;
-	}
-    function open(page: OMAppPage_Instance, parameters?: PageOptions): void;
-
-    module navigation {
-        function push(url: string, animated?: boolean): void;
-        function pop(animated?: boolean): void;
-        function popTo(index: int, animated?: boolean): void;
-        module Bar {
-            isHidden: boolean;
-            title: string;
-            titleColor: string;
-            backgroundColor: string;
-        }
-    }
-
-    var currentTheme: OMAppTheme_Instance;
-
-    module analytics {
-		function track(event: string, parameters?: Object): void;
-	}
-
-    interface User {
-		isOnline: boolean;
-		id: string;
-		name: string;
-		type: OMAppUserType_Instance;
-		coin: string;
-	}
-    var	currentUser: User;
-
-    interface HTTPRequest {
-		url: string;
-		method?: string;
-		data?: Object;
-		headers?: Object;
-	}
-	function http(request: HTTPRequest, callback: (success: boolean, result?: Object|string) => void): void;
-
-    interface AlertMessage {
-    	title: string;
-    	body: string;
-    	actions: array;
-    }
-    function alert(message: AlertMessage, callback: (index: Int) => void): void;
-
-    interface Network {
-    	isReachable: boolean;
-    	isViaWiFi: boolean;
-    	type: OMAppNetworkType_Instance;
-    }
-    var network: Network;
-
-    interface DebugConfiguration {
-    	currentTheme?: OMAppTheme_Instance;
-		currentUser?: Object;
-		network?: Object;
-        http?: Object;
-		navigation?: Object;
-    }
-    function debug(configuration?: DebugConfiguration): void;
+interface OMAppNavigationBar {
+    isHidden: boolean;
+    title: string;
+    titleColor: string;
+    backgroundColor: string;
 }
+
+interface OMAppNavigation {
+    push(url: string, animated?: boolean): void;
+    pop(animated?: boolean): void;
+    popTo(index: int, animated?: boolean): void;
+    bar: OMAppNavigationBar;
+}
+
+interface OMAppAnalytics {
+    track(event: string, parameters?: Object): void;
+}
+
+interface OMAppUser {
+    isOnline: boolean;
+    id: string;
+    name: string;
+    type: OMAppUserType_Instance;
+    coin: string;
+}
+
+interface OMAppHTTPRequest {
+    url: string;
+    method?: string;
+    data?: Object;
+    headers?: Object;
+}
+
+interface OMAppAlertMessage {
+    title: string;
+    body: string;
+    actions: array;
+}
+
+interface OMAppNetwork {
+    isReachable: boolean;
+    isViaWiFi: boolean;
+    type: OMAppNetworkType_Instance;
+}
+
+interface OMAppDebugConfiguration {
+    currentTheme?: OMAppTheme_Instance;
+    currentUser?: Object;
+    network?: Object;
+    http?: Object;
+    navigation?: Object;
+}
+
+
+interface OMApp {
+
+    ready(callback: () => void): void;
+
+    login(callback: (success: boolean) => void): void;
+
+    open(page: OMAppPage_Instance, parameters?: Object): void;
+
+    navigation: OMAppNavigation;
+
+    currentTheme: OMAppTheme_Instance;
+
+    analytics: OMAppAnalytics;
+
+    currentUser: OMAppUser;
+
+	http(request: OMAppHTTPRequest, callback: (success: boolean, result?: Object|string) => void): void;
+
+    alert(message: OMAppAlertMessage, callback: (index: Int) => void): void;
+
+    network: OMAppNetwork;
+
+    debug(configuration?: OMAppDebugConfiguration): void;
+}
+declare var omApp: OMApp;
+
+

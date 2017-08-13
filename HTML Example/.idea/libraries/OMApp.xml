@@ -1,6 +1,13 @@
 <component name="libraryTable">
   <library name="OMApp" type="javaScript">
-    <CLASSES />
+    <properties>
+      <sourceFilesUrls>
+        <item url="file://$PROJECT_DIR$/../OMApp/OMApp.d.ts" />
+      </sourceFilesUrls>
+    </properties>
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/../OMApp/OMApp.d.ts" />
+    </CLASSES>
     <SOURCES />
   </library>
 </component>

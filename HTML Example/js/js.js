@@ -45,6 +45,9 @@ omApp.ready(function() {
     });
 
 
+    $(document).ready(function () {
+
+    });
 
     omApp.open(OMAppPage.mall);
     omApp.navigation.push("http://www.baidu.com", false);

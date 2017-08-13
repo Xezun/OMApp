@@ -1,6 +1,14 @@
 // OMApp
 // Version: 2.0.0
 
+function _OMAppDefine(name, value) {
+    if ("function" === typeof define && define.amd) {
+        define(name, [], function () {
+            return value;
+        });
+    }
+}
+
 /* OMAppPage 页面类型枚举定义 */
 if (!window.OMAppPage) {
 	var _OMAppPage = (function() {
@@ -18,11 +26,7 @@ if (!window.OMAppPage) {
 	Object.defineProperties(window, {
 		OMAppPage: { get: function() { return _OMAppPage; } }
 	});
-	if ("function"==typeof define && define.amd) {
-		define("OMAppPage",[],function(){
-			return window.OMAppPage;
-		});
-	}
+    _OMAppDefine("OMAppPage", window.OMAppPage);
 }
 
 /* OMAppUserType 用户类型枚举定义 */
@@ -40,12 +44,8 @@ if (!window.OMAppUserType) {
 	Object.defineProperties(window, {
 		OMAppUserType: { get: function() {return _OMAppUserType;} }
 	});
-	if ("function"==typeof define && define.amd) {
-		define("OMAppUserType",[],function(){
-			return window.OMAppUserType;
-		});
-	}
-};
+    _OMAppDefine("OMAppUserType", window.OMAppUserType);
+}
 
 
 /* OMAppTheme 主题类型枚举定义 */
@@ -61,12 +61,8 @@ if (!window.OMAppTheme) {
 	Object.defineProperties(window, {
 		OMAppTheme: { get: function() {return _OMAppTheme;} }
 	});
-	if ("function"==typeof define && define.amd) {
-		define("OMAppTheme",[],function(){
-			return window.OMAppTheme;
-		});
-	}
-};
+    _OMAppDefine("OMAppTheme", window.OMAppTheme);
+}
 
 /* OMAppNetworkType 网路类型 */
 if (!window.OMAppNetworkType) {
@@ -85,12 +81,8 @@ if (!window.OMAppNetworkType) {
 	Object.defineProperties(window, {
 		OMAppNetworkType: { get: function() {return _OMAppNetworkType;} }
 	});
-	if ("function"==typeof define && define.amd) {
-		define("OMAppNetworkType",[],function(){
-			return window.OMAppNetworkType;
-		});
-	}
-};
+    _OMAppDefine("OMAppNetworkType", window.OMAppNetworkType);
+}
 
 
 /* omApp 接口定义 */
@@ -157,11 +149,12 @@ if (!window.omApp) {
 		function _URLQueryStringFromObject(anObject) {
 			if (!anObject) { return null; }
 			var query = null;
-			for (key in anObject) {
+			for (var key in anObject) {
+			    if (!anObject.hasOwnProperty(key)) { continue; }
 				if (query) { query = query + "&" + key; } else { query = key; }
 	        	var value = anObject[key];
 	        	if (value) {
-	        		if (typeof value == 'object') {
+	        		if (typeof value === 'object') {
 	        			value = JSON.stringify(value);
 	        		} else {
 	        			value = value.toString();
@@ -204,7 +197,7 @@ if (!window.omApp) {
 	 	// 0.0 _readyHandlers，数组。用于保存 omApp.ready 方法传递的所有函数，并且在 app ready 后依次执行。
 	 	var _readyHandlers = null;
 	 	function _ready(callback) {
-	 		if (typeof callback != 'function') { 
+	 		if (typeof callback !== 'function') {
 	 			return; 
 	 		}
 	 		// 如果文档已加载，异步执行。
@@ -230,11 +223,11 @@ if (!window.omApp) {
 
 	 	// 0.2 向 App 发送消息，HTML 页面准备完成，可以初始化 omApp 对象了。
 	 	function _documentIsReady() {
-	 		if (omApp.isReady) { return; };
+	 		if (omApp.isReady) { return; }
 	 		if (!_isApp) {
 	 			setTimeout(omApp.didFinishLoading());
 	 			return;
-	 		};
+	 		}
 	 		_OMAppMessageSend(_OMAppMessage.documentIsReady, null, null);
 	 	}
 	 	Object.defineProperty(_omAppObject, 'documentIsReady', { get: function() { return _documentIsReady; }});
@@ -244,11 +237,11 @@ if (!window.omApp) {
 	 		if (!_readyHandlers) {
 	 			console.log('[OMApp] 为了保证 omApp 在使用时已完成初始化，请将操作放在 omApp.ready(function(){/*代码*/}) 中。'); 
 	 			return;
-	 		};
+	 		}
 	 		_isReady = true;
 	 		for (var i = _readyHandlers.length - 1; i >= 0; i--) {
 	 			(_readyHandlers.pop())();
-	 		};
+	 		}
 	 	}
 	 	Object.defineProperty(_omAppObject, 'didFinishLoading', { get: function() { return _didFinishLoading; }});
 
@@ -288,30 +281,30 @@ if (!window.omApp) {
 			// 3.1 进入下级页面。
 			var _push = function (url, animated) {
 				// 不是以 http、https 开头的，被视作为相对路径。
-	   			if (url.search(/(http|https|file):\/\//i) != 0) {
+	   			if (url.search(/(http|https|file):\/\//i) !== 0) {
 	   				url = window.location.protocol + "//" + window.location.host + url;
 	   			}
 	   			if (!_isApp) {
 					window.location.href = url;
 					return;
 				}
-				if (typeof animated != 'boolean') {
+				if (typeof animated !== 'boolean') {
 					animated = true;
-				};
+				}
 	   		 	return _OMAppMessageSend(_OMAppMessage.navigation.push, {"url": url, "animated": animated});
-			}
+			};
 
 			// 3.2 推出当前页面，使栈内页面数量 -1。
 			var _pop = function (animated) {
 				if (!_isApp) {
 					window.history.back();
 					return;
-				};
-				if (typeof animated != 'boolean') {
+				}
+				if (typeof animated !== 'boolean') {
 					animated = true;
-				};
+				}
 				return _OMAppMessageSend(_OMAppMessage.navigation.pop, {"animated": animated});
-			}
+			};
 
 			// 3.3 移除栈内索引大于 index 的所有页面，即将 index 页面所显示的内容展示出来。
 			var _popTo = function (index, animated) {
@@ -319,12 +312,12 @@ if (!window.omApp) {
 					var i = index - window.history.length + 1;
 					window.history.go(i);
 					return;
-				};
-				if (typeof animated != 'boolean') {
+				}
+				if (typeof animated !== 'boolean') {
 					animated = true;
-				};
+				}
 				return _OMAppMessageSend(_OMAppMessage.navigation.popTo, {"index": index, "animated": animated});
-			}
+			};
 
 			// 3.4 Bar
 			var _bar = (function() {
@@ -415,7 +408,7 @@ if (!window.omApp) {
 			Object.defineProperties(_currentUserObject, {
 				isOnline: {
 					get: function () {
-						return (_type != OMAppUserType.visitor)
+						return (_type !== OMAppUserType.visitor)
 					}
 				},
 				id: {
@@ -449,7 +442,7 @@ if (!window.omApp) {
 	 	// 7.2 HTTP 回调 （回调函数ID，是否成功，数据（Base64字符串），数据类型）
 		function _didFinishHTTPRequest(callbackID, success, result, contentType) {
 			var callback = _callbackManager.pop(callbackID);
-			if (!callback) { return; };
+			if (!callback) { return; }
 			if (result) {
 				result = decodeURIComponent(result);
 				if (/json/.test(contentType)) {
@@ -468,7 +461,7 @@ if (!window.omApp) {
 					callback(-1);
 				}, 100);
 				return;
-			};
+			}
 			return _OMAppMessageSend(_OMAppMessage.alert, {"message": message}, callback);
 		}
 		Object.defineProperty(_omAppObject, 'alert', { get: function() { return _alert; }});
@@ -486,81 +479,83 @@ if (!window.omApp) {
 	 	var _network = (function() {
 	 		var _networkObject = {};
 	 		var _type = OMAppNetworkType.unknown;
-	 		var _networkObject = {};
 	 	 	var _ajaxSettings = {
 	 			headers: {},
 	 			data: {}
 	 		};
 
 	 		var _ajax =	function(request, callback) {
-	 	    	var xmlhttp = new XMLHttpRequest();
-				xmlhttp.onreadystatechange = function() {
-					if (xmlhttp.readyState != 4) {
+	 	    	var xhr = new XMLHttpRequest();
+				xhr.onreadystatechange = function() {
+					if (xhr.readyState !== 4) {
 						return;
 					}
-					var contentType = xmlhttp.getResponseHeader("Content-Type");
-					var success = (xmlhttp.status == 200);
-					var result = xmlhttp.responseText;
+					var contentType = xhr.getResponseHeader("Content-Type");
+					var success = (xhr.status === 200);
+					var result = xhr.responseText;
 					if (result) {
 						result = encodeURIComponent(result);
-					};
+					}
 					callback(success, result, contentType);
-				}
-				xmlhttp.open(request.method, request.url, true);
+				};
+				xhr.open(request.method, request.url, true);
 				
 				// 设置 Headers
-				if (_ajaxSettings && _ajaxSettings.headers) { 
-					for (key in _ajaxSettings.headers) {
-						xmlhttp.setRequestHeader(key, _ajaxSettings.headers[key]);
+				if (_ajaxSettings && _ajaxSettings.headers) {
+					for (var key in _ajaxSettings.headers) {
+                        if (!_ajaxSettings.headers.hasOwnProperty(key)) { continue; }
+						xhr.setRequestHeader(key, _ajaxSettings.headers[key]);
 					}
 				}
 				if (request.headers) {
-					for (key in request.headers) {
-						xmlhttp.setRequestHeader(key, request.headers[key]);
+					for (var key in request.headers) {
+                        if (!request.headers.hasOwnProperty(key)) { continue; }
+						xhr.setRequestHeader(key, request.headers[key]);
 					}
 				}
 				
-				if(request.method=="POST"){  
-					xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded; charset=UTF-8");  
+				if(request.method === "POST"){
+					xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded; charset=UTF-8");
 				}
 
-				function addObjectToXHRData(orgData, anObject) {
-					if (!anObject) { return orgData; }
-					for (key in _ajaxSettings.orgData) {
-						var str = (key + "=" + encodeURIComponent(anObject[key]));
-						if (orgData) { orgData = (orgData + "&" + str); } else { orgData = str; }
-					}
-					return orgData;
+				function unionObjectsValues(object1, object2) {
+				    var object = {};
+				    function copyValues(anObject) {
+                        if (!anObject) { return; }
+                        for (var key in anObject) {
+                            if (!anObject.hasOwnProperty(key)) { continue; }
+                            object[key] = anObject[key];
+                        }
+                    }
+                    copyValues(object1);
+				    copyValues(object2);
+					return object;
 				}
 
-				var data = null;
-				if (request.data) {
-					data = addObjectToXHRData(data, request.data);
-					if (_ajaxSettings && _ajaxSettings.data) {
-						var anObject = {};
-						for (key in _ajaxSettings.data) {
-							if (!request.data[key]) { anObject[key] = _ajaxSettings.data[key];}
-						}
-						data = addObjectToXHRData(data, anObject);
-					}
-				} else if (_ajaxSettings) {
-					data = addObjectToXHRData(data, _ajaxSettings.data)
-				}
-				xmlhttp.send(data);
+				var data = unionObjectsValues(_ajaxSettings.data, request.data);
+                var parsedData = null;
+                for (var key in data) {
+                    if (!data.hasOwnProperty(key)) { continue; }
+                    if (parsedData) { parsedData += ("&" + key); } else { parsedData = key; }
+                    if (data[key]) {
+                        parsedData += ("=" + encodeURIComponent(data[key]));
+                    }
+                }
+				xhr.send(parsedData);
 	 		}
 
 	 		function _http(request, callback) {
 				if (request.params && !request.data) {
 					_deprecate("omApp.http 参数字段 request.params", "request.data");
 					request.data = request.params;
-				};
+				}
 				if (!_isApp) {
 					var callbackID = _callbackManager.push(callback);
 					_ajax(request, function(success, result, contentType) {
 						omApp.didFinishHTTPRequest(callbackID, success, result, contentType);
 					});
 					return;
-				};
+				}
 		        return _OMAppMessageSend(_OMAppMessage.http, {"request": request}, callback);
 			}
 
@@ -570,10 +565,10 @@ if (!window.omApp) {
 		 			set: function(newValue) { _type = newValue; }
 				},
 				isReachable: {
-					get: function() { return (_type != OMAppNetworkType.none); }
+					get: function() { return (_type !== OMAppNetworkType.none); }
 				},
 				isViaWiFi: {
-					get: function() { return (_type == OMAppNetworkType.WiFi); }
+					get: function() { return (_type === OMAppNetworkType.WiFi); }
 				},
 				ajax: {
 					get: function() { return _ajax; }
@@ -608,9 +603,10 @@ if (!window.omApp) {
 	 		function copyValues(sourceObject, targetObject) {
 	 			if (!sourceObject) { return; }
 	 			if (!targetObject) { return; }
-	 			for (key in sourceObject) {
-	 				sourceObject[key] = targetObject[key];
-	 			}
+	 			for (var key in sourceObject) {
+                    if (sourceObject.hasOwnProperty(key)) {
+                        sourceObject[key] = targetObject[key];
+                    }
 	 		}
 	 		copyValues(configuration.currentUser, _currentUser);
 	 		copyValues(configuration.navigation.bar, _navigation.bar);
@@ -626,7 +622,7 @@ if (!window.omApp) {
 				document.removeEventListener("DOMContentLoaded", _eventListener);
 				window.removeEventListener("load", _eventListener);
 				omApp.documentIsReady();
-			}
+			};
 	        document.addEventListener("DOMContentLoaded", _eventListener, false);
 			window.addEventListener("load", _eventListener, false);   
 		}
@@ -637,48 +633,12 @@ if (!window.omApp) {
 	Object.defineProperties(window, {
 		omApp: { get: function() { return _omApp; } }
 	});
-
-	if ("function"==typeof define && define.amd) {
-		define("omApp", [], function(){
-			return window.omApp;
-		});
-	}
-};
-
-
-
-
-
-
-// 发送网路请求
-// 回调参数：是否请求成功, 请求回来的数据（URL编码的字符串）, 文档类型.
-function OMAppAJAX(request, callback) {
-	
+    _OMAppDefine("omApp", window.omApp);
 }
 
-// 获取 URL 中的参数
-function OMAppGetURLQueryString(parameterName) {
-	var reg = new RegExp("(^|&)"+ parameterName +"=([^&]*)(&|$)");
-	var r = window.location.search.substr(1).match(reg);
-	if(r!=null)return  unescape(r[2]); return null;
-}
 
-// 设置 Cookie
-function OMAppSetCookie(name,value) {
-	var Days = 30;
-	var exp = new Date();
-	exp.setTime(exp.getTime() + Days*24*60*60*1000);
-	document.cookie = name + "="+ escape (value) + ";expires=" + exp.toGMTString();
-}
 
-// 读取 Cookie
-function OMAppGetCookie(name) {
-	var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
-	if(arr=document.cookie.match(reg))
-	return unescape(arr[2]);
-	else
-	return null;
-}
+
 
 
 
