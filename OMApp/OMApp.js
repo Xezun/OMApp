@@ -18,6 +18,11 @@ if (!window.OMAppPage) {
 	Object.defineProperties(window, {
 		OMAppPage: { get: function() { return _OMAppPage; } }
 	});
+	if ("function"==typeof define && define.amd) {
+		define("OMAppPage",[],function(){
+			return window.OMAppPage;
+		});
+	}
 }
 
 /* OMAppUserType 用户类型枚举定义 */
@@ -35,6 +40,11 @@ if (!window.OMAppUserType) {
 	Object.defineProperties(window, {
 		OMAppUserType: { get: function() {return _OMAppUserType;} }
 	});
+	if ("function"==typeof define && define.amd) {
+		define("OMAppUserType",[],function(){
+			return window.OMAppUserType;
+		});
+	}
 };
 
 
@@ -51,6 +61,11 @@ if (!window.OMAppTheme) {
 	Object.defineProperties(window, {
 		OMAppTheme: { get: function() {return _OMAppTheme;} }
 	});
+	if ("function"==typeof define && define.amd) {
+		define("OMAppTheme",[],function(){
+			return window.OMAppTheme;
+		});
+	}
 };
 
 /* OMAppNetworkType 网路类型 */
@@ -70,6 +85,11 @@ if (!window.OMAppNetworkType) {
 	Object.defineProperties(window, {
 		OMAppNetworkType: { get: function() {return _OMAppNetworkType;} }
 	});
+	if ("function"==typeof define && define.amd) {
+		define("OMAppNetworkType",[],function(){
+			return window.OMAppNetworkType;
+		});
+	}
 };
 
 
@@ -106,12 +126,12 @@ if (!window.omApp) {
 				return callback;
 			}
 
-			var _object = {};
-			Object.defineProperties(_object, {
+			var _callbackManagerObject = {};
+			Object.defineProperties(_callbackManagerObject, {
 				push: { get: function() { return _push; } },
 				pop:  { get: function() { return _pop;  } }
 			});
-			return _object;
+			return _callbackManagerObject;
 		})();
 
 		// _OMAppMessage 定义了所有消息类型。
@@ -136,7 +156,7 @@ if (!window.omApp) {
 		// 向 App 发送消息：（消息类型，消息参数，回调）。
 		function _OMAppMessageSend(message, parameters, callback) {
 	        if (!message) { return; }
-	        var url = 'app://' + encodeURIComponent(message);
+	        var url = 'app://' + message;
 	        
 	        var query = null; // ? 以后的部分，不包括 ?
 	        var callbackID = null;
@@ -393,6 +413,7 @@ if (!window.omApp) {
 			var _name = "None";
 			var _type = OMAppUserType.visitor;
 			var _coin = 0;
+			var _token = "";
 			
 			var _currentUserObject = {};
 			Object.defineProperties(_currentUserObject, {
@@ -416,6 +437,10 @@ if (!window.omApp) {
 				coin: {
 					get: function() { return _coin; },
 					set: function(newValue) { _coin = newValue; }
+				},
+				token: {
+					get: function() { return _token; },
+					set: function(newValue) { _token = newValue; }
 				}
 			});
 			return _currentUserObject;
@@ -423,23 +448,9 @@ if (!window.omApp) {
 		Object.defineProperty(_omAppObject, 'currentUser', { get: function() { return _currentUser; }});
 
 		// 7.1 HTTP
-		function _http(request, callback) {
-			if (request.params && !request.data) {
-				_deprecate("omApp.http 参数字段 request.params", "request.data");
-				request.data = request.params;
-			};
-			if (!_isApp) {
-				var callbackID = _callbackManager.push(callback);
-				OMAppAJAX(request, function(success, result, contentType) {
-					omApp.didFinishHTTPRequest(callbackID, success, result, contentType);
-				});
-				return;
-			};
-	        return _OMAppMessageSend(_OMAppMessage.http, {"request": request}, callback);
-		}
-		Object.defineProperty(_omAppObject, 'http', { get: function() { return _http; }});	
+		Object.defineProperty(_omAppObject, 'http', { get: function() { return omApp.network.http; }});	
 
-		// 7.2 HTTP 回调 （回调函数ID，是否成功，数据（Base64字符串），数据类型）
+	 	// 7.2 HTTP 回调 （回调函数ID，是否成功，数据（Base64字符串），数据类型）
 		function _didFinishHTTPRequest(callbackID, success, result, contentType) {
 			var callback = _callbackManager.pop(callbackID);
 			if (!callback) { return; };
@@ -480,6 +491,83 @@ if (!window.omApp) {
 	 		var _networkObject = {};
 	 		var _type = OMAppNetworkType.unknown;
 	 		var _networkObject = {};
+	 	 	var _ajaxSettings = {
+	 			headers: {},
+	 			data: {}
+	 		};
+
+	 		var _ajax =	function(request, callback) {
+	 	    	var xmlhttp = new XMLHttpRequest();
+				xmlhttp.onreadystatechange = function() {
+					if (xmlhttp.readyState != 4) {
+						return;
+					}
+					var contentType = xmlhttp.getResponseHeader("Content-Type");
+					var success = (xmlhttp.status == 200);
+					var result = xmlhttp.responseText;
+					if (result) {
+						result = encodeURIComponent(result);
+					};
+					callback(success, result, contentType);
+				}
+				xmlhttp.open(request.method, request.url, true);
+				
+				// 设置 Headers
+				if (_ajaxSettings && _ajaxSettings.headers) { 
+					for (key in _ajaxSettings.headers) {
+						xmlhttp.setRequestHeader(key, _ajaxSettings.headers[key]);
+					}
+				}
+				if (request.headers) {
+					for (key in request.headers) {
+						xmlhttp.setRequestHeader(key, request.headers[key]);
+					}
+				}
+				
+				if(request.method=="POST"){  
+					xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded; charset=UTF-8");  
+				}
+
+				function addObjectToXHRData(orgData, anObject) {
+					if (!anObject) { return orgData; }
+					for (key in _ajaxSettings.orgData) {
+						var str = (key + "=" + encodeURIComponent(anObject[key]));
+						if (orgData) { orgData = (orgData + "&" + str); } else { orgData = str; }
+					}
+					return orgData;
+				}
+
+				var data = null;
+				if (request.data) {
+					data = addObjectToXHRData(data, request.data);
+					if (_ajaxSettings && _ajaxSettings.data) {
+						var anObject = {};
+						for (key in _ajaxSettings.data) {
+							if (!request.data[key]) { anObject[key] = _ajaxSettings.data[key];}
+						}
+						data = addObjectToXHRData(data, anObject);
+					}
+				} else if (_ajaxSettings) {
+					data = addObjectToXHRData(data, _ajaxSettings.data)
+				}
+				xmlhttp.send(data);
+	 		}
+
+	 		function _http(request, callback) {
+				if (request.params && !request.data) {
+					_deprecate("omApp.http 参数字段 request.params", "request.data");
+					request.data = request.params;
+				};
+				if (!_isApp) {
+					var callbackID = _callbackManager.push(callback);
+					_ajax(request, function(success, result, contentType) {
+						omApp.didFinishHTTPRequest(callbackID, success, result, contentType);
+					});
+					return;
+				};
+		        return _OMAppMessageSend(_OMAppMessage.http, {"request": request}, callback);
+			}
+
 	 		Object.defineProperties(_networkObject, {
 				type: {
 					get: function() { return _type; },
@@ -490,11 +578,49 @@ if (!window.omApp) {
 				},
 				isViaWiFi: {
 					get: function() { return (_type == OMAppNetworkType.WiFi); }
+				},
+				ajax: {
+					get: function() { return _ajax; }
+				},
+				ajaxSettings: {
+					get: function() { return function(newValue) { _ajaxSettings = newValue; } }
+				},
+				http: {
+					get: function() { return _http; }
 				}
 			});
 	 		return _networkObject;
 	 	})();
 	 	Object.defineProperty(_omAppObject, 'network', { get: function() { return _network; }});
+
+
+
+		/*****************************************************/
+		/****************** Private Methods ******************/
+		/*****************************************************/
+
+	 	// debug
+	 	function _debug(configuration) {
+	 		if (_isApp) { return; }
+	 		if (!configuration) { return; }
+	 		if (configuration.http) {
+	 			_network.ajaxSettings(configuration.http);
+	 		}
+	 		if (configuration.currentTheme) {
+	 			_currentTheme = configuration.currentTheme;
+	 		}
+	 		function copyValues(sourceObject, targetObject) {
+	 			if (!sourceObject) { return; }
+	 			if (!targetObject) { return; }
+	 			for (key in sourceObject) {
+	 				sourceObject[key] = targetObject[key];
+	 			}
+	 		}
+	 		copyValues(configuration.currentUser, _currentUser);
+	 		copyValues(configuration.navigation.bar, _navigation.bar);
+	 		copyValues(configuration.network, _network);
+	 	}
+	 	Object.defineProperty(_omAppObject, 'debug', { get: function() { return _debug; } });
 
 		return _omAppObject;
 	})();
@@ -503,9 +629,9 @@ if (!window.omApp) {
 		omApp: { get: function() { return _omApp; } }
 	});
 
-
-
-
+	define("omApp",[],function(){
+		return window.omApp;
+	});
 
 
 
@@ -522,6 +648,9 @@ if (!window.omApp) {
         document.addEventListener("DOMContentLoaded", _eventListener, false);
 		window.addEventListener("load", _eventListener, false);   
 	}
+
+
+
 };
 
 
@@ -532,63 +661,7 @@ if (!window.omApp) {
 // 发送网路请求
 // 回调参数：是否请求成功, 请求回来的数据（URL编码的字符串）, 文档类型.
 function OMAppAJAX(request, callback) {
-	var xmlhttp = new XMLHttpRequest();
-	xmlhttp.onreadystatechange = function() {
-		if (xmlhttp.readyState != 4) {
-			return;
-		}
-		var contentType = xmlhttp.getResponseHeader("Content-Type");
-		var success = (xmlhttp.status == 200);
-		var result = xmlhttp.responseText;
-		if (result) {
-			result = encodeURIComponent(result);
-		};
-		callback(success, result, contentType);
-	}
-	xmlhttp.open(request.method, request.url, true);
 	
-	// 读取测试用的 user_token 和 access_token
-	var access_token = OMAppGetURLQueryString("access_token");
-	if (!access_token) {
-		access_token = "Test";
-	}
-	if (request.headers) {
-		request.headers["access-token"] = access_token;
-	} else {
-		request.headers = {"access-token": access_token};
-	}
-	var user_token = OMAppGetURLQueryString("user_token");
-	if (user_token) {
-		request.headers["user-token"] = user_token;
-		if (request.data) {  // 因西安接口不规范，这个做兼容
-			request.data["user_token"] = user_token;
-		} else {
-			request.data = {"user_token": user_token};
-		}
-	};
-
-	// 设置 Headers
-	if (request.headers) {
-		for (key in request.headers) {
-			xmlhttp.setRequestHeader(key, request.headers[key]);
-		}
-	}
-	
-	if(request.method=="POST"){  
-		xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");  
-	}
-
-	var data = null;
-	if (request.data) {
-		for (key in request.data) {
-			if (data) {
-				data = data + "&" + key + "=" + encodeURIComponent(request.data[key]);
-			} else {
-				data = key + "=" + encodeURIComponent(request.data[key]);
-			}
-		}
-	}
-	xmlhttp.send(data);
 }
 
 // 获取 URL 中的参数
