@@ -6,68 +6,54 @@
 
 
 ## 说明
-
 本协议，规范 App 内 HTML 页面与 App 的交互方式，提高开发效率，降低维护成本。
 
 ## 基本规范
-
 1. 通过 URL 参数传递数据时，使用 *Key-Value* 形式，如果 Value 不是基本数据类型，则用 `URL 编码后的 JSON 串` 表示。 
-2. 所有标注为只读的属性，请在业务逻辑中，不要去修改这些值。它们虽然可写，但只是供 App 初始化值时使用。
+2. 所有标注为只读的属性，请在业务逻辑中，不要去修改这些值。它们虽然可能可写，但只是供 App 初始化值时使用。
 3. 只读的属性，即使修改其值，也不会影响 App 里的内容。
 
 ***
 ## 第一部分：HTML 访问 App
-
 HTML 页面通过 App 提供 JavaScript 接口，来实现对 App 功能的访问。
 
 ### 1. 浏览器环境
-
 - HTML 若要判断是否处于 App 提供的浏览器环境中，可以通过 `User-Agent` 判断。
-
     ```
     // 无特殊说明，所有代码均为 JavaScript 代码。
     // 判断是否在 App 中。
     var isApp = /Onemena/.test(window.navigator.userAgent);
     ```
-
 - 交互说明：
-    
     - App 须在初始化 WebView 时修改 `User-Agent` 。
 
 ### 2. 接口获取方式
-
 - App 提供的接口统一定义在 `omApp` 对象上，所有 HTML 与 App 的交互都通过此对象进行。
-
     ```
     // 打印 App 提供的 JavaScript 接口
     console.log(omApp); 
     // 或者
     console.log(window.omApp);
     ```
-
+- 在不同的环境下，`omApp` 可能并不是相同的对象，因此除本文档提供的方法、属性外，不要对 `omApp` 的其它属性或方法产生依赖。
 - 交互说明：
-
     - 基于对象注入的方式，须在 WebView 创建 JavaScript 环境时注入 `omApp` 对象。
     - 需保证 `omApp` 对象在使用前已初始化完成。
 
 
 ### 3. 开发调试 
-
 - 引入 `OMApp.js` 交互框架，文件在 OMApp 目录下；
 - 在桌面浏览器中开发调试；
 - 在 App 中开发调试；
 - 请尽量保持 `OMApp.js` 为最新版本。
 
-
 ### 4. 接口列表
 
 #### 4.0 ready(*callback*) 
-
     2017-07-27： 新增接口。
 
 - 接口说明：
-
-    此接口主要是提供一个时机，在 HTML 页面的 JavaScript 代码执行前，对 `omApp` 对象进行初始化。因此，为保证能正常使用 omApp 对象，请将操作放在此方法中进行。
+    为了保证 `omApp` 对象在使用时已完成初始化，请将所有用到 `omApp` 方法或属性的代码，放在此方法中进行。该方法可以调用多次，且所有代码会在初始化完成时，按次序执行。
 
 - 参数说明：
 
@@ -76,7 +62,6 @@ HTML 页面通过 App 提供 JavaScript 接口，来实现对 App 功能的访�
     | callback       | Function    | 回调函数，无参数 |
 
 - 代码示例：
-
     - 常规用法。
     ``` 
     // 本方法类似但不能替代 JQuery.ready 方法。
@@ -87,11 +72,11 @@ HTML 页面通过 App 提供 JavaScript 接口，来实现对 App 功能的访�
         console.log(omApp.currentTheme);
     });
     ```
-
-    - 与 angular JS 一起使用。
+    - 与第三方框架一起使用。
     ```
-    // 因为基于 omApp 的业务逻辑需要在 ready 方法中执行，但是往往第三方框架有自己的执行机制。
-    // 下面就是设置 angular 延迟执行的步骤。
+    // 因为基于 omApp 的业务逻辑需要在 ready 方法中执行，
+    // 但是往往第三方框架有自己的执行机制，所以需要设置第三方框架延迟执行。
+    // 例如 angular 的延迟执行步骤如下：
 
     // 1. 删除 HTML 标签中的 `ng-app` 属性，因为添加了该属性 angular 在加载时就会自动执行。
 
@@ -112,13 +97,10 @@ HTML 页面通过 App 提供 JavaScript 接口，来实现对 App 功能的访�
     ```
     
 - 交互说明：
-
     - 基于 URL 的交互方式， `omApp` 对象的初始化，请在监听到此事件时进行。
     - 需初始化的属性，详见各接口。
     - 交互协议：
-        
-        - URL： `app://documentisready` 
-
+        - URL： `app://documentisready`
         - 回调： `omApp.didFinishLoading()`
 
 

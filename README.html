@@ -1072,7 +1072,7 @@ body .markdown-body
 <h2 id="_3"><a name="user-content-_3" href="#_3" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>基本规范</h2>
 <ol>
 <li>通过 URL 参数传递数据时，使用 <em>Key-Value</em> 形式，如果 Value 不是基本数据类型，则用 <code>URL 编码后的 JSON 串</code> 表示。 </li>
-<li>所有标注为只读的属性，请在业务逻辑中，不要去修改这些值。它们虽然可写，但只是供 App 初始化值时使用。</li>
+<li>所有标注为只读的属性，请在业务逻辑中，不要去修改这些值。它们虽然可能可写，但只是供 App 初始化值时使用。</li>
 <li>只读的属性，即使修改其值，也不会影响 App 里的内容。</li>
 </ol>
 <hr />
@@ -1080,35 +1080,26 @@ body .markdown-body
 <p>HTML 页面通过 App 提供 JavaScript 接口，来实现对 App 功能的访问。</p>
 <h3 id="1"><a name="user-content-1" href="#1" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>1. 浏览器环境</h3>
 <ul>
-<li>
-<p>HTML 若要判断是否处于 App 提供的浏览器环境中，可以通过 <code>User-Agent</code> 判断。</p>
-<pre><code>// 无特殊说明，所有代码均为 JavaScript 代码。
+<li>HTML 若要判断是否处于 App 提供的浏览器环境中，可以通过 <code>User-Agent</code> 判断。<br />
+    <pre><code>// 无特殊说明，所有代码均为 JavaScript 代码。
 // 判断是否在 App 中。
 var isApp = /Onemena/.test(window.navigator.userAgent);
-</code></pre>
-
-</li>
-<li>
-<p>交互说明：</p>
-<ul>
+</code></pre></li>
+<li>交互说明：<ul>
 <li>App 须在初始化 WebView 时修改 <code>User-Agent</code> 。</li>
 </ul>
 </li>
 </ul>
 <h3 id="2"><a name="user-content-2" href="#2" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>2. 接口获取方式</h3>
 <ul>
-<li>
-<p>App 提供的接口统一定义在 <code>omApp</code> 对象上，所有 HTML 与 App 的交互都通过此对象进行。</p>
-<pre><code>// 打印 App 提供的 JavaScript 接口
+<li>App 提供的接口统一定义在 <code>omApp</code> 对象上，所有 HTML 与 App 的交互都通过此对象进行。<br />
+    <pre><code>// 打印 App 提供的 JavaScript 接口
 console.log(omApp); 
 // 或者
 console.log(window.omApp);
-</code></pre>
-
-</li>
-<li>
-<p>交互说明：</p>
-<ul>
+</code></pre></li>
+<li>在不同的环境下，<code>omApp</code> 可能并不是相同的对象，因此除本文档提供的方法、属性外，不要对 <code>omApp</code> 的其它属性或方法产生依赖。</li>
+<li>交互说明：<ul>
 <li>基于对象注入的方式，须在 WebView 创建 JavaScript 环境时注入 <code>omApp</code> 对象。</li>
 <li>需保证 <code>omApp</code> 对象在使用前已初始化完成。</li>
 </ul>
@@ -1127,8 +1118,8 @@ console.log(window.omApp);
 </code></pre>
 <ul>
 <li>
-<p>接口说明：</p>
-<p>此接口主要是提供一个时机，在 HTML 页面的 JavaScript 代码执行前，对 <code>omApp</code> 对象进行初始化。因此，为保证能正常使用 omApp 对象，请将操作放在此方法中进行。</p>
+<p>接口说明：<br />
+    为了保证 <code>omApp</code> 对象在使用时已完成初始化，请将所有用到 <code>omApp</code> 方法或属性的代码，放在此方法中进行。该方法可以调用多次，且所有代码会在初始化完成时，按次序执行。</p>
 </li>
 <li>
 <p>参数说明：</p>
@@ -1152,8 +1143,7 @@ console.log(window.omApp);
 <li>
 <p>代码示例：</p>
 <ul>
-<li>
-<p>常规用法。<br />
+<li>常规用法。<br />
 <pre><code>// 本方法类似但不能替代 JQuery.ready 方法。
 // 在基于URL拦截的交互方式中，该方法监听的是 DOMContentLoaded 事件，与 JQuery 一样。
 // 在基于对象注入的交互方式中，调用该方法时，回调可能被立即执行。
@@ -1161,12 +1151,11 @@ omApp.ready(function() {
     // 基于 omApp 对象的业务逻辑代码。比如：获取 App 的主题设置。
     console.log(omApp.currentTheme);
 });
-</code></pre></p>
-</li>
-<li>
-<p>与 angular JS 一起使用。<br />
-<pre><code>// 因为基于 omApp 的业务逻辑需要在 ready 方法中执行，但是往往第三方框架有自己的执行机制。
-// 下面就是设置 angular 延迟执行的步骤。
+</code></pre></li>
+<li>与第三方框架一起使用。<br />
+<pre><code>// 因为基于 omApp 的业务逻辑需要在 ready 方法中执行，
+// 但是往往第三方框架有自己的执行机制，所以需要设置第三方框架延迟执行。
+// 例如 angular 的延迟执行步骤如下：
 
 // 1. 删除 HTML 标签中的 `ng-app` 属性，因为添加了该属性 angular 在加载时就会自动执行。
 
@@ -1178,14 +1167,13 @@ var moduleName = angular.module('moduleName', []);
 omApp.ready(function () {
     // 为了兼容性，建议在 angular 的 ready 中启动模块。
     angular.element(document).ready(function() {
-        // 第一个参数表示 angular 的根 DOM
+        // 第一个参数表示 angular 的根 DOM 元素。
         // 第二个参数就是`步骤2`中定义的模块名字。
         // `步骤2`模块的定义也可以放在这里进行，也就是在调用 bootstrap 方法前，模块必须被定义。
         angular.bootstrap(document, ['moduleName']);
     });
 });
-</code></pre></p>
-</li>
+</code></pre></li>
 </ul>
 </li>
 <li>
@@ -1193,15 +1181,9 @@ omApp.ready(function () {
 <ul>
 <li>基于 URL 的交互方式， <code>omApp</code> 对象的初始化，请在监听到此事件时进行。</li>
 <li>需初始化的属性，详见各接口。</li>
-<li>
-<p>交互协议：</p>
-<ul>
-<li>
-<p>URL： <code>app://documentisready</code> </p>
-</li>
-<li>
-<p>回调： <code>omApp.didFinishLoading()</code></p>
-</li>
+<li>交互协议：<ul>
+<li>URL： <code>app://documentisready</code></li>
+<li>回调： <code>omApp.didFinishLoading()</code></li>
 </ul>
 </li>
 </ul>
