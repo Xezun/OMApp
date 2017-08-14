@@ -12,8 +12,8 @@ function _OMAppDefine(name, value) {
 /* OMAppPage 页面类型枚举定义 */
 if (!window.OMAppPage) {
 	var _OMAppPage = (function() {
-	    var _object = {};
-		Object.defineProperties(_object, {
+	    var _OMAppPageObject = {};
+		Object.defineProperties(_OMAppPageObject, {
 			mall: 			{ get: function() { return "mall";			} },
 			task: 			{ get: function() { return "task";			} },
 			newsList: 		{ get: function() { return "newsList";		} },
@@ -21,47 +21,47 @@ if (!window.OMAppPage) {
 			videoList: 		{ get: function() { return "videoList";		} },
 			videoDetail: 	{ get: function() { return "videoDetail";	} }                  
 		});
-		return _object;
+		return _OMAppPageObject;
 	})();
 	Object.defineProperties(window, {
 		OMAppPage: { get: function() { return _OMAppPage; } }
 	});
-    _OMAppDefine("OMAppPage", window.OMAppPage);
+    _OMAppDefine("OMAppPage", _OMAppPage);
 }
 
 /* OMAppUserType 用户类型枚举定义 */
 if (!window.OMAppUserType) {
 	var _OMAppUserType = (function() {
-	    var _object = {};
-		Object.defineProperties(_object, {
+	    var _OMAppUserTypeObject = {};
+		Object.defineProperties(_OMAppUserTypeObject, {
 			visitor: 	{ get: function() { return "visitor"; 	} },
 			google: 	{ get: function() { return "google";	} },
 			facebook: 	{ get: function() { return "facebook";	} },
 			twitter: 	{ get: function() { return "twitter";	} }                 
 		});
-		return _object;
+		return _OMAppUserTypeObject;
 	})();
 	Object.defineProperties(window, {
 		OMAppUserType: { get: function() {return _OMAppUserType;} }
 	});
-    _OMAppDefine("OMAppUserType", window.OMAppUserType);
+    _OMAppDefine("OMAppUserType", _OMAppUserType);
 }
 
 
 /* OMAppTheme 主题类型枚举定义 */
 if (!window.OMAppTheme) {
 	var _OMAppTheme = (function(){
-		var _object = {};
-		Object.defineProperties(_object, {
+		var _OMAppThemeObject = {};
+		Object.defineProperties(_OMAppThemeObject, {
 			day: 	{ get: function() { return "day"; 	} },
 			night: 	{ get: function() { return "night";	} }                  
 		});
-		return _object;
+		return _OMAppThemeObject;
 	})();
 	Object.defineProperties(window, {
 		OMAppTheme: { get: function() {return _OMAppTheme;} }
 	});
-    _OMAppDefine("OMAppTheme", window.OMAppTheme);
+    _OMAppDefine("OMAppTheme", _OMAppTheme);
 }
 
 /* OMAppNetworkType 网路类型 */
@@ -81,7 +81,7 @@ if (!window.OMAppNetworkType) {
 	Object.defineProperties(window, {
 		OMAppNetworkType: { get: function() {return _OMAppNetworkType;} }
 	});
-    _OMAppDefine("OMAppNetworkType", window.OMAppNetworkType);
+    _OMAppDefine("OMAppNetworkType", _OMAppNetworkType);
 }
 
 
@@ -91,6 +91,35 @@ if (!window.omApp) {
 		var _omAppObject = {};
 
 		var _isApp = /Onemena/.test(window.navigator.userAgent);
+
+		var _configuration = {
+            currentTheme: OMAppTheme.day,
+            currentUser: {
+                id: "0",
+                name: "Onemena",
+                type: OMAppUserType.visitor,
+                coin: 0,
+                token: "Onemena"
+            },
+            network: {
+            	type: OMAppNetworkType.unknown,
+                ajaxSettings: {
+                    headers: {
+                        "Access-Token": "OMApp",
+                        "User-Token": "Onemena"
+                    },
+                    data: { }
+                }
+			},
+            navigation: {
+                bar: {
+                    title: "Onemena",
+                    titleColor: "#FFFFFF",
+                    backgroundColor: "#000000",
+                    isHidden: false
+                }
+            }
+		};
 
 		// 在控制台打印方法废弃的消息。
 		function _deprecate(oldMethod, newMethod) {
@@ -145,7 +174,7 @@ if (!window.omApp) {
 			}			
 		};
 
-		// 将对象序列化成 URLQuery 部分。
+		// 将 Object 序列化成 URLQuery 部分，返回值可能是 null。
 		function _URLQueryStringFromObject(anObject) {
 			if (!anObject) { return null; }
 			var query = null;
@@ -210,9 +239,7 @@ if (!window.omApp) {
 			}
 	 	}
 	 	Object.defineProperty(_omAppObject, 'ready', {
-	 		get: function() { 
-	 			return _ready;
-	 		}
+	 		get: function() { return _ready; }
 	 	});
 
 		// 0.1
@@ -238,7 +265,7 @@ if (!window.omApp) {
 	 	function _documentIsReady() {
 	 		if (_isReady) { return; }
 	 		if (!_isApp) {
-	 			setTimeout(_didFinishLoading());
+	 			setTimeout(function(){ _didFinishLoading(); });
 	 			return;
 	 		}
 	 		_OMAppMessageSend(_OMAppMessage.documentIsReady, null, null);
@@ -323,28 +350,40 @@ if (!window.omApp) {
 
 			// 3.4 Bar
 			var _bar = (function() {
-				var _title			 = "Onemena";
-				var _titleColor		 = "#000000";
-				var _backgroundColor = "#FFFFFF";
-				var _isHidden		 = false;
+				var _title			 = _configuration.navigation.bar.title;
+				var _titleColor		 = _configuration.navigation.bar.titleColor;
+				var _backgroundColor = _configuration.navigation.bar.backgroundColor;
+				var _isHidden		 = _configuration.navigation.bar.isHidden;
 
 				var _navigationBarObject = {};
 				Object.defineProperties(_navigationBarObject, {
 					title: {
 						get: function() { return _title; },
-						set: function(newValue) { _title = newValue; _OMAppMessageSend(_OMAppMessage.navigation.bar, {"title": newValue}); }
+						set: function(newValue) {
+							_title = newValue;
+							_OMAppMessageSend(_OMAppMessage.navigation.bar, {"title": newValue});
+						}
 					},
 					titleColor: {
 						get: function() { return _titleColor; },
-						set: function(newValue) { _titleColor = newValue; _OMAppMessageSend(_OMAppMessage.navigation.bar, {"titleColor": newValue}) }
+						set: function(newValue) {
+						    _titleColor = newValue;
+						    _OMAppMessageSend(_OMAppMessage.navigation.bar, {"titleColor": newValue});
+						}
 					},
 					backgroundColor: {
 						get: function() { return _backgroundColor; },
-						set: function(newValue) { _backgroundColor = newValue; _OMAppMessageSend(_OMAppMessage.navigation.bar, {"backgroundColor": newValue})}
+						set: function(newValue) {
+						    _backgroundColor = newValue;
+						    _OMAppMessageSend(_OMAppMessage.navigation.bar, {"backgroundColor": newValue});
+						}
 					},
 					isHidden: {
 						get: function() { return _isHidden; },
-						set: function(newValue) { _isHidden = newValue; _OMAppMessageSend(_OMAppMessage.navigation.bar, {"isHidden": newValue}) }
+						set: function(newValue) {
+						    _isHidden = newValue;
+						    _OMAppMessageSend(_OMAppMessage.navigation.bar, {"isHidden": newValue});
+						}
 					}
 				});
 				return _navigationBarObject;
@@ -362,7 +401,7 @@ if (!window.omApp) {
 		Object.defineProperty(_omAppObject, 'navigation', { get: function() { return _navigation; }});
 
 		// 4. currentTheme
-		var _currentTheme = OMAppTheme.day;
+		var _currentTheme = _configuration.currentTheme;
 		Object.defineProperties(_omAppObject, {
 			currentTheme: {
 				get: function() { 
@@ -389,7 +428,8 @@ if (!window.omApp) {
 
 		var _analytics = (function() {
 			function _track(event, parameters) {
-				return _OMAppMessageSend(_OMAppMessage.analytics.track, {"event": event, "parameters": parameters}, null);
+			    var data = {"event": event, "parameters": parameters};
+				return _OMAppMessageSend(_OMAppMessage.analytics.track, data, null);
 			}
 
 			var _analyticsObject = {};
@@ -400,11 +440,11 @@ if (!window.omApp) {
 
 		// 6. 当前用户
 		var _currentUser = (function() {
-			var _id   = "0";
-			var _name = "None";
-			var _type = OMAppUserType.visitor;
-			var _coin = 0;
-			var _token = "";
+			var _id   = _configuration.currentUser.id;
+			var _name = _configuration.currentUser.name;
+			var _type = _configuration.currentUser.type;
+			var _coin = _configuration.currentUser.coin;
+			var _token = _configuration.currentUser.token;
 			
 			var _currentUserObject = {};
 			Object.defineProperties(_currentUserObject, {
@@ -460,16 +500,16 @@ if (!window.omApp) {
 				callback(index);
 			}
 		}
-	 	Object.defineProperty(_omAppObject, 'didSelectAlertActionAtIndex', { get: function() { return _didSelectAlertActionAtIndex; }});
+	 	Object.defineProperty(_omAppObject, 'didSelectAlertActionAtIndex', {
+	 	    get: function() {
+	 	        return _didSelectAlertActionAtIndex;
+	 	    }
+	 	});
 
 	 	// 9. 网络状态
 	 	var _network = (function() {
-	 		var _networkObject = {};
-	 		var _type = OMAppNetworkType.unknown;
-	 	 	var _ajaxSettings = {
-	 			headers: {},
-	 			data: {}
-	 		};
+	 		var _type = _configuration.network.type;
+	 	 	var _ajaxSettings = _configuration.network.ajaxSettings;
 
 	 		var _ajax =	function(request, callback) {
 	 	    	var xhr = new XMLHttpRequest();
@@ -486,45 +526,41 @@ if (!window.omApp) {
 					callback(success, result, contentType);
 				};
 				xhr.open(request.method, request.url, true);
+
+				function setXHRHeadersFromObject(anObject) {
+                    if (!anObject) { return; }
+                    for (var key in anObject) {
+                        if (!anObject.hasOwnProperty(key)) { continue; }
+                        xhr.setRequestHeader(key, anObject[key]);
+                    }
+                }
 				
 				// 设置 Headers
-				if (_ajaxSettings && _ajaxSettings.headers) {
-					for (var key in _ajaxSettings.headers) {
-                        if (!_ajaxSettings.headers.hasOwnProperty(key)) { continue; }
-						xhr.setRequestHeader(key, _ajaxSettings.headers[key]);
-					}
-				}
-				if (request.headers) {
-					for (var key in request.headers) {
-                        if (!request.headers.hasOwnProperty(key)) { continue; }
-						xhr.setRequestHeader(key, request.headers[key]);
-					}
-				}
-				
+                setXHRHeadersFromObject(_ajaxSettings.headers);
+				setXHRHeadersFromObject(request.headers);
+
 				if(request.method === "POST"){
 					xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded; charset=UTF-8");
 				}
 
-				var data = null;
-                if (_ajaxSettings.data && request.data) {
-                    // 合并值，替换重复的值。
+				// 合并两个对象的属性值。如果其中某个对象为空，则不合并，直接返回另一个对象，否则创建新对象。
+				function mergeObjectValueIfNeeded(object1, object2) {
+                    if (!object1) { return object2; }
+                    if (!object2) { return object1; }
                     var dataObject = {};
                     function copyValues(anObject) {
-                        if (!anObject) { return; }
                         for (var key in anObject) {
                             if (!anObject.hasOwnProperty(key)) { continue; }
                             dataObject[key] = anObject[key];
                         }
                     }
-                    copyValues(_ajaxSettings.data);
-                    copyValues(request.data);
-                    data = _URLQueryStringFromObject(dataObject);
-                } else if (_ajaxSettings.data) {
-                    data = _URLQueryStringFromObject(_ajaxSettings.data);
-                } else {
-                    data = _URLQueryStringFromObject(request.data);
+                    copyValues(object1);
+                    copyValues(object2);
+                    return dataObject;
                 }
 
+                var dataObject = mergeObjectValueIfNeeded(_ajaxSettings.data, request.data);
+				var data = _URLQueryStringFromObject(dataObject);
 				xhr.send(data);
 	 		};
 
@@ -542,9 +578,9 @@ if (!window.omApp) {
             }
 
 	 		function _http(request, callback) {
-				if (request.params && !request.data) {
+				if (request["params"] && !request.data) {
 					_deprecate("omApp.http 参数字段 request.params", "request.data");
-					request.data = request.params;
+					request.data = request["params"];
 				}
 				if (!_isApp) {
 					var callbackID = _callbackManager.push(callback);
@@ -556,6 +592,7 @@ if (!window.omApp) {
 		        return _OMAppMessageSend(_OMAppMessage.http, {"request": request}, callback);
 			}
 
+            var _networkObject = {};
 	 		Object.defineProperties(_networkObject, {
 				type: {
 					get: function() { return _type; },
@@ -587,7 +624,13 @@ if (!window.omApp) {
 
         // 7.1 HTTP
         Object.defineProperty(_omAppObject, 'http', { get: function() { return _network.http; }});
-        Object.defineProperty(_omAppObject, 'didFinishHTTPRequest', { get: function() { return _network.didFinishHTTPRequest; }});
+        Object.defineProperty(_omAppObject, 'didFinishHTTPRequest', {
+            get: function() {
+                return _network.didFinishHTTPRequest;
+            }
+        });
+
+
 		/*****************************************************/
 		/****************** Private Methods ******************/
 		/*****************************************************/
@@ -596,28 +639,8 @@ if (!window.omApp) {
 	 	function _debug(configuration) {
 	 		if (_isApp) { return; }
 	 		if (!configuration) { return; }
-	 		if (configuration.http) {
-	 			_network.ajaxSettings(configuration.http);
-	 		}
-	 		if (configuration.currentTheme) {
-	 			_currentTheme = configuration.currentTheme;
-	 		}
-	 		function copyValues(sourceObject, targetObject) {
-                if (!sourceObject) {
-                    return;
-                }
-                if (!targetObject) {
-                    return;
-                }
-                for (var key in sourceObject) {
-                    if (sourceObject.hasOwnProperty(key)) {
-                        sourceObject[key] = targetObject[key];
-                    }
-                }
-            }
-	 		copyValues(configuration.currentUser, _currentUser);
-	 		copyValues(configuration.navigation.bar, _navigation.bar);
-	 		copyValues(configuration.network, _network);
+	 		console.log("[Debug] "+ JSON.stringify(configuration));
+	 		_configuration = configuration;
 	 	}
 	 	Object.defineProperty(_omAppObject, 'debug', { get: function() { return _debug; } });
 

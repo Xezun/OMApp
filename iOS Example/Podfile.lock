@@ -18,7 +18,7 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   OMKit:
-    :commit: 6155dcd3ec0facc42195083d3c5b8b896aa9d1c0
+    :commit: 9c36e2b9c668fd968ef9c079fd977f64cbf3d739
     :git: https://github.com/mlibai/OMKit.git
 
 SPEC CHECKSUMS:

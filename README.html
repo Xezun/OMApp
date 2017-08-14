@@ -2240,7 +2240,37 @@ document.getElementById(&quot;app_network_type&quot;).innerHTML = omApp.network.
 <h3 id="1_1"><a name="user-content-1_1" href="#1_1" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>1. 如何在桌面浏览器中测试某个页面已登陆后的情况？</h3>
 <p>omApp 提供的 http 方法，在浏览器中，默认没有附带用户登录状态信息（user_token) ，所以获取不到已登陆后用户的数据。在这种情况下，可以在浏览器地址栏的 URL 后拼接用户真实 user_token 参数，再次加载页面即可。</p>
 <h3 id="2-omapp"><a name="user-content-2-omapp" href="#2-omapp" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>2. 如何在桌面浏览器中设置 omApp 的初始属性？</h3>
-<p>由于暂未提供配置 omApp 的方法。可以在 OMApp.js 末尾打个断点，然后在控制台手动设置 omApp 对象的属性。</p>
+<p>可通过 omApp.debug() 函数，在调用 ready 函数之前，设置 omApp 的配置信息。omApp.debug 函数只在浏览器环境中才会生效。<br />
+<pre><code>// 设置调试信息。
+omApp.debug({
+    currentTheme: OMAppTheme.night,
+    currentUser: {
+        id: &quot;09&quot;,
+        name: &quot;John&quot;,
+        type: OMAppUserType.facebook,
+        coin: 1000,
+        token: &quot;Test&quot;
+    },
+    network: {
+        type: OMAppNetworkType.unknown,
+        ajaxSettings: {
+            headers: {
+                &quot;Access-Token&quot;: &quot;OMApp&quot;,
+                &quot;User-Token&quot;: &quot;Onemena&quot;
+            },
+            data: { }
+        }
+    },
+    navigation: {
+        bar: {
+            title: &quot;Onemena&quot;,
+            titleColor: &quot;#FFFFFF&quot;,
+            backgroundColor: &quot;#000000&quot;,
+            isHidden: false
+        }
+    }
+});
+</code></pre></p>
 <hr />
 <h2 id="omapp-url"><a name="user-content-omapp-url" href="#omapp-url" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>第三部分：<code>omApp</code> 基于 URL 交互方式的实现</h2>
 <h3 id="_4"><a name="user-content-_4" href="#_4" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>基本规则</h3>

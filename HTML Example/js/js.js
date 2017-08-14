@@ -4,33 +4,34 @@ window.onerror = function(message, url, line) {
 	console.log('Error: ' + message + "\nURL: " + url + "\nLine: " + line); 
 }
 
+// 调试模式下，设置配置。
 omApp.debug({
-	currentTheme: OMAppTheme.day,
-	currentUser: {
-		id: "123",
-		name: "John",
-		type: OMAppUserType.google,
-		coin: 100,
-		token: "Test"
-	},
-	network: OMAppNetworkType.unknown,
-	http: {
-		headers: {
-			"Access-Token": "OMApp",
-			"User-Token": "Test"
-		},
-		data: {
-			"user_token": "Test"
-		}
-	},
-	navigation: {
-		bar: {
-			title: "Test",
-			titleColor: "#FFFFFF",
-			backgroundColor: "#000000",
-			isHidden: false
-		}
-	}
+    currentTheme: OMAppTheme.night,
+    currentUser: {
+        id: "09",
+        name: "John",
+        type: OMAppUserType.facebook,
+        coin: 1000,
+        token: "Test"
+    },
+    network: {
+        type: OMAppNetworkType.unknown,
+        ajaxSettings: {
+            headers: {
+                "Access-Token": "OMApp",
+                "User-Token": "Onemena"
+            },
+            data: { }
+        }
+    },
+    navigation: {
+        bar: {
+            title: "Onemena",
+            titleColor: "#FFFFFF",
+            backgroundColor: "#000000",
+            isHidden: false
+        }
+    }
 });
 
 omApp.ready(function() {
@@ -40,40 +41,87 @@ omApp.ready(function() {
     omApp.navigation.bar.titleColor         = "#000000";
     omApp.navigation.bar.backgroundColor    = "#FFFFFF";
 
-    omApp.login(function (success) {
-
-    });
-
-
     $(document).ready(function () {
 
-    });
+		$("input[name='login']").click(function () {
+			omApp.login(function (success) {
+				console.log("Login result: " + success);
+			});
+        });
 
-    omApp.open(OMAppPage.mall);
-    omApp.navigation.push("http://www.baidu.com", false);
+        $("input[name='open']").click(function () {
+            omApp.open(OMAppPage.task, {id: "0"});
+        });
 
-    omApp.navigation.pop(true);
-    omApp.navigation.popTo(0, false);
+        $("input[name='push']").click(function () {
+            omApp.navigation.push("http://www.baidu.com", true);
+        });
 
-    console.log(omApp.currentTheme);
-    omApp.currentTheme = OMAppTheme.day;
+        $("input[name='pop']").click(function () {
+            omApp.navigation.pop(true);
+        });
 
-    omApp.analytics.track("read");
+        $("input[name='popTo']").click(function () {
+            omApp.navigation.popTo(0, false);
+        });
 
-    console.log(omApp.currentUser.name);
+        $("input[name='bar.title']").click(function () {
+            omApp.navigation.bar.title = "New Title";
+        });
 
+        $("input[name='bar.titleColor']").click(function () {
+            omApp.navigation.bar.titleColor = "#FF0000";
+        });
 
-    omApp.http({url: ""}, function (success, result) {
+        $("input[name='bar.backgroundColor']").click(function () {
+            omApp.navigation.bar.backgroundColor = "#CCCCCC";
+        });
 
-    });
+        $("input[name='bar.isHidden']").click(function () {
+        	omApp.navigation.bar.isHidden = false;
+        });
 
-    omApp.alert({
-        "title": "",
-        "body": ""
-    },function (index) {
+        $("input[name='theme']").click(function () {
+            omApp.currentTheme = OMAppTheme.night;
+            console.log(omApp.currentTheme);
+        });
 
-    });
+        $("input[name='analytics']").click(function () {
+            omApp.analytics.track("click", {id: "123"});
+        });
 
-    console.log(omApp.network.isReachable);
-    console.log(omApp.network.type);
+        $("input[name='user']").click(function () {
+            console.log("currentUser.id:" + omApp.currentUser.id);
+            console.log("currentUser.name:" + omApp.currentUser.name);
+            console.log("currentUser.coin:" + omApp.currentUser.coin);
+            console.log("currentUser.type:" + omApp.currentUser.type);
+            console.log("currentUser.token:" + omApp.currentUser.token);
+        });
+
+        $("input[name='http']").click(function () {
+            omApp.http({
+				url: "http://1.dev.wekoora.com/ar_AE/api/get_live_game?live_game_id=51&time_zone=GMT%2B8",
+				method: "GET"
+			}, function (success, result) {
+				console.log(result);
+			});
+        });
+
+        $("input[name='alert']").click(function () {
+        	omApp.alert({
+				title: "你好",
+				body: "请点击任意按钮！",
+				actions: ["确定", "取消"]
+			}, function (index) {
+				console.log("alert at:" + index);
+            });
+        });
+
+        $("input[name='network']").click(function () {
+            console.log("network.isViaWiFi:" + omApp.network.isViaWiFi);
+            console.log("network.isReachable:" + omApp.network.isReachable);
+            console.log("network.type:" + omApp.network.type);
+        });
+	});
+
 });

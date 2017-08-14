@@ -646,7 +646,38 @@ omApp 提供的 http 方法，在浏览器中，默认没有附带用户登录�
 
 ### 2. 如何在桌面浏览器中设置 omApp 的初始属性？
 
-由于暂未提供配置 omApp 的方法。可以在 OMApp.js 末尾打个断点，然后在控制台手动设置 omApp 对象的属性。
+可通过 omApp.debug() 函数，在调用 ready 函数之前，设置 omApp 的配置信息。omApp.debug 函数只在浏览器环境中才会生效。
+```
+// 设置调试信息。
+omApp.debug({
+    currentTheme: OMAppTheme.night,
+    currentUser: {
+        id: "09",
+        name: "John",
+        type: OMAppUserType.facebook,
+        coin: 1000,
+        token: "Test"
+    },
+    network: {
+        type: OMAppNetworkType.unknown,
+        ajaxSettings: {
+            headers: {
+                "Access-Token": "OMApp",
+                "User-Token": "Onemena"
+            },
+            data: { }
+        }
+    },
+    navigation: {
+        bar: {
+            title: "Onemena",
+            titleColor: "#FFFFFF",
+            backgroundColor: "#000000",
+            isHidden: false
+        }
+    }
+});
+```
 
 
 ***
