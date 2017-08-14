@@ -679,6 +679,10 @@ omApp.debug({
 });
 ```
 
+### 3. omApp 在 IDE 中的自动补全功能。
+
+目前支持在 WebStorm 中自动补全和语法检查，将 OMApp/OMApp.d.ts 文件添加到 WebStorm > Language & Frameworks > JavaScript > Libraries 中即可。
+
 
 ***
 
