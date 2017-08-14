@@ -128,16 +128,16 @@ if (!window.omApp) {
 
 		// _OMAppMessage 定义了所有消息类型。
 		var _OMAppMessage = {
-			documentIsReady: "documentisready",
+			documentIsReady: "documentIsReady".toLowerCase(),
 			navigation: {
 				pop: 	"navigation.pop",
-				popTo: 	"navigation.popto",
+				popTo: 	"navigation.popTo".toLowerCase(),
 				push: 	"navigation.push",
 				bar: 	"navigation.bar"
 			},
 			open: 				"open",
 			login: 				"login",
-			currentTheme: 		"currenttheme",
+			currentTheme: 		"currentTheme".toLowerCase(),
 			http: 				"http",
 			alert: 				"alert",
 			analytics: {
@@ -221,29 +221,31 @@ if (!window.omApp) {
 	 		get: function() { return _isReady; }
 	 	});
 
+        // 0.3 App 在完成初始化 omApp 后调用此方法，告诉 HTML 初始化已完成。
+        function _didFinishLoading() {
+            if (!_readyHandlers) {
+                console.log('[OMApp] 为了保证 omApp 在使用时已完成初始化，请将操作放在 omApp.ready(function(){/*代码*/}) 中。');
+                return;
+            }
+            _isReady = true;
+            for (var i = _readyHandlers.length - 1; i >= 0; i--) {
+                (_readyHandlers.pop())();
+            }
+        }
+        Object.defineProperty(_omAppObject, 'didFinishLoading', { get: function() { return _didFinishLoading; }});
+
 	 	// 0.2 向 App 发送消息，HTML 页面准备完成，可以初始化 omApp 对象了。
 	 	function _documentIsReady() {
-	 		if (omApp.isReady) { return; }
+	 		if (_isReady) { return; }
 	 		if (!_isApp) {
-	 			setTimeout(omApp.didFinishLoading());
+	 			setTimeout(_didFinishLoading());
 	 			return;
 	 		}
 	 		_OMAppMessageSend(_OMAppMessage.documentIsReady, null, null);
 	 	}
 	 	Object.defineProperty(_omAppObject, 'documentIsReady', { get: function() { return _documentIsReady; }});
 
-	 	// 0.3 App 在完成初始化 omApp 后调用此方法，告诉 HTML 初始化已完成。
-	 	function _didFinishLoading() {
-	 		if (!_readyHandlers) {
-	 			console.log('[OMApp] 为了保证 omApp 在使用时已完成初始化，请将操作放在 omApp.ready(function(){/*代码*/}) 中。'); 
-	 			return;
-	 		}
-	 		_isReady = true;
-	 		for (var i = _readyHandlers.length - 1; i >= 0; i--) {
-	 			(_readyHandlers.pop())();
-	 		}
-	 	}
-	 	Object.defineProperty(_omAppObject, 'didFinishLoading', { get: function() { return _didFinishLoading; }});
+
 
 		// 1.1 HTML 调用原生的登录。
 		function _login(callback) {
@@ -436,22 +438,7 @@ if (!window.omApp) {
 		})();
 		Object.defineProperty(_omAppObject, 'currentUser', { get: function() { return _currentUser; }});
 
-		// 7.1 HTTP
-		Object.defineProperty(_omAppObject, 'http', { get: function() { return omApp.network.http; }});	
 
-	 	// 7.2 HTTP 回调 （回调函数ID，是否成功，数据（Base64字符串），数据类型）
-		function _didFinishHTTPRequest(callbackID, success, result, contentType) {
-			var callback = _callbackManager.pop(callbackID);
-			if (!callback) { return; }
-			if (result) {
-				result = decodeURIComponent(result);
-				if (/json/.test(contentType)) {
-					result = JSON.parse(result);
-				}
-			}
-			callback(success, result);
-		}
-	 	Object.defineProperty(_omAppObject, 'didFinishHTTPRequest', { get: function() { return _didFinishHTTPRequest; }});
 
 	 	// 8.1 alert
 		function _alert(message, callback) {
@@ -518,31 +505,41 @@ if (!window.omApp) {
 					xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded; charset=UTF-8");
 				}
 
-				function unionObjectsValues(object1, object2) {
-				    var object = {};
-				    function copyValues(anObject) {
+				var data = null;
+                if (_ajaxSettings.data && request.data) {
+                    // 合并值，替换重复的值。
+                    var dataObject = {};
+                    function copyValues(anObject) {
                         if (!anObject) { return; }
                         for (var key in anObject) {
                             if (!anObject.hasOwnProperty(key)) { continue; }
-                            object[key] = anObject[key];
+                            dataObject[key] = anObject[key];
                         }
                     }
-                    copyValues(object1);
-				    copyValues(object2);
-					return object;
-				}
+                    copyValues(_ajaxSettings.data);
+                    copyValues(request.data);
+                    data = _URLQueryStringFromObject(dataObject);
+                } else if (_ajaxSettings.data) {
+                    data = _URLQueryStringFromObject(_ajaxSettings.data);
+                } else {
+                    data = _URLQueryStringFromObject(request.data);
+                }
 
-				var data = unionObjectsValues(_ajaxSettings.data, request.data);
-                var parsedData = null;
-                for (var key in data) {
-                    if (!data.hasOwnProperty(key)) { continue; }
-                    if (parsedData) { parsedData += ("&" + key); } else { parsedData = key; }
-                    if (data[key]) {
-                        parsedData += ("=" + encodeURIComponent(data[key]));
+				xhr.send(data);
+	 		};
+
+            // 7.2 HTTP 回调 （回调函数ID，是否成功，数据（Base64字符串），数据类型）
+            function _didFinishHTTPRequest(callbackID, success, result, contentType) {
+                var callback = _callbackManager.pop(callbackID);
+                if (!callback) { return; }
+                if (result) {
+                    result = decodeURIComponent(result);
+                    if (/json/.test(contentType)) {
+                        result = JSON.parse(result);
                     }
                 }
-				xhr.send(parsedData);
-	 		}
+                callback(success, result);
+            }
 
 	 		function _http(request, callback) {
 				if (request.params && !request.data) {
@@ -552,7 +549,7 @@ if (!window.omApp) {
 				if (!_isApp) {
 					var callbackID = _callbackManager.push(callback);
 					_ajax(request, function(success, result, contentType) {
-						omApp.didFinishHTTPRequest(callbackID, success, result, contentType);
+						_didFinishHTTPRequest(callbackID, success, result, contentType);
 					});
 					return;
 				}
@@ -578,14 +575,19 @@ if (!window.omApp) {
 				},
 				http: {
 					get: function() { return _http; }
-				}
+				},
+                didFinishHTTPRequest: {
+				    get: function () { return _didFinishHTTPRequest; }
+                }
 			});
 	 		return _networkObject;
 	 	})();
 	 	Object.defineProperty(_omAppObject, 'network', { get: function() { return _network; }});
 
 
-
+        // 7.1 HTTP
+        Object.defineProperty(_omAppObject, 'http', { get: function() { return _network.http; }});
+        Object.defineProperty(_omAppObject, 'didFinishHTTPRequest', { get: function() { return _network.didFinishHTTPRequest; }});
 		/*****************************************************/
 		/****************** Private Methods ******************/
 		/*****************************************************/
@@ -601,13 +603,18 @@ if (!window.omApp) {
 	 			_currentTheme = configuration.currentTheme;
 	 		}
 	 		function copyValues(sourceObject, targetObject) {
-	 			if (!sourceObject) { return; }
-	 			if (!targetObject) { return; }
-	 			for (var key in sourceObject) {
+                if (!sourceObject) {
+                    return;
+                }
+                if (!targetObject) {
+                    return;
+                }
+                for (var key in sourceObject) {
                     if (sourceObject.hasOwnProperty(key)) {
                         sourceObject[key] = targetObject[key];
                     }
-	 		}
+                }
+            }
 	 		copyValues(configuration.currentUser, _currentUser);
 	 		copyValues(configuration.navigation.bar, _navigation.bar);
 	 		copyValues(configuration.network, _network);
@@ -616,12 +623,12 @@ if (!window.omApp) {
 
 	 	// 当页面加载完成时，向 App 发送消息，初始化 omApp 对象。
 		if (document.readyState === "complete") {   
-	         setTimeout(omApp.documentIsReady);      
+	         setTimeout(_documentIsReady);
 		} else {
 			var _eventListener = function() {
 				document.removeEventListener("DOMContentLoaded", _eventListener);
 				window.removeEventListener("load", _eventListener);
-				omApp.documentIsReady();
+				_documentIsReady();
 			};
 	        document.addEventListener("DOMContentLoaded", _eventListener, false);
 			window.addEventListener("load", _eventListener, false);   
