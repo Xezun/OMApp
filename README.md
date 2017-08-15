@@ -49,7 +49,52 @@ HTML 页面通过 App 提供 JavaScript 接口，来实现对 App 功能的访�
 
 ### 4. 接口列表
 
-#### 4.0 ready(*callback*) 
+#### 4.1 debug(*configuration*) 
+
+- 接口说明：
+    为了方便在浏览器中开发调试，通过此接口设置 `omApp`对象的初始值。此接口只在浏览器中生效，在 App 中不执行任何操作。需在调用 `omApp` 对象之前设置，否则不生效。
+
+- 参数说明：
+
+    | **Name**       | **Type**    | **Description** |
+    | :------------- | :---------- | :-------------- |
+    | configuration  | Object      | 一个结构类似 omApp 的数据对象 |
+
+- 代码示例：
+```
+// omApp 初始化配置参数。
+omApp.debug({
+    currentTheme: OMAppTheme.night,     // 主题
+    currentUser: {                      // 当前用户
+        id: "09",
+        name: "John",
+        type: OMAppUserType.facebook,
+        coin: 1000,
+        token: "Test"
+    },
+    network: {
+        type: OMAppNetworkType.unknown, // 网络类型
+        ajaxSettings: {                 // 网络请求默认配置
+            headers: {
+                "Access-Token": "OMApp",
+                "User-Token": "Onemena"
+            },
+            data: { }
+        }
+    },
+    navigation: {                       // 导航初始状态
+        bar: {
+            title: "Onemena",
+            titleColor: "#FFFFFF",
+            backgroundColor: "#000000",
+            isHidden: false
+        }
+    }
+});
+```
+
+
+#### 4.2 ready(*callback*) 
     2017-07-27： 新增接口。
 
 - 接口说明：
@@ -104,220 +149,7 @@ HTML 页面通过 App 提供 JavaScript 接口，来实现对 App 功能的访�
         - 回调： `omApp.didFinishLoading()`
 
 
-#### 4.1 login(*callback*)
-
-- 接口说明：
-
-    当 HTML 页面需要调用 App 的 `登录` 功能时，调用此接口。
-
-- 参数说明：
-
-    | **Name**       | **Type**    | **Description** |
-    | :------------- | :---------- | :-------------- |
-    | callback       | Function    | 可选。登录回调函数，用户返回登录结果 |
-
-    - callback 函数参数：
-    
-    | **Name**       | **Type**    | **Description** |
-    | :------------- | :---------- | :-------------- |
-    | success        | Bool        | 是否登录成功。 |
-
-    <font size=2>* 请通过 [omApp.currentUser](#currentUser) 来获取当前已登录用户信息。</font>
-
-
-- 代码示例：
-
-    ``` 
-    // 调起 App 的登录流程
-    omApp.login(function(success) {
-        if (success) {
-            // do suceess actions.
-        } else {
-            // do something when failed.
-        }
-    });
-    ```
-
-- 基于 URL 的交互方式：
-    
-    - URL： `app://login/?callbackID=...`
-
-    - 回调： `omApp.didFinishLogin(callbackID, success)`
-
-        | Name         | Type   | Description |
-        | :----------- | :----- | :--------- |
-        | callbackID   | String | url 中的 callbackID |
-        | success      | Bool   | 登录是否成功 |
-
-
-#### 4.2 open(*page*, *parameters*) [暂未启用]
-
-- 接口说明：
-
-    当 HTML 页面需要跳转到 App 其它界面时，调用此接口。
-
-- 参数说明：
-
-    | **Name**       | **Type**    | **Description** |
-    | :------------- | :---------- | :-------------- |
-    | page           | OMAppPage   | 必选。见 [OMAppPage枚举](#OMAppPage)  |
-    | parameters     | Object      | 可选。见 [OMAppPage枚举](#OMAppPage) |
-
-- <a name="OMAppPage">***OMAppPage*枚举**</a>
-
-    1. 新闻列表：*OMAppPage.**newsList***
-
-        | Name | Type   | Description | 
-        | :--- | :----- | :-------------- |
-        | id   | String | 新闻栏目 ID |
- 
-    2. 新闻详情：*OMAppPage.**newsDetail***
-  
-        | Name           | Type        | Description | 
-        | :------------- | :---------- | :-------------- |
-        | id             | String      | 新闻 ID |
- 
-    3. 视频列表：*OMAppPage.**videoList***
-  
-        | Name    | Type        | Description | 
-        | :------ | :---------- | :-------------- |
-        | id      | String      | 视频栏目 ID |
- 
-    4. 视频详情：*OMAppPage.**videoDetail***
-  
-        | Name           | Type         | Description | 
-        | :------------- | :----------  | :-------------- |
-        | id             | String       | 视频 ID |
- 
-    5. 金币商城：*OMAppPage.**mall***
- 
-    6. 金币任务：*OMAppPage.**task***
-
-- 代码示例：
-
-    ```
-    // 打开金币商城页
-    omApp.open(OMAppPage.mall); 
-    // 打开金币任务页
-    omApp.open(OMAppPage.task); 
-    ```
-
-- 基于 URL 的交互方式：
-    
-    - URL： `app://open/?page=...`
-
-
-#### 4.3 navigation
-
-- 接口说明：
-
-    Object，只读，非空。
-    为了使 HTML 提供类似原生 App 的操作体验，`navigation` 接口给 HTML 提供了创建新窗口的能，并通过 `导航栈` 来管理这一系列窗口。
-
-##### 4.3.1 navigation.push(*url*, *animated*)
-
-- 接口说明：
-
-    创建一个新窗口并打开指定 URL，常用于导航到下级页面。新窗口将压入到导航栈顶。
-
-- 参数说明：
-
-    | **Name**       | **Type**    | **Description** |
-    | :------------- | :---------- | :-------------- |
-    | url            | String      | 必选。下级页面的 URL   |
-    | animated       | Bool        | 可选。是否展示转场动画，默认 true   |
-
-- 代码示例：
-
-    ```
-    omApp.navigation.push('http://8.dev.arabsada.com/'); 
-    omApp.navigation.push('http://8.dev.arabsada.com/', true); 
-    ```
-
-- 基于 URL 的交互方式：
-    
-    - URL： `app://navigation.push/?url=...&animated=...`
-    
-
-##### 4.3.2 navigation.pop(*animated*)
-
-- 接口说明：
-
-    关闭当前窗口，并返回到上一个窗口，常用于返回到上级页面。当前窗口从导航栈中弹出。
-
-- 参数说明：
-
-    | **Name**       | **Type**    | **Description** |
-    | :------------- | :---------- | :-------------- |
-    | animated       | Bool        | 可选。是否展示转场动画，默认 true   |
-
-- 代码示例：
-
-    ```
-    omApp.navigation.pop(true); 
-    ```
-
-- 基于 URL 的交互方式：
-    
-    - URL：`app://navigation.pop/?animated=...`
-
-
-##### 4.3.3 navigation.popTo(*index*, *animated*)
-
-- 接口说明：
-
-    返回到导航栈内指定级页面。如果当前导航栈内已经有很多页面，此方法可以快速回到指定页面。
-
-- 参数说明：
-
-    | **Name**       | **Type**    | **Description** |
-    | :------------- | :---------- | :-------------- |
-    | index          | Int         | 必选。正数，目的页面所在的位置索引，0 为第一个 HTML 页面 |
-    | animated       | Bool        | 可选。是否展示转场动画，默认 true   |
-
-- 代码示例：
-
-    ```
-    omApp.navigation.popTo(0, true);
-    ```
-
-- 基于 URL 的交互方式：
-    
-    - URL：`app://navigation.popto/?index=...&animated=...`
-
-
-##### 4.3.4 navigation.bar
-
-- 接口说明：
-
-    只读，Object。代表了 App 的原生导航条对象。通过此对象，可以控制导航条的外观。
-
-- 属性说明：
-
-    | **Name**        | **Type**    | **Description** |
-    | :-------------- | :---------- | :-------------- |
-    | isHidden        | Bool        | 导航条是否隐藏    |
-    | title           | String      | 标题            |
-    | titleColor      | String      | 标题颜色         |
-    | backgroundColor | String      | 背景色           |
-
-- 代码示例：
-
-    ```
-    omApp.navigation.bar.isHidden = false;
-    omApp.navigation.bar.title = '自定义的标题';
-    omApp.navigation.bar.titleColor = '#FF0000';
-    omApp.navigation.bar.backgroundColor = '#0000FF';
-    ```
-
-- 交互说明：
-    
-    - 基于 URL 的交互方式 App 需在 ready 方法中初始化 bar 各属性的初始值。 
-    - 交互协议：
-        - URL：`app://navigation.bar/?isHidden=...&title=...&titleColor=...`
-
-
-#### 4.4 currentTheme
+#### 4.3 currentTheme
 
     变更日志：
     2017-06-17： `theme` -> `currentTheme` 
@@ -354,40 +186,7 @@ HTML 页面通过 App 提供 JavaScript 接口，来实现对 App 功能的访�
         - URL：`app://currenttheme/?name=...`
 
 
-#### 4.5 analytics 
-
-- 接口说明：
-
-    App 统计分析模块。
-
-##### 4.5.1 analytics.track(*event*, *parameters*)
-
-- 接口说明：
-
-    记录一条用户行为。
-
-- 参数说明：
-
-    | **Name**     | **Type**    | **Description** |
-    | :----------- | :---------- | :-------------- |
-    | event        | String      | 必选，非空。统计名称 |
-    | parameters   | Object      | 可选。额外参数 *Key-Value* 为基本数据类型 |
-
-- 代码示例：
-
-    ```
-    // 例如：统计 click 。
-    omApp.analytics.track("click");
-    // 例如：统计 read 。
-    omApp.analytics.track("read", {"id": "2", "type": "news"});
-    ```
-
-- 交互说明：
-
-    - URL： `app://analytics.track/?event=...&parameters={...}`
-
-
-#### 4.6 <a name="currentUser">currentUser</a>
+#### 4.4 currentUser
 
 - 接口说明：
 
@@ -435,7 +234,213 @@ HTML 页面通过 App 提供 JavaScript 接口，来实现对 App 功能的访�
     - 因此在 ready 事件中，直接调用 JS 修改各属性值即可。
 
 
-#### 4.7 http(*request*, *callback*)
+#### 4.5 navigation
+
+- 接口说明：
+
+    Object，只读，非空。
+    为了使 HTML 提供类似原生 App 的操作体验，`navigation` 接口给 HTML 提供了创建新窗口的能，并通过 `导航栈` 来管理这一系列窗口。
+
+##### 4.5.1 navigation.push(*url*, *animated*)
+
+- 接口说明：
+
+    创建一个新窗口并打开指定 URL，常用于导航到下级页面。新窗口将压入到导航栈顶。
+
+- 参数说明：
+
+    | **Name**       | **Type**    | **Description** |
+    | :------------- | :---------- | :-------------- |
+    | url            | String      | 必选。下级页面的 URL   |
+    | animated       | Bool        | 可选。是否展示转场动画，默认 true   |
+
+- 代码示例：
+
+    ```
+    omApp.navigation.push('http://8.dev.arabsada.com/'); 
+    omApp.navigation.push('http://8.dev.arabsada.com/', true); 
+    ```
+
+- 基于 URL 的交互方式：
+    
+    - URL： `app://navigation.push/?url=...&animated=...`
+    
+
+##### 4.5.2 navigation.pop(*animated*)
+
+- 接口说明：
+
+    关闭当前窗口，并返回到上一个窗口，常用于返回到上级页面。当前窗口从导航栈中弹出。
+
+- 参数说明：
+
+    | **Name**       | **Type**    | **Description** |
+    | :------------- | :---------- | :-------------- |
+    | animated       | Bool        | 可选。是否展示转场动画，默认 true   |
+
+- 代码示例：
+
+    ```
+    omApp.navigation.pop(true); 
+    ```
+
+- 基于 URL 的交互方式：
+    
+    - URL：`app://navigation.pop/?animated=...`
+
+
+##### 4.5.3 navigation.popTo(*index*, *animated*)
+
+- 接口说明：
+
+    返回到导航栈内指定级页面。如果当前导航栈内已经有很多页面，此方法可以快速回到指定页面。
+
+- 参数说明：
+
+    | **Name**       | **Type**    | **Description** |
+    | :------------- | :---------- | :-------------- |
+    | index          | Int         | 必选。正数，目的页面所在的位置索引，0 为第一个 HTML 页面 |
+    | animated       | Bool        | 可选。是否展示转场动画，默认 true   |
+
+- 代码示例：
+
+    ```
+    omApp.navigation.popTo(0, true);
+    ```
+
+- 基于 URL 的交互方式：
+    
+    - URL：`app://navigation.popto/?index=...&animated=...`
+
+
+##### 4.5.4 navigation.bar
+
+- 接口说明：
+
+    只读，Object。代表了 App 的原生导航条对象。通过此对象，可以控制导航条的外观。
+
+- 属性说明：
+
+    | **Name**        | **Type**    | **Description** |
+    | :-------------- | :---------- | :-------------- |
+    | isHidden        | Bool        | 导航条是否隐藏    |
+    | title           | String      | 标题            |
+    | titleColor      | String      | 标题颜色         |
+    | backgroundColor | String      | 背景色           |
+
+- 代码示例：
+
+    ```
+    omApp.navigation.bar.isHidden = false;
+    omApp.navigation.bar.title = '自定义的标题';
+    omApp.navigation.bar.titleColor = '#FF0000';
+    omApp.navigation.bar.backgroundColor = '#0000FF';
+    ```
+
+- 交互说明：
+    
+    - 基于 URL 的交互方式 App 需在 ready 方法中初始化 bar 各属性的初始值。 
+    - 交互协议：
+        - URL：`app://navigation.bar/?isHidden=...&title=...&titleColor=...`
+
+
+#### 4.6 login(*callback*)
+
+- 接口说明：
+
+    当 HTML 页面需要调用 App 的 `登录` 功能时，调用此接口。
+
+- 参数说明：
+
+    | **Name**       | **Type**    | **Description** |
+    | :------------- | :---------- | :-------------- |
+    | callback       | Function    | 可选。登录回调函数，用户返回登录结果 |
+
+    - callback 函数参数：
+    
+    | **Name**       | **Type**    | **Description** |
+    | :------------- | :---------- | :-------------- |
+    | success        | Bool        | 是否登录成功。 |
+
+    <font size=2>* 请通过 [omApp.currentUser](#44-currentuser) 来获取当前已登录用户信息。</font>
+
+
+- 代码示例：
+
+    ``` 
+    // 调起 App 的登录流程
+    omApp.login(function(success) {
+        if (success) {
+            // do suceess actions.
+        } else {
+            // do something when failed.
+        }
+    });
+    ```
+
+- 基于 URL 的交互方式：
+    
+    - URL： `app://login/?callbackID=...`
+
+    - 回调： `omApp.didFinishLogin(callbackID, success)`
+
+        | Name         | Type   | Description |
+        | :----------- | :----- | :--------- |
+        | callbackID   | String | url 中的 callbackID |
+        | success      | Bool   | 登录是否成功 |
+
+
+#### 4.7 network
+
+- 接口说明：
+
+    只读，非空，Object 类型。判断是否可联网 `isReachable` 属性来确定。
+
+- 属性说明：
+    
+    | **Name**        | **Type**        | **Description** |
+    | :-------------- | :-------------- | :-------------- |
+    | isReachable     | Bool            | 只读。是否能联网。  |
+    | isViaWiFi       | Bool            | 只读。是否是 WiFi 。  |
+    | type            | OMAppNetworkType   | 只读。见 [OMAppNetworkType枚举](#OMAppNetworkType)  |
+
+
+- <a name="OMAppNetworkType">***OMAppNetworkType*枚举**</a>
+
+    | **Name**                       | **Type**    | **Description** |
+    | :----------------------------- | :---------- | :-------------- |
+    | *OMAppNetworkType.**none***    | String      | 无网络           |
+    | *OMAppNetworkType.**WiFi***    | String      | WiFi            |
+    | *OMAppNetworkType.WWan**2G***  | String      | 蜂窝网 2G        |
+    | *OMAppNetworkType.WWan**3G***  | String      | 蜂窝网 3G        |
+    | *OMAppNetworkType.WWan**4G***  | String      | 蜂窝网 4G      |
+    | *OMAppNetworkType.**unknown*** | String      | 未知的联网方式  |
+
+
+- 代码示例：
+
+    ```
+    // 判断是否联网
+    if (omApp.network.isReachable) {
+        // 已联网
+    } else {
+        // 未联网
+    }
+    // 判断是否 WiFi
+    if (omApp.network.isViaWiFi) {
+        // 正通过 Wi-Fi 上网
+    }
+    // 显示网络类型
+    document.getElementById("app_network_type").innerHTML = omApp.network.type;
+    ```
+
+- 交互说明：
+    
+    - App 需在 ready 消息中初始化 `omApp.network.type` 的值。
+    - 后期考虑加入网络变化 `change` 事件，暂不支持。
+
+
+#### 4.8 http(*request*, *callback*)
 
 - 接口说明：
 
@@ -521,7 +526,39 @@ HTML 页面通过 App 提供 JavaScript 接口，来实现对 App 功能的访�
         ```
 
 
-#### 4.8 alert(*message*, *callback*)
+#### 4.9 analytics 
+
+- 接口说明：
+
+    App 统计分析模块。
+
+##### 4.9.1 analytics.track(*event*, *parameters*)
+
+- 接口说明：
+
+    记录一条用户行为。
+
+- 参数说明：
+
+    | **Name**     | **Type**    | **Description** |
+    | :----------- | :---------- | :-------------- |
+    | event        | String      | 必选，非空。统计名称 |
+    | parameters   | Object      | 可选。额外参数 *Key-Value* 为基本数据类型 |
+
+- 代码示例：
+
+    ```
+    // 例如：统计 click 。
+    omApp.analytics.track("click");
+    // 例如：统计 read 。
+    omApp.analytics.track("read", {"id": "2", "type": "news"});
+    ```
+
+- 交互说明：
+
+    - URL： `app://analytics.track/?event=...&parameters={...}`
+
+#### 4.10 alert(*message*, *callback*)
 
 - 接口说明：
 
@@ -584,54 +621,71 @@ HTML 页面通过 App 提供 JavaScript 接口，来实现对 App 功能的访�
         ```
 
 
-#### 4.9 network
+#### 4.11 open(*path*) 
 
 - 接口说明：
 
-    只读，非空，Object 类型。判断是否可联网 `isReachable` 属性来确定。
+    当 HTML 页面需要跳转到 App 其它界面时，调用此接口。
 
-- 属性说明：
+- 参数说明：
+
+    | **Name**    | **Type**    | **Description** |
+    | :---------- | :---------- | :-------------- |
+    | path        | String      | 必选。页面路径 |
+
+- <a name="OMAppPage">***OMAppPage*枚举及相关参数**</a>
+
+    1. 页面路径指的是从 App 首页进入到目标页面所经过路径。
+    2. 页面路径用斜线（/）分割，类似于URL路径。
+    3. 常用路径示例：
+        - 新闻：news
+        - 新闻频道：news/2
+        - 新闻详情：news/0/9453
+    1. 新闻：*OMAppPage.**news***
+
+        | Name           | Type        | Description     | 
+        | :------------- | :---------- | :-------------- |
+        | categoryID     | String      | 可选。栏目 ID     |
+        | id             | String      | 可选。新闻 ID     |
+        | action         | String      | 可选。follow     |
+ 
+    2. 视频：*OMAppPage.**video***
+  
+        | Name           | Type        | Description     | 
+        | :------------- | :---------- | :-------------- |
+        | categoryID     | String      | 可选。栏目 ID     |
+        | id             | String      | 可选。视频 ID     |
+        | action         | String      | 可选。follow     |
+ 
+    3. 金币商城：*OMAppPage.**mall***
+    4. 金币任务：*OMAppPage.**task***
+    5. 内置Web页面：*OMAppPage.**web***
     
-    | **Name**        | **Type**        | **Description** |
-    | :-------------- | :-------------- | :-------------- |
-    | isReachable     | Bool            | 只读。是否能联网。  |
-    | isViaWiFi       | Bool            | 只读。是否是 WiFi 。  |
-    | type            | OMAppNetworkType   | 只读。见 [OMAppNetworkType枚举](#OMAppNetworkType)  |
-
-
-- <a name="OMAppNetworkType">***OMAppNetworkType*枚举**</a>
-
-    | **Name**                       | **Type**    | **Description** |
-    | :----------------------------- | :---------- | :-------------- |
-    | *OMAppNetworkType.**none***    | String      | 无网络           |
-    | *OMAppNetworkType.**WiFi***    | String      | WiFi            |
-    | *OMAppNetworkType.WWan**2G***  | String      | 蜂窝网 2G        |
-    | *OMAppNetworkType.WWan**3G***  | String      | 蜂窝网 3G        |
-    | *OMAppNetworkType.WWan**4G***  | String      | 蜂窝网 4G      |
-    | *OMAppNetworkType.**unknown*** | String      | 未知的联网方式  |
-
+        | Name           | Type        | Description     | 
+        | :------------  | :---------- | :-------------- |
+        | url            | String      | 必选。网址        |
 
 - 代码示例：
 
     ```
-    // 判断是否联网
-    if (omApp.network.isReachable) {
-        // 已联网
-    } else {
-        // 未联网
-    }
-    // 判断是否 WiFi
-    if (omApp.network.isViaWiFi) {
-        // 正通过 Wi-Fi 上网
-    }
-    // 显示网络类型
-    document.getElementById("app_network_type").innerHTML = omApp.network.type;
+    // 打开金币商城页
+    omApp.open(OMAppPage.mall); 
+    // 打开金币任务页
+    omApp.open(OMAppPage.task); 
     ```
 
-- 交互说明：
+- 基于 URL 的交互方式：
     
-    - App 需在 ready 消息中初始化 `omApp.network.type` 的值。
-    - 后期考虑加入网络变化 `change` 事件，暂不支持。
+    - URL： `app://open/?page=...`
+
+
+
+
+
+
+
+
+
 
 
 ***
@@ -642,42 +696,11 @@ HTML 页面通过 App 提供 JavaScript 接口，来实现对 App 功能的访�
 
 ### 1. 如何在桌面浏览器中测试某个页面已登陆后的情况？
 
-omApp 提供的 http 方法，在浏览器中，默认没有附带用户登录状态信息（user_token) ，所以获取不到已登陆后用户的数据。在这种情况下，可以在浏览器地址栏的 URL 后拼接用户真实 user_token 参数，再次加载页面即可。
+在桌面浏览器中，omApp 提供的 http 方法，是通过 ajax 发送网络请求的。可以通过 `omApp.debug` 方法设置 ajax 请求默认 headers 和请求参数。
 
 ### 2. 如何在桌面浏览器中设置 omApp 的初始属性？
 
 可通过 omApp.debug() 函数，在调用 ready 函数之前，设置 omApp 的配置信息。omApp.debug 函数只在浏览器环境中才会生效。
-```
-// 设置调试信息。
-omApp.debug({
-    currentTheme: OMAppTheme.night,
-    currentUser: {
-        id: "09",
-        name: "John",
-        type: OMAppUserType.facebook,
-        coin: 1000,
-        token: "Test"
-    },
-    network: {
-        type: OMAppNetworkType.unknown,
-        ajaxSettings: {
-            headers: {
-                "Access-Token": "OMApp",
-                "User-Token": "Onemena"
-            },
-            data: { }
-        }
-    },
-    navigation: {
-        bar: {
-            title: "Onemena",
-            titleColor: "#FFFFFF",
-            backgroundColor: "#000000",
-            isHidden: false
-        }
-    }
-});
-```
 
 ### 3. omApp 在 IDE 中的自动补全功能。
 

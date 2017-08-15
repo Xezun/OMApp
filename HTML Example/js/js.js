@@ -122,6 +122,7 @@ omApp.ready(function() {
             console.log("network.isReachable:" + omApp.network.isReachable);
             console.log("network.type:" + omApp.network.type);
         });
+
 	});
 
 });

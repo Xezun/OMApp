@@ -1027,25 +1027,26 @@ body .markdown-body
 <li><a href="#2">2. 接口获取方式</a></li>
 <li><a href="#3">3. 开发调试</a></li>
 <li><a href="#4">4. 接口列表</a><ul>
-<li><a href="#40-readycallback">4.0 ready(callback)</a></li>
-<li><a href="#41-logincallback">4.1 login(callback)</a></li>
-<li><a href="#42-openpage-parameters">4.2 open(page, parameters) [暂未启用]</a></li>
-<li><a href="#43-navigation">4.3 navigation</a><ul>
-<li><a href="#431-navigationpushurl-animated">4.3.1 navigation.push(url, animated)</a></li>
-<li><a href="#432-navigationpopanimated">4.3.2 navigation.pop(animated)</a></li>
-<li><a href="#433-navigationpoptoindex-animated">4.3.3 navigation.popTo(index, animated)</a></li>
-<li><a href="#434-navigationbar">4.3.4 navigation.bar</a></li>
+<li><a href="#41-debugconfiguration">4.1 debug(configuration)</a></li>
+<li><a href="#42-readycallback">4.2 ready(callback)</a></li>
+<li><a href="#43-currenttheme">4.3 currentTheme</a></li>
+<li><a href="#44-currentuser">4.4 currentUser</a></li>
+<li><a href="#45-navigation">4.5 navigation</a><ul>
+<li><a href="#451-navigationpushurl-animated">4.5.1 navigation.push(url, animated)</a></li>
+<li><a href="#452-navigationpopanimated">4.5.2 navigation.pop(animated)</a></li>
+<li><a href="#453-navigationpoptoindex-animated">4.5.3 navigation.popTo(index, animated)</a></li>
+<li><a href="#454-navigationbar">4.5.4 navigation.bar</a></li>
 </ul>
 </li>
-<li><a href="#44-currenttheme">4.4 currentTheme</a></li>
-<li><a href="#45-analytics">4.5 analytics</a><ul>
-<li><a href="#451-analyticstrackevent-parameters">4.5.1 analytics.track(event, parameters)</a></li>
+<li><a href="#46-logincallback">4.6 login(callback)</a></li>
+<li><a href="#47-network">4.7 network</a></li>
+<li><a href="#48-httprequest-callback">4.8 http(request, callback)</a></li>
+<li><a href="#49-analytics">4.9 analytics</a><ul>
+<li><a href="#491-analyticstrackevent-parameters">4.9.1 analytics.track(event, parameters)</a></li>
 </ul>
 </li>
-<li><a href="#46-currentuser">4.6 <a name="currentUser">currentUser</a></a></li>
-<li><a href="#47-httprequest-callback">4.7 http(request, callback)</a></li>
-<li><a href="#48-alertmessage-callback">4.8 alert(message, callback)</a></li>
-<li><a href="#49-network">4.9 network</a></li>
+<li><a href="#410-alertmessage-callback">4.10 alert(message, callback)</a></li>
+<li><a href="#411-openpage-parameters">4.11 open(page, parameters) [暂未启用]</a></li>
 </ul>
 </li>
 </ul>
@@ -1114,7 +1115,66 @@ console.log(window.omApp);
 <li>请尽量保持 <code>OMApp.js</code> 为最新版本。</li>
 </ul>
 <h3 id="4"><a name="user-content-4" href="#4" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4. 接口列表</h3>
-<h4 id="40-readycallback"><a name="user-content-40-readycallback" href="#40-readycallback" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.0 ready(<em>callback</em>)</h4>
+<h4 id="41-debugconfiguration"><a name="user-content-41-debugconfiguration" href="#41-debugconfiguration" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.1 debug(<em>configuration</em>)</h4>
+<ul>
+<li>
+<p>接口说明：<br />
+    为了方便在浏览器中开发调试，通过此接口设置 <code>omApp</code>对象的初始值。此接口只在浏览器中生效，在 App 中不执行任何操作。需在调用 <code>omApp</code> 对象之前设置，否则不生效。</p>
+</li>
+<li>
+<p>参数说明：</p>
+<table>
+<thead>
+<tr>
+<th><strong>Name</strong></th>
+<th><strong>Type</strong></th>
+<th><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>configuration</td>
+<td>Object</td>
+<td>一个结构类似 omApp 的数据对象</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>代码示例：<br />
+<pre><code>// omApp 初始化配置参数。
+omApp.debug({
+    currentTheme: OMAppTheme.night,     // 主题
+    currentUser: {                      // 当前用户
+        id: &quot;09&quot;,
+        name: &quot;John&quot;,
+        type: OMAppUserType.facebook,
+        coin: 1000,
+        token: &quot;Test&quot;
+    },
+    network: {
+        type: OMAppNetworkType.unknown, // 网络类型
+        ajaxSettings: {                 // 网络请求默认配置
+            headers: {
+                &quot;Access-Token&quot;: &quot;OMApp&quot;,
+                &quot;User-Token&quot;: &quot;Onemena&quot;
+            },
+            data: { }
+        }
+    },
+    navigation: {                       // 导航初始状态
+        bar: {
+            title: &quot;Onemena&quot;,
+            titleColor: &quot;#FFFFFF&quot;,
+            backgroundColor: &quot;#000000&quot;,
+            isHidden: false
+        }
+    }
+});
+</code></pre></p>
+</li>
+</ul>
+<h4 id="42-readycallback"><a name="user-content-42-readycallback" href="#42-readycallback" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.2 ready(<em>callback</em>)</h4>
 <pre><code>2017-07-27： 新增接口。
 </code></pre>
 <ul>
@@ -1190,424 +1250,7 @@ omApp.ready(function () {
 </ul>
 </li>
 </ul>
-<h4 id="41-logincallback"><a name="user-content-41-logincallback" href="#41-logincallback" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.1 login(<em>callback</em>)</h4>
-<ul>
-<li>
-<p>接口说明：</p>
-<p>当 HTML 页面需要调用 App 的 <code>登录</code> 功能时，调用此接口。</p>
-</li>
-<li>
-<p>参数说明：</p>
-<table>
-<thead>
-<tr>
-<th><strong>Name</strong></th>
-<th><strong>Type</strong></th>
-<th><strong>Description</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>callback</td>
-<td>Function</td>
-<td>可选。登录回调函数，用户返回登录结果</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li>callback 函数参数：</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th><strong>Name</strong></th>
-<th><strong>Type</strong></th>
-<th><strong>Description</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>success</td>
-<td>Bool</td>
-<td>是否登录成功。</td>
-</tr>
-</tbody>
-</table>
-<p><font size=2>* 请通过 <a href="#currentUser">omApp.currentUser</a> 来获取当前已登录用户信息。</font></p>
-</li>
-<li>
-<p>代码示例：</p>
-<pre><code>// 调起 App 的登录流程
-omApp.login(function(success) {
-    if (success) {
-        // do suceess actions.
-    } else {
-        // do something when failed.
-    }
-});
-</code></pre>
-
-</li>
-<li>
-<p>基于 URL 的交互方式：</p>
-<ul>
-<li>
-<p>URL： <code>app://login/?callbackID=...</code></p>
-</li>
-<li>
-<p>回调： <code>omApp.didFinishLogin(callbackID, success)</code></p>
-<table>
-<thead>
-<tr>
-<th>Name</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>callbackID</td>
-<td>String</td>
-<td>url 中的 callbackID</td>
-</tr>
-<tr>
-<td>success</td>
-<td>Bool</td>
-<td>登录是否成功</td>
-</tr>
-</tbody>
-</table>
-</li>
-</ul>
-</li>
-</ul>
-<h4 id="42-openpage-parameters"><a name="user-content-42-openpage-parameters" href="#42-openpage-parameters" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.2 open(<em>page</em>, <em>parameters</em>) [暂未启用]</h4>
-<ul>
-<li>
-<p>接口说明：</p>
-<p>当 HTML 页面需要跳转到 App 其它界面时，调用此接口。</p>
-</li>
-<li>
-<p>参数说明：</p>
-<table>
-<thead>
-<tr>
-<th><strong>Name</strong></th>
-<th><strong>Type</strong></th>
-<th><strong>Description</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>page</td>
-<td>OMAppPage</td>
-<td>必选。见 <a href="#OMAppPage">OMAppPage枚举</a></td>
-</tr>
-<tr>
-<td>parameters</td>
-<td>Object</td>
-<td>可选。见 <a href="#OMAppPage">OMAppPage枚举</a></td>
-</tr>
-</tbody>
-</table>
-</li>
-<li>
-<p><a name="OMAppPage"><strong><em>OMAppPage</em>枚举</strong></a></p>
-<ol>
-<li>
-<p>新闻列表：<em>OMAppPage.<strong>newsList</strong></em></p>
-<table>
-<thead>
-<tr>
-<th>Name</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>id</td>
-<td>String</td>
-<td>新闻栏目 ID</td>
-</tr>
-</tbody>
-</table>
-</li>
-<li>
-<p>新闻详情：<em>OMAppPage.<strong>newsDetail</strong></em></p>
-<table>
-<thead>
-<tr>
-<th>Name</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>id</td>
-<td>String</td>
-<td>新闻 ID</td>
-</tr>
-</tbody>
-</table>
-</li>
-<li>
-<p>视频列表：<em>OMAppPage.<strong>videoList</strong></em></p>
-<table>
-<thead>
-<tr>
-<th>Name</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>id</td>
-<td>String</td>
-<td>视频栏目 ID</td>
-</tr>
-</tbody>
-</table>
-</li>
-<li>
-<p>视频详情：<em>OMAppPage.<strong>videoDetail</strong></em></p>
-<table>
-<thead>
-<tr>
-<th>Name</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>id</td>
-<td>String</td>
-<td>视频 ID</td>
-</tr>
-</tbody>
-</table>
-</li>
-<li>
-<p>金币商城：<em>OMAppPage.<strong>mall</strong></em></p>
-</li>
-<li>
-<p>金币任务：<em>OMAppPage.<strong>task</strong></em></p>
-</li>
-</ol>
-</li>
-<li>
-<p>代码示例：</p>
-<pre><code>// 打开金币商城页
-omApp.open(OMAppPage.mall); 
-// 打开金币任务页
-omApp.open(OMAppPage.task); 
-</code></pre>
-
-</li>
-<li>
-<p>基于 URL 的交互方式：</p>
-<ul>
-<li>URL： <code>app://open/?page=...</code></li>
-</ul>
-</li>
-</ul>
-<h4 id="43-navigation"><a name="user-content-43-navigation" href="#43-navigation" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.3 navigation</h4>
-<ul>
-<li>
-<p>接口说明：</p>
-<p>Object，只读，非空。<br />
-为了使 HTML 提供类似原生 App 的操作体验，<code>navigation</code> 接口给 HTML 提供了创建新窗口的能，并通过 <code>导航栈</code> 来管理这一系列窗口。</p>
-</li>
-</ul>
-<h5 id="431-navigationpushurl-animated"><a name="user-content-431-navigationpushurl-animated" href="#431-navigationpushurl-animated" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.3.1 navigation.push(<em>url</em>, <em>animated</em>)</h5>
-<ul>
-<li>
-<p>接口说明：</p>
-<p>创建一个新窗口并打开指定 URL，常用于导航到下级页面。新窗口将压入到导航栈顶。</p>
-</li>
-<li>
-<p>参数说明：</p>
-<table>
-<thead>
-<tr>
-<th><strong>Name</strong></th>
-<th><strong>Type</strong></th>
-<th><strong>Description</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>url</td>
-<td>String</td>
-<td>必选。下级页面的 URL</td>
-</tr>
-<tr>
-<td>animated</td>
-<td>Bool</td>
-<td>可选。是否展示转场动画，默认 true</td>
-</tr>
-</tbody>
-</table>
-</li>
-<li>
-<p>代码示例：</p>
-<pre><code>omApp.navigation.push('http://8.dev.arabsada.com/'); 
-omApp.navigation.push('http://8.dev.arabsada.com/', true); 
-</code></pre>
-
-</li>
-<li>
-<p>基于 URL 的交互方式：</p>
-<ul>
-<li>URL： <code>app://navigation.push/?url=...&amp;animated=...</code></li>
-</ul>
-</li>
-</ul>
-<h5 id="432-navigationpopanimated"><a name="user-content-432-navigationpopanimated" href="#432-navigationpopanimated" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.3.2 navigation.pop(<em>animated</em>)</h5>
-<ul>
-<li>
-<p>接口说明：</p>
-<p>关闭当前窗口，并返回到上一个窗口，常用于返回到上级页面。当前窗口从导航栈中弹出。</p>
-</li>
-<li>
-<p>参数说明：</p>
-<table>
-<thead>
-<tr>
-<th><strong>Name</strong></th>
-<th><strong>Type</strong></th>
-<th><strong>Description</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>animated</td>
-<td>Bool</td>
-<td>可选。是否展示转场动画，默认 true</td>
-</tr>
-</tbody>
-</table>
-</li>
-<li>
-<p>代码示例：</p>
-<pre><code>omApp.navigation.pop(true); 
-</code></pre>
-
-</li>
-<li>
-<p>基于 URL 的交互方式：</p>
-<ul>
-<li>URL：<code>app://navigation.pop/?animated=...</code></li>
-</ul>
-</li>
-</ul>
-<h5 id="433-navigationpoptoindex-animated"><a name="user-content-433-navigationpoptoindex-animated" href="#433-navigationpoptoindex-animated" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.3.3 navigation.popTo(<em>index</em>, <em>animated</em>)</h5>
-<ul>
-<li>
-<p>接口说明：</p>
-<p>返回到导航栈内指定级页面。如果当前导航栈内已经有很多页面，此方法可以快速回到指定页面。</p>
-</li>
-<li>
-<p>参数说明：</p>
-<table>
-<thead>
-<tr>
-<th><strong>Name</strong></th>
-<th><strong>Type</strong></th>
-<th><strong>Description</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>index</td>
-<td>Int</td>
-<td>必选。正数，目的页面所在的位置索引，0 为第一个 HTML 页面</td>
-</tr>
-<tr>
-<td>animated</td>
-<td>Bool</td>
-<td>可选。是否展示转场动画，默认 true</td>
-</tr>
-</tbody>
-</table>
-</li>
-<li>
-<p>代码示例：</p>
-<pre><code>omApp.navigation.popTo(0, true);
-</code></pre>
-
-</li>
-<li>
-<p>基于 URL 的交互方式：</p>
-<ul>
-<li>URL：<code>app://navigation.popto/?index=...&amp;animated=...</code></li>
-</ul>
-</li>
-</ul>
-<h5 id="434-navigationbar"><a name="user-content-434-navigationbar" href="#434-navigationbar" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.3.4 navigation.bar</h5>
-<ul>
-<li>
-<p>接口说明：</p>
-<p>只读，Object。代表了 App 的原生导航条对象。通过此对象，可以控制导航条的外观。</p>
-</li>
-<li>
-<p>属性说明：</p>
-<table>
-<thead>
-<tr>
-<th><strong>Name</strong></th>
-<th><strong>Type</strong></th>
-<th><strong>Description</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>isHidden</td>
-<td>Bool</td>
-<td>导航条是否隐藏</td>
-</tr>
-<tr>
-<td>title</td>
-<td>String</td>
-<td>标题</td>
-</tr>
-<tr>
-<td>titleColor</td>
-<td>String</td>
-<td>标题颜色</td>
-</tr>
-<tr>
-<td>backgroundColor</td>
-<td>String</td>
-<td>背景色</td>
-</tr>
-</tbody>
-</table>
-</li>
-<li>
-<p>代码示例：</p>
-<pre><code>omApp.navigation.bar.isHidden = false;
-omApp.navigation.bar.title = '自定义的标题';
-omApp.navigation.bar.titleColor = '#FF0000';
-omApp.navigation.bar.backgroundColor = '#0000FF';
-</code></pre>
-
-</li>
-<li>
-<p>交互说明：</p>
-<ul>
-<li>基于 URL 的交互方式 App 需在 ready 方法中初始化 bar 各属性的初始值。 </li>
-<li>交互协议：<ul>
-<li>URL：<code>app://navigation.bar/?isHidden=...&amp;title=...&amp;titleColor=...</code></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h4 id="44-currenttheme"><a name="user-content-44-currenttheme" href="#44-currenttheme" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.4 currentTheme</h4>
+<h4 id="43-currenttheme"><a name="user-content-43-currenttheme" href="#43-currenttheme" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.3 currentTheme</h4>
 <pre><code>变更日志：
 2017-06-17： `theme` -&gt; `currentTheme`
 </code></pre>
@@ -1665,60 +1308,7 @@ omApp.navigation.bar.backgroundColor = '#0000FF';
 </ul>
 </li>
 </ul>
-<h4 id="45-analytics"><a name="user-content-45-analytics" href="#45-analytics" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.5 analytics</h4>
-<ul>
-<li>
-<p>接口说明：</p>
-<p>App 统计分析模块。</p>
-</li>
-</ul>
-<h5 id="451-analyticstrackevent-parameters"><a name="user-content-451-analyticstrackevent-parameters" href="#451-analyticstrackevent-parameters" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.5.1 analytics.track(<em>event</em>, <em>parameters</em>)</h5>
-<ul>
-<li>
-<p>接口说明：</p>
-<p>记录一条用户行为。</p>
-</li>
-<li>
-<p>参数说明：</p>
-<table>
-<thead>
-<tr>
-<th><strong>Name</strong></th>
-<th><strong>Type</strong></th>
-<th><strong>Description</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>event</td>
-<td>String</td>
-<td>必选，非空。统计名称</td>
-</tr>
-<tr>
-<td>parameters</td>
-<td>Object</td>
-<td>可选。额外参数 <em>Key-Value</em> 为基本数据类型</td>
-</tr>
-</tbody>
-</table>
-</li>
-<li>
-<p>代码示例：</p>
-<pre><code>// 例如：统计 click 。
-omApp.analytics.track(&quot;click&quot;);
-// 例如：统计 read 。
-omApp.analytics.track(&quot;read&quot;, {&quot;id&quot;: &quot;2&quot;, &quot;type&quot;: &quot;news&quot;});
-</code></pre>
-
-</li>
-<li>
-<p>交互说明：</p>
-<ul>
-<li>URL： <code>app://analytics.track/?event=...&amp;parameters={...}</code></li>
-</ul>
-</li>
-</ul>
-<h4 id="46-currentuser"><a name="user-content-46-currentuser" href="#46-currentuser" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.6 <a name="currentUser">currentUser</a></h4>
+<h4 id="44-currentuser"><a name="user-content-44-currentuser" href="#44-currentuser" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.4 currentUser</h4>
 <ul>
 <li>
 <p>接口说明：</p>
@@ -1825,7 +1415,395 @@ var userName = omApp.currentUser.name;
 </ul>
 </li>
 </ul>
-<h4 id="47-httprequest-callback"><a name="user-content-47-httprequest-callback" href="#47-httprequest-callback" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.7 http(<em>request</em>, <em>callback</em>)</h4>
+<h4 id="45-navigation"><a name="user-content-45-navigation" href="#45-navigation" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.5 navigation</h4>
+<ul>
+<li>
+<p>接口说明：</p>
+<p>Object，只读，非空。<br />
+为了使 HTML 提供类似原生 App 的操作体验，<code>navigation</code> 接口给 HTML 提供了创建新窗口的能，并通过 <code>导航栈</code> 来管理这一系列窗口。</p>
+</li>
+</ul>
+<h5 id="451-navigationpushurl-animated"><a name="user-content-451-navigationpushurl-animated" href="#451-navigationpushurl-animated" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.5.1 navigation.push(<em>url</em>, <em>animated</em>)</h5>
+<ul>
+<li>
+<p>接口说明：</p>
+<p>创建一个新窗口并打开指定 URL，常用于导航到下级页面。新窗口将压入到导航栈顶。</p>
+</li>
+<li>
+<p>参数说明：</p>
+<table>
+<thead>
+<tr>
+<th><strong>Name</strong></th>
+<th><strong>Type</strong></th>
+<th><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>url</td>
+<td>String</td>
+<td>必选。下级页面的 URL</td>
+</tr>
+<tr>
+<td>animated</td>
+<td>Bool</td>
+<td>可选。是否展示转场动画，默认 true</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>代码示例：</p>
+<pre><code>omApp.navigation.push('http://8.dev.arabsada.com/'); 
+omApp.navigation.push('http://8.dev.arabsada.com/', true); 
+</code></pre>
+
+</li>
+<li>
+<p>基于 URL 的交互方式：</p>
+<ul>
+<li>URL： <code>app://navigation.push/?url=...&amp;animated=...</code></li>
+</ul>
+</li>
+</ul>
+<h5 id="452-navigationpopanimated"><a name="user-content-452-navigationpopanimated" href="#452-navigationpopanimated" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.5.2 navigation.pop(<em>animated</em>)</h5>
+<ul>
+<li>
+<p>接口说明：</p>
+<p>关闭当前窗口，并返回到上一个窗口，常用于返回到上级页面。当前窗口从导航栈中弹出。</p>
+</li>
+<li>
+<p>参数说明：</p>
+<table>
+<thead>
+<tr>
+<th><strong>Name</strong></th>
+<th><strong>Type</strong></th>
+<th><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>animated</td>
+<td>Bool</td>
+<td>可选。是否展示转场动画，默认 true</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>代码示例：</p>
+<pre><code>omApp.navigation.pop(true); 
+</code></pre>
+
+</li>
+<li>
+<p>基于 URL 的交互方式：</p>
+<ul>
+<li>URL：<code>app://navigation.pop/?animated=...</code></li>
+</ul>
+</li>
+</ul>
+<h5 id="453-navigationpoptoindex-animated"><a name="user-content-453-navigationpoptoindex-animated" href="#453-navigationpoptoindex-animated" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.5.3 navigation.popTo(<em>index</em>, <em>animated</em>)</h5>
+<ul>
+<li>
+<p>接口说明：</p>
+<p>返回到导航栈内指定级页面。如果当前导航栈内已经有很多页面，此方法可以快速回到指定页面。</p>
+</li>
+<li>
+<p>参数说明：</p>
+<table>
+<thead>
+<tr>
+<th><strong>Name</strong></th>
+<th><strong>Type</strong></th>
+<th><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>index</td>
+<td>Int</td>
+<td>必选。正数，目的页面所在的位置索引，0 为第一个 HTML 页面</td>
+</tr>
+<tr>
+<td>animated</td>
+<td>Bool</td>
+<td>可选。是否展示转场动画，默认 true</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>代码示例：</p>
+<pre><code>omApp.navigation.popTo(0, true);
+</code></pre>
+
+</li>
+<li>
+<p>基于 URL 的交互方式：</p>
+<ul>
+<li>URL：<code>app://navigation.popto/?index=...&amp;animated=...</code></li>
+</ul>
+</li>
+</ul>
+<h5 id="454-navigationbar"><a name="user-content-454-navigationbar" href="#454-navigationbar" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.5.4 navigation.bar</h5>
+<ul>
+<li>
+<p>接口说明：</p>
+<p>只读，Object。代表了 App 的原生导航条对象。通过此对象，可以控制导航条的外观。</p>
+</li>
+<li>
+<p>属性说明：</p>
+<table>
+<thead>
+<tr>
+<th><strong>Name</strong></th>
+<th><strong>Type</strong></th>
+<th><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>isHidden</td>
+<td>Bool</td>
+<td>导航条是否隐藏</td>
+</tr>
+<tr>
+<td>title</td>
+<td>String</td>
+<td>标题</td>
+</tr>
+<tr>
+<td>titleColor</td>
+<td>String</td>
+<td>标题颜色</td>
+</tr>
+<tr>
+<td>backgroundColor</td>
+<td>String</td>
+<td>背景色</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>代码示例：</p>
+<pre><code>omApp.navigation.bar.isHidden = false;
+omApp.navigation.bar.title = '自定义的标题';
+omApp.navigation.bar.titleColor = '#FF0000';
+omApp.navigation.bar.backgroundColor = '#0000FF';
+</code></pre>
+
+</li>
+<li>
+<p>交互说明：</p>
+<ul>
+<li>基于 URL 的交互方式 App 需在 ready 方法中初始化 bar 各属性的初始值。 </li>
+<li>交互协议：<ul>
+<li>URL：<code>app://navigation.bar/?isHidden=...&amp;title=...&amp;titleColor=...</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="46-logincallback"><a name="user-content-46-logincallback" href="#46-logincallback" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.6 login(<em>callback</em>)</h4>
+<ul>
+<li>
+<p>接口说明：</p>
+<p>当 HTML 页面需要调用 App 的 <code>登录</code> 功能时，调用此接口。</p>
+</li>
+<li>
+<p>参数说明：</p>
+<table>
+<thead>
+<tr>
+<th><strong>Name</strong></th>
+<th><strong>Type</strong></th>
+<th><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>callback</td>
+<td>Function</td>
+<td>可选。登录回调函数，用户返回登录结果</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>callback 函数参数：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th><strong>Name</strong></th>
+<th><strong>Type</strong></th>
+<th><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>success</td>
+<td>Bool</td>
+<td>是否登录成功。</td>
+</tr>
+</tbody>
+</table>
+<p><font size=2>* 请通过 <a href="#44-currentuser">omApp.currentUser</a> 来获取当前已登录用户信息。</font></p>
+</li>
+<li>
+<p>代码示例：</p>
+<pre><code>// 调起 App 的登录流程
+omApp.login(function(success) {
+    if (success) {
+        // do suceess actions.
+    } else {
+        // do something when failed.
+    }
+});
+</code></pre>
+
+</li>
+<li>
+<p>基于 URL 的交互方式：</p>
+<ul>
+<li>
+<p>URL： <code>app://login/?callbackID=...</code></p>
+</li>
+<li>
+<p>回调： <code>omApp.didFinishLogin(callbackID, success)</code></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>callbackID</td>
+<td>String</td>
+<td>url 中的 callbackID</td>
+</tr>
+<tr>
+<td>success</td>
+<td>Bool</td>
+<td>登录是否成功</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="47-network"><a name="user-content-47-network" href="#47-network" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.7 network</h4>
+<ul>
+<li>
+<p>接口说明：</p>
+<p>只读，非空，Object 类型。判断是否可联网 <code>isReachable</code> 属性来确定。</p>
+</li>
+<li>
+<p>属性说明：</p>
+<table>
+<thead>
+<tr>
+<th><strong>Name</strong></th>
+<th><strong>Type</strong></th>
+<th><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>isReachable</td>
+<td>Bool</td>
+<td>只读。是否能联网。</td>
+</tr>
+<tr>
+<td>isViaWiFi</td>
+<td>Bool</td>
+<td>只读。是否是 WiFi 。</td>
+</tr>
+<tr>
+<td>type</td>
+<td>OMAppNetworkType</td>
+<td>只读。见 <a href="#OMAppNetworkType">OMAppNetworkType枚举</a></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p><a name="OMAppNetworkType"><strong><em>OMAppNetworkType</em>枚举</strong></a></p>
+<table>
+<thead>
+<tr>
+<th><strong>Name</strong></th>
+<th><strong>Type</strong></th>
+<th><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><em>OMAppNetworkType.<strong>none</strong></em></td>
+<td>String</td>
+<td>无网络</td>
+</tr>
+<tr>
+<td><em>OMAppNetworkType.<strong>WiFi</strong></em></td>
+<td>String</td>
+<td>WiFi</td>
+</tr>
+<tr>
+<td><em>OMAppNetworkType.WWan<strong>2G</strong></em></td>
+<td>String</td>
+<td>蜂窝网 2G</td>
+</tr>
+<tr>
+<td><em>OMAppNetworkType.WWan<strong>3G</strong></em></td>
+<td>String</td>
+<td>蜂窝网 3G</td>
+</tr>
+<tr>
+<td><em>OMAppNetworkType.WWan<strong>4G</strong></em></td>
+<td>String</td>
+<td>蜂窝网 4G</td>
+</tr>
+<tr>
+<td><em>OMAppNetworkType.<strong>unknown</strong></em></td>
+<td>String</td>
+<td>未知的联网方式</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>代码示例：</p>
+<pre><code>// 判断是否联网
+if (omApp.network.isReachable) {
+    // 已联网
+} else {
+    // 未联网
+}
+// 判断是否 WiFi
+if (omApp.network.isViaWiFi) {
+    // 正通过 Wi-Fi 上网
+}
+// 显示网络类型
+document.getElementById(&quot;app_network_type&quot;).innerHTML = omApp.network.type;
+</code></pre>
+
+</li>
+<li>
+<p>交互说明：</p>
+<ul>
+<li>App 需在 ready 消息中初始化 <code>omApp.network.type</code> 的值。</li>
+<li>后期考虑加入网络变化 <code>change</code> 事件，暂不支持。</li>
+</ul>
+</li>
+</ul>
+<h4 id="48-httprequest-callback"><a name="user-content-48-httprequest-callback" href="#48-httprequest-callback" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.8 http(<em>request</em>, <em>callback</em>)</h4>
 <ul>
 <li>
 <p>接口说明：</p>
@@ -1997,7 +1975,60 @@ omApp.didFinishHTTPRequest(callbackID, true, 'anEncodedString', 'application/jso
 </ul>
 </li>
 </ul>
-<h4 id="48-alertmessage-callback"><a name="user-content-48-alertmessage-callback" href="#48-alertmessage-callback" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.8 alert(<em>message</em>, <em>callback</em>)</h4>
+<h4 id="49-analytics"><a name="user-content-49-analytics" href="#49-analytics" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.9 analytics</h4>
+<ul>
+<li>
+<p>接口说明：</p>
+<p>App 统计分析模块。</p>
+</li>
+</ul>
+<h5 id="491-analyticstrackevent-parameters"><a name="user-content-491-analyticstrackevent-parameters" href="#491-analyticstrackevent-parameters" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.9.1 analytics.track(<em>event</em>, <em>parameters</em>)</h5>
+<ul>
+<li>
+<p>接口说明：</p>
+<p>记录一条用户行为。</p>
+</li>
+<li>
+<p>参数说明：</p>
+<table>
+<thead>
+<tr>
+<th><strong>Name</strong></th>
+<th><strong>Type</strong></th>
+<th><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>event</td>
+<td>String</td>
+<td>必选，非空。统计名称</td>
+</tr>
+<tr>
+<td>parameters</td>
+<td>Object</td>
+<td>可选。额外参数 <em>Key-Value</em> 为基本数据类型</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>代码示例：</p>
+<pre><code>// 例如：统计 click 。
+omApp.analytics.track(&quot;click&quot;);
+// 例如：统计 read 。
+omApp.analytics.track(&quot;read&quot;, {&quot;id&quot;: &quot;2&quot;, &quot;type&quot;: &quot;news&quot;});
+</code></pre>
+
+</li>
+<li>
+<p>交互说明：</p>
+<ul>
+<li>URL： <code>app://analytics.track/?event=...&amp;parameters={...}</code></li>
+</ul>
+</li>
+</ul>
+<h4 id="410-alertmessage-callback"><a name="user-content-410-alertmessage-callback" href="#410-alertmessage-callback" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.10 alert(<em>message</em>, <em>callback</em>)</h4>
 <ul>
 <li>
 <p>接口说明：</p>
@@ -2131,14 +2162,14 @@ omApp.didSelectAlertActionAtIndex(callbackID, 0);
 </ul>
 </li>
 </ul>
-<h4 id="49-network"><a name="user-content-49-network" href="#49-network" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.9 network</h4>
+<h4 id="411-openpage-parameters"><a name="user-content-411-openpage-parameters" href="#411-openpage-parameters" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.11 open(<em>page</em>, <em>parameters</em>) [暂未启用]</h4>
 <ul>
 <li>
 <p>接口说明：</p>
-<p>只读，非空，Object 类型。判断是否可联网 <code>isReachable</code> 属性来确定。</p>
+<p>当 HTML 页面需要跳转到 App 其它界面时，调用此接口。</p>
 </li>
 <li>
-<p>属性说明：</p>
+<p>参数说明：</p>
 <table>
 <thead>
 <tr>
@@ -2149,89 +2180,107 @@ omApp.didSelectAlertActionAtIndex(callbackID, 0);
 </thead>
 <tbody>
 <tr>
-<td>isReachable</td>
-<td>Bool</td>
-<td>只读。是否能联网。</td>
+<td>page</td>
+<td>OMAppPage</td>
+<td>必选。见 <a href="#OMAppPage">OMAppPage枚举</a></td>
 </tr>
 <tr>
-<td>isViaWiFi</td>
-<td>Bool</td>
-<td>只读。是否是 WiFi 。</td>
-</tr>
-<tr>
-<td>type</td>
-<td>OMAppNetworkType</td>
-<td>只读。见 <a href="#OMAppNetworkType">OMAppNetworkType枚举</a></td>
+<td>parameters</td>
+<td>Object</td>
+<td>可选。见 <a href="#OMAppPage">OMAppPage枚举</a></td>
 </tr>
 </tbody>
 </table>
 </li>
 <li>
-<p><a name="OMAppNetworkType"><strong><em>OMAppNetworkType</em>枚举</strong></a></p>
+<p><a name="OMAppPage"><strong><em>OMAppPage</em>枚举及相关参数</strong></a></p>
+<ol>
+<li>
+<p>新闻：<em>OMAppPage.<strong>news</strong></em></p>
 <table>
 <thead>
 <tr>
-<th><strong>Name</strong></th>
-<th><strong>Type</strong></th>
-<th><strong>Description</strong></th>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><em>OMAppNetworkType.<strong>none</strong></em></td>
+<td>categoryID</td>
 <td>String</td>
-<td>无网络</td>
+<td>可选。栏目 ID</td>
 </tr>
 <tr>
-<td><em>OMAppNetworkType.<strong>WiFi</strong></em></td>
+<td>id</td>
 <td>String</td>
-<td>WiFi</td>
-</tr>
-<tr>
-<td><em>OMAppNetworkType.WWan<strong>2G</strong></em></td>
-<td>String</td>
-<td>蜂窝网 2G</td>
-</tr>
-<tr>
-<td><em>OMAppNetworkType.WWan<strong>3G</strong></em></td>
-<td>String</td>
-<td>蜂窝网 3G</td>
-</tr>
-<tr>
-<td><em>OMAppNetworkType.WWan<strong>4G</strong></em></td>
-<td>String</td>
-<td>蜂窝网 4G</td>
-</tr>
-<tr>
-<td><em>OMAppNetworkType.<strong>unknown</strong></em></td>
-<td>String</td>
-<td>未知的联网方式</td>
+<td>可选。新闻 ID</td>
 </tr>
 </tbody>
 </table>
+</li>
+<li>
+<p>视频：<em>OMAppPage.<strong>video</strong></em></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>categoryID</td>
+<td>String</td>
+<td>可选。栏目 ID</td>
+</tr>
+<tr>
+<td>id</td>
+<td>String</td>
+<td>可选。视频 ID</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>金币商城：<em>OMAppPage.<strong>mall</strong></em></p>
+</li>
+<li>金币任务：<em>OMAppPage.<strong>task</strong></em></li>
+<li>
+<p>内置Web页面：<em>OMAppPage.<strong>web</strong></em></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>url</td>
+<td>String</td>
+<td>必选。网址</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ol>
 </li>
 <li>
 <p>代码示例：</p>
-<pre><code>// 判断是否联网
-if (omApp.network.isReachable) {
-    // 已联网
-} else {
-    // 未联网
-}
-// 判断是否 WiFi
-if (omApp.network.isViaWiFi) {
-    // 正通过 Wi-Fi 上网
-}
-// 显示网络类型
-document.getElementById(&quot;app_network_type&quot;).innerHTML = omApp.network.type;
+<pre><code>// 打开金币商城页
+omApp.open(OMAppPage.mall); 
+// 打开金币任务页
+omApp.open(OMAppPage.task); 
 </code></pre>
 
 </li>
 <li>
-<p>交互说明：</p>
+<p>基于 URL 的交互方式：</p>
 <ul>
-<li>App 需在 ready 消息中初始化 <code>omApp.network.type</code> 的值。</li>
-<li>后期考虑加入网络变化 <code>change</code> 事件，暂不支持。</li>
+<li>URL： <code>app://open/?page=...</code></li>
 </ul>
 </li>
 </ul>
@@ -2239,39 +2288,9 @@ document.getElementById(&quot;app_network_type&quot;).innerHTML = omApp.network.
 <h2 id="html"><a name="user-content-html" href="#html" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>第二部分：HTML 开发调试</h2>
 <p>交互框架 <code>OMApp.js</code> 为桌面浏览器模拟了 <code>omApp</code> 对象的一些基本的功能和交互方式。</p>
 <h3 id="1_1"><a name="user-content-1_1" href="#1_1" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>1. 如何在桌面浏览器中测试某个页面已登陆后的情况？</h3>
-<p>omApp 提供的 http 方法，在浏览器中，默认没有附带用户登录状态信息（user_token) ，所以获取不到已登陆后用户的数据。在这种情况下，可以在浏览器地址栏的 URL 后拼接用户真实 user_token 参数，再次加载页面即可。</p>
+<p>在桌面浏览器中，omApp 提供的 http 方法，是通过 ajax 发送网络请求的。可以通过 <code>omApp.debug</code> 方法设置 ajax 请求默认 headers 和请求参数。</p>
 <h3 id="2-omapp"><a name="user-content-2-omapp" href="#2-omapp" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>2. 如何在桌面浏览器中设置 omApp 的初始属性？</h3>
-<p>可通过 omApp.debug() 函数，在调用 ready 函数之前，设置 omApp 的配置信息。omApp.debug 函数只在浏览器环境中才会生效。<br />
-<pre><code>// 设置调试信息。
-omApp.debug({
-    currentTheme: OMAppTheme.night,
-    currentUser: {
-        id: &quot;09&quot;,
-        name: &quot;John&quot;,
-        type: OMAppUserType.facebook,
-        coin: 1000,
-        token: &quot;Test&quot;
-    },
-    network: {
-        type: OMAppNetworkType.unknown,
-        ajaxSettings: {
-            headers: {
-                &quot;Access-Token&quot;: &quot;OMApp&quot;,
-                &quot;User-Token&quot;: &quot;Onemena&quot;
-            },
-            data: { }
-        }
-    },
-    navigation: {
-        bar: {
-            title: &quot;Onemena&quot;,
-            titleColor: &quot;#FFFFFF&quot;,
-            backgroundColor: &quot;#000000&quot;,
-            isHidden: false
-        }
-    }
-});
-</code></pre></p>
+<p>可通过 omApp.debug() 函数，在调用 ready 函数之前，设置 omApp 的配置信息。omApp.debug 函数只在浏览器环境中才会生效。</p>
 <h3 id="3-omapp-ide"><a name="user-content-3-omapp-ide" href="#3-omapp-ide" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>3. omApp 在 IDE 中的自动补全功能。</h3>
 <p>目前支持在 WebStorm 中自动补全和语法检查，将 OMApp/OMApp.d.ts 文件添加到 WebStorm &gt; Language &amp; Frameworks &gt; JavaScript &gt; Libraries 中即可。</p>
 <hr />

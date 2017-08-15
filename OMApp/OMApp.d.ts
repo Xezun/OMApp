@@ -1,12 +1,11 @@
-// Type definitions for OMApp 2.0.1
+// Type definitions for OMApp 2.0.2
 
 interface OMAppPage_Static {
-	mall: 			OMAppPage_Instance;
-	task: 			OMAppPage_Instance;
-	newsList: 		OMAppPage_Instance;
-	newsDetail: 	OMAppPage_Instance;
-	videoList:  	OMAppPage_Instance;
-	videoDetail: 	OMAppPage_Instance;
+	mall:      OMAppPage_Instance;
+	task:      OMAppPage_Instance;
+	news:      OMAppPage_Instance;
+	video:     OMAppPage_Instance;
+    web:       OMAppPage_Instance;
 }
 interface OMAppPage_Instance { }
 declare var OMAppPage: OMAppPage_Static;

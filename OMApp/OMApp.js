@@ -1,5 +1,5 @@
 // OMApp
-// Version: 2.0.0
+// Version: 2.0.2
 
 function _OMAppDefine(name, value) {
     if ("function" === typeof define && define.amd) {
@@ -14,12 +14,11 @@ if (!window.OMAppPage) {
 	var _OMAppPage = (function() {
 	    var _OMAppPageObject = {};
 		Object.defineProperties(_OMAppPageObject, {
-			mall: 			{ get: function() { return "mall";			} },
-			task: 			{ get: function() { return "task";			} },
-			newsList: 		{ get: function() { return "newsList";		} },
-			newsDetail: 	{ get: function() { return "newsDetail";	} },
-			videoList: 		{ get: function() { return "videoList";		} },
-			videoDetail: 	{ get: function() { return "videoDetail";	} }                  
+			mall:	{ get: function() { return "mall";	} },
+			task:	{ get: function() { return "task";	} },
+			news:	{ get: function() { return "news";	} },
+			video:	{ get: function() { return "video";	} },
+			web:	{ get: function() { return "web";	} }
 		});
 		return _OMAppPageObject;
 	})();
