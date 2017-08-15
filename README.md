@@ -636,34 +636,17 @@ omApp.debug({
 - <a name="OMAppPage">***OMAppPage*枚举及相关参数**</a>
 
     1. 页面路径指的是从 App 首页进入到目标页面所经过路径。
-    2. 页面路径用斜线（/）分割，类似于URL路径。
+    2. 页面路径用斜线（/）分割，类似于URL路径，值采用 URL 编码后的字符串。
     3. 常用路径示例：
         - 新闻：news
         - 新闻频道：news/2
         - 新闻详情：news/0/9453
-    1. 新闻：*OMAppPage.**news***
 
-        | Name           | Type        | Description     | 
-        | :------------- | :---------- | :-------------- |
-        | categoryID     | String      | 可选。栏目 ID     |
-        | id             | String      | 可选。新闻 ID     |
-        | action         | String      | 可选。follow     |
- 
+    1. 新闻：*OMAppPage.**news***
     2. 视频：*OMAppPage.**video***
-  
-        | Name           | Type        | Description     | 
-        | :------------- | :---------- | :-------------- |
-        | categoryID     | String      | 可选。栏目 ID     |
-        | id             | String      | 可选。视频 ID     |
-        | action         | String      | 可选。follow     |
- 
     3. 金币商城：*OMAppPage.**mall***
     4. 金币任务：*OMAppPage.**task***
     5. 内置Web页面：*OMAppPage.**web***
-    
-        | Name           | Type        | Description     | 
-        | :------------  | :---------- | :-------------- |
-        | url            | String      | 必选。网址        |
 
 - 代码示例：
 
@@ -676,7 +659,7 @@ omApp.debug({
 
 - 基于 URL 的交互方式：
     
-    - URL： `app://open/?page=...`
+    - URL： `app://open/?path=...`
 
 
 
