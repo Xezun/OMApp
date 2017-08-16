@@ -2168,7 +2168,7 @@ omApp.didSelectAlertActionAtIndex(callbackID, 0);
 <p>接口说明：</p>
 <ol>
 <li>当 HTML 页面需要跳转到 App 其它界面时，调用此接口。</li>
-<li>外面页面深度链接到 App 指定页面也适用此方法。</li>
+<li>基于 URL 的交互方式，适用于深度链接到 App 的 URL 规则。</li>
 </ol>
 </li>
 <li>
@@ -2197,7 +2197,7 @@ omApp.didSelectAlertActionAtIndex(callbackID, 0);
 </li>
 <li>
 <p><a name="OMAppPage"><strong><em>OMAppPage</em>枚举及相关参数</strong></a></p>
-<ol>
+<ul>
 <li>
 <p>新闻：<em>OMAppPage.<strong>news</strong></em></p>
 <table>
@@ -2271,7 +2271,86 @@ omApp.didSelectAlertActionAtIndex(callbackID, 0);
 </tbody>
 </table>
 </li>
-</ol>
+</ul>
+</li>
+<li>
+<p>适用于深度链接的额外参数：</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>actions</td>
+<td>Array<String></td>
+<td>可选。需执行的操作</td>
+</tr>
+<tr>
+<td>type</td>
+<td>String</td>
+<td>可选。页面跳转的来源</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>
+<p><code>action</code> 取值：</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>follow</td>
+<td>String</td>
+<td>关注。例如打开新闻详情页时，同时执行关注操作</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p><code>type</code> 取值：</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>web</td>
+<td>String</td>
+<td>默认，来自 App 内置 WebView 。</td>
+</tr>
+<tr>
+<td>push</td>
+<td>String</td>
+<td>推送。</td>
+</tr>
+<tr>
+<td>share</td>
+<td>String</td>
+<td>分享落地页。</td>
+</tr>
+<tr>
+<td>launch</td>
+<td>String</td>
+<td>App 启动页。</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
 </li>
 <li>
 <p>代码示例：</p>
@@ -2283,6 +2362,8 @@ omApp.open(OMAppPage.task);
 omApp.open(OMAppPage.news, {categoryID: &quot;1&quot;, id: &quot;9523&quot;});
 // 打开指定视频频道
 omApp.open(OMAppPage.video, {categoryID: &quot;5&quot;});
+// 打开指定网页
+omApp.open(OMAppPage.web, {url: &quot;http://www.baidu.com&quot;});
 </code></pre>
 
 </li>
@@ -2291,6 +2372,14 @@ omApp.open(OMAppPage.video, {categoryID: &quot;5&quot;});
 <ul>
 <li>URL： <code>app://open/?page=...&amp;parameters=...</code></li>
 </ul>
+</li>
+<li>
+<p>深度链接 URL 举例（HTML代码）：</p>
+<pre><code>&lt;!--  parameters 是 encodeURIComponent 后的 JSON 字符串。 --&gt;
+&lt;a href=&quot;anaween://open/?page=news&amp;parameters=%7B%22id%22%3A%20%221%22%2C%20%22categoryID%22%3A%20%220%22%2C%20%22type%22%3A%20%22share%22%7D&quot;&gt;在 App 中查看更多详情&lt;/a&gt;
+&lt;a href=&quot;anaween://open/?page=news&amp;parameters=%7B%22id%22%3A%20%221%22%2C%20%22categoryID%22%3A%20%220%22%2C%20%22actions%22%3A%20%5B%22follow%22%5D%2C%20%22type%22%3A%20%22share%22%7D&quot;&gt;在 App 中查看更多详情并关注作者&lt;/a&gt;
+</code></pre>
+
 </li>
 </ul>
 <hr />

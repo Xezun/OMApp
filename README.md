@@ -626,7 +626,7 @@ omApp.debug({
 - 接口说明：
 
     1. 当 HTML 页面需要跳转到 App 其它界面时，调用此接口。
-    2. 外面页面深度链接到 App 指定页面也适用此方法。
+    2. 基于 URL 的交互方式，适用于深度链接到 App 的 URL 规则。
 
 - 参数说明：
 
@@ -637,16 +637,16 @@ omApp.debug({
 
 - <a name="OMAppPage">***OMAppPage*枚举及相关参数**</a>
 
-    1. 新闻：*OMAppPage.**news***
+    - 新闻：*OMAppPage.**news***
     
-        | Name        | Type    | Description |
-        | :---------- | :------ | :------------------ |
-        | categoryID  | String  | 可选。新闻分类 ID。   |
-        | id          | String  | 可选。新闻 ID 。     |
+        | Name        | Type           | Description |
+        | :---------- | :------------- | :------------------ |
+        | categoryID  | String         | 可选。新闻分类 ID。   |
+        | id          | String         | 可选。新闻 ID 。     |
 
         <font size="2" color="gray">** 不可单独指定新闻 id，必须同时提供 categoryID （默认可传 0 ）。*</font>
-
-    2. 视频：*OMAppPage.**video***
+ 
+    - 视频：*OMAppPage.**video***
 
         | Name        | Type    | Description |
         | :---------- | :------ | :------------------ |
@@ -655,13 +655,36 @@ omApp.debug({
 
         <font size="2" color="gray">** 不可单独指定视频 id，必须同时提供 categoryID （默认可传 0 ）。*</font>
 
-    3. 金币商城：*OMAppPage.**mall***
-    4. 金币任务：*OMAppPage.**task***
-    5. 内置Web页面：*OMAppPage.**web***
+    - 金币商城：*OMAppPage.**mall***
+    - 金币任务：*OMAppPage.**task***
+    - 内置Web页面：*OMAppPage.**web***
     
         | Name        | Type    | Description |
         | :---------- | :------ | :------------------ |
         | url         | String  | 必选。网址。   |
+
+
+- 适用于深度链接的额外参数：
+
+    | Name        | Type           | Description |
+    | :---------- | :------------- | :------------------ |
+    | actions     | Array<String>  | 可选。需执行的操作    |
+    | type        | String         | 可选。页面跳转的来源     |
+
+    - `action` 取值：
+        
+        | Name        | Type           | Description |
+        | :---------- | :------------- | :------------------ |
+        | follow      | String         | 关注。例如打开新闻详情页时，同时执行关注操作 |
+
+    - `type` 取值：
+    
+        | Name        | Type           | Description |
+        | :---------- | :------------- | :------------------ |
+        | web         | String         | 默认，来自 App 内置 WebView 。     |
+        | push        | String         | 推送。                            |
+        | share       | String         | 分享落地页。      |
+        | launch      | String         | App 启动页。     |
 
 - 代码示例：
 
@@ -674,6 +697,8 @@ omApp.debug({
     omApp.open(OMAppPage.news, {categoryID: "1", id: "9523"});
     // 打开指定视频频道
     omApp.open(OMAppPage.video, {categoryID: "5"});
+    // 打开指定网页
+    omApp.open(OMAppPage.web, {url: "http://www.baidu.com"});
     ```
 
 - 基于 URL 的交互方式：
@@ -681,7 +706,13 @@ omApp.debug({
     - URL： `app://open/?page=...&parameters=...`
 
 
+- 深度链接 URL 举例（HTML代码）：
 
+    ```
+    <!--  parameters 是 encodeURIComponent 后的 JSON 字符串。 -->
+    <a href="anaween://open/?page=news&parameters=%7B%22id%22%3A%20%221%22%2C%20%22categoryID%22%3A%20%220%22%2C%20%22type%22%3A%20%22share%22%7D">在 App 中查看更多详情</a>
+    <a href="anaween://open/?page=news&parameters=%7B%22id%22%3A%20%221%22%2C%20%22categoryID%22%3A%20%220%22%2C%20%22actions%22%3A%20%5B%22follow%22%5D%2C%20%22type%22%3A%20%22share%22%7D">在 App 中查看更多详情并关注作者</a>
+    ```
 
 
 
