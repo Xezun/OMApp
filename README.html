@@ -1046,7 +1046,7 @@ body .markdown-body
 </ul>
 </li>
 <li><a href="#410-alertmessage-callback">4.10 alert(message, callback)</a></li>
-<li><a href="#411-openpage-parameters">4.11 open(page, parameters) [暂未启用]</a></li>
+<li><a href="#411-openpage-parameters">4.11 open(page, parameters)</a></li>
 </ul>
 </li>
 </ul>
@@ -2162,11 +2162,14 @@ omApp.didSelectAlertActionAtIndex(callbackID, 0);
 </ul>
 </li>
 </ul>
-<h4 id="411-openpage-parameters"><a name="user-content-411-openpage-parameters" href="#411-openpage-parameters" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.11 open(<em>page</em>, <em>parameters</em>) [暂未启用]</h4>
+<h4 id="411-openpage-parameters"><a name="user-content-411-openpage-parameters" href="#411-openpage-parameters" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>4.11 open(<em>page</em>, <em>parameters</em>)</h4>
 <ul>
 <li>
 <p>接口说明：</p>
-<p>当 HTML 页面需要跳转到 App 其它界面时，调用此接口。</p>
+<ol>
+<li>当 HTML 页面需要跳转到 App 其它界面时，调用此接口。</li>
+<li>外面页面深度链接到 App 指定页面也适用此方法。</li>
+</ol>
 </li>
 <li>
 <p>参数说明：</p>
@@ -2182,12 +2185,12 @@ omApp.didSelectAlertActionAtIndex(callbackID, 0);
 <tr>
 <td>page</td>
 <td>OMAppPage</td>
-<td>必选。见 <a href="#OMAppPage">OMAppPage枚举</a></td>
+<td>必选。见 OMAppPage 枚举</td>
 </tr>
 <tr>
 <td>parameters</td>
 <td>Object</td>
-<td>可选。见 <a href="#OMAppPage">OMAppPage枚举</a></td>
+<td>见 OMAppPage 枚举</td>
 </tr>
 </tbody>
 </table>
@@ -2209,15 +2212,16 @@ omApp.didSelectAlertActionAtIndex(callbackID, 0);
 <tr>
 <td>categoryID</td>
 <td>String</td>
-<td>可选。栏目 ID</td>
+<td>可选。新闻分类 ID。</td>
 </tr>
 <tr>
 <td>id</td>
 <td>String</td>
-<td>可选。新闻 ID</td>
+<td>可选。新闻 ID 。</td>
 </tr>
 </tbody>
 </table>
+<p><font size="2" color="gray">*<em> 不可单独指定新闻 id，必须同时提供 categoryID （默认可传 0 ）。</em></font></p>
 </li>
 <li>
 <p>视频：<em>OMAppPage.<strong>video</strong></em></p>
@@ -2233,15 +2237,16 @@ omApp.didSelectAlertActionAtIndex(callbackID, 0);
 <tr>
 <td>categoryID</td>
 <td>String</td>
-<td>可选。栏目 ID</td>
+<td>可选。视频分类 ID，默认可传 0 。</td>
 </tr>
 <tr>
 <td>id</td>
 <td>String</td>
-<td>可选。视频 ID</td>
+<td>可选。视频 ID ，必选 categoryID。</td>
 </tr>
 </tbody>
 </table>
+<p><font size="2" color="gray">*<em> 不可单独指定视频 id，必须同时提供 categoryID （默认可传 0 ）。</em></font></p>
 </li>
 <li>
 <p>金币商城：<em>OMAppPage.<strong>mall</strong></em></p>
@@ -2261,7 +2266,7 @@ omApp.didSelectAlertActionAtIndex(callbackID, 0);
 <tr>
 <td>url</td>
 <td>String</td>
-<td>必选。网址</td>
+<td>必选。网址。</td>
 </tr>
 </tbody>
 </table>
@@ -2274,13 +2279,17 @@ omApp.didSelectAlertActionAtIndex(callbackID, 0);
 omApp.open(OMAppPage.mall); 
 // 打开金币任务页
 omApp.open(OMAppPage.task); 
+// 打开指定新闻
+omApp.open(OMAppPage.news, {categoryID: &quot;1&quot;, id: &quot;9523&quot;});
+// 打开指定视频频道
+omApp.open(OMAppPage.video, {categoryID: &quot;5&quot;});
 </code></pre>
 
 </li>
 <li>
 <p>基于 URL 的交互方式：</p>
 <ul>
-<li>URL： <code>app://open/?page=...</code></li>
+<li>URL： <code>app://open/?page=...&amp;parameters=...</code></li>
 </ul>
 </li>
 </ul>

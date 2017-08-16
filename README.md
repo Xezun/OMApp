@@ -621,32 +621,47 @@ omApp.debug({
         ```
 
 
-#### 4.11 open(*path*) 
+#### 4.11 open(*page*, *parameters*) 
 
 - 接口说明：
 
-    当 HTML 页面需要跳转到 App 其它界面时，调用此接口。
+    1. 当 HTML 页面需要跳转到 App 其它界面时，调用此接口。
+    2. 外面页面深度链接到 App 指定页面也适用此方法。
 
 - 参数说明：
 
-    | **Name**    | **Type**    | **Description** |
-    | :---------- | :---------- | :-------------- |
-    | path        | String      | 必选。页面路径 |
+    | **Name**    | **Type**    | **Description**    |
+    | :---------- | :---------- | :----------------- |
+    | page        | OMAppPage   | 必选。见 OMAppPage 枚举 |
+    | parameters  | Object      | 见 OMAppPage 枚举 |
 
 - <a name="OMAppPage">***OMAppPage*枚举及相关参数**</a>
 
-    1. 页面路径指的是从 App 首页进入到目标页面所经过路径。
-    2. 页面路径用斜线（/）分割，类似于URL路径，值采用 URL 编码后的字符串。
-    3. 常用路径示例：
-        - 新闻：news
-        - 新闻频道：news/2
-        - 新闻详情：news/0/9453
-
     1. 新闻：*OMAppPage.**news***
+    
+        | Name        | Type    | Description |
+        | :---------- | :------ | :------------------ |
+        | categoryID  | String  | 可选。新闻分类 ID。   |
+        | id          | String  | 可选。新闻 ID 。     |
+
+        <font size="2" color="gray">** 不可单独指定新闻 id，必须同时提供 categoryID （默认可传 0 ）。*</font>
+
     2. 视频：*OMAppPage.**video***
+
+        | Name        | Type    | Description |
+        | :---------- | :------ | :------------------ |
+        | categoryID  | String  | 可选。视频分类 ID，默认可传 0 。   |
+        | id          | String  | 可选。视频 ID ，必选 categoryID。     |
+
+        <font size="2" color="gray">** 不可单独指定视频 id，必须同时提供 categoryID （默认可传 0 ）。*</font>
+
     3. 金币商城：*OMAppPage.**mall***
     4. 金币任务：*OMAppPage.**task***
     5. 内置Web页面：*OMAppPage.**web***
+    
+        | Name        | Type    | Description |
+        | :---------- | :------ | :------------------ |
+        | url         | String  | 必选。网址。   |
 
 - 代码示例：
 
@@ -655,11 +670,15 @@ omApp.debug({
     omApp.open(OMAppPage.mall); 
     // 打开金币任务页
     omApp.open(OMAppPage.task); 
+    // 打开指定新闻
+    omApp.open(OMAppPage.news, {categoryID: "1", id: "9523"});
+    // 打开指定视频频道
+    omApp.open(OMAppPage.video, {categoryID: "5"});
     ```
 
 - 基于 URL 的交互方式：
     
-    - URL： `app://open/?path=...`
+    - URL： `app://open/?page=...&parameters=...`
 
 
 
