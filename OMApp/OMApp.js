@@ -63,24 +63,24 @@ if (!window.OMAppTheme) {
     _OMAppDefine("OMAppTheme", _OMAppTheme);
 }
 
-/* OMAppNetworkType 网路类型 */
-if (!window.OMAppNetworkType) {
-	var _OMAppNetworkType = (function(){
-		var _OMAppNetworkTypeObject = {};
-		Object.defineProperties(_OMAppNetworkTypeObject, {
+/* OMAppNetworkingType 网路类型 */
+if (!window.OMAppNetworkingType) {
+	var _OMAppNetworkingType = (function(){
+		var _OMAppNetworkingTypeObject = {};
+		Object.defineProperties(_OMAppNetworkingTypeObject, {
 			none: 			{ get: function() { return "none"; 			} },
 			WiFi: 			{ get: function() { return "WiFi";			} },
 			WWan2G: 		{ get: function() { return "2G";			} },
 			WWan3G: 		{ get: function() { return "3G";			} },
 			WWan4G: 		{ get: function() { return "4G";			} },
-			unknown: 		{ get: function() { return "unknown";		} } 
+			other: 		    { get: function() { return "other";		} }
 		});
-		return _OMAppNetworkTypeObject;
+		return _OMAppNetworkingTypeObject;
 	})();
 	Object.defineProperties(window, {
-		OMAppNetworkType: { get: function() {return _OMAppNetworkType;} }
+		OMAppNetworkType: { get: function() {return _OMAppNetworkingType;} }
 	});
-    _OMAppDefine("OMAppNetworkType", _OMAppNetworkType);
+    _OMAppDefine("OMAppNetworkingType", _OMAppNetworkingType);
 }
 
 
@@ -125,34 +125,40 @@ if (!window.omApp) {
 			console.log("[OMApp] " + oldMethod + " 已废弃，请使用 " + newMethod + " 代替！");
 		}
 
-		// _callbackManager 负责管理所有回调函数。
+		// _manager 负责管理所有回调函数。
 		// 主要方法: 
-		// - 1，push 保存一个回调函数并返回其ID。
-		// - 2，pop 通过 ID 取出一个回调函数。
-		var _callbackManager = (function(){
-			var _store 	= {}; // 所有已保存的回调
-			var _id 	= 0;
+		// - 1，register 保存一个回调函数并返回其ID。
+		// - 2，execute 通过 ID 执行一个回调函数，执行完释放。
+		var _manager = (function() {
+			var _callbacks 	    = {}; // 所有已保存的回调
+			var _callbackID 	= 0;
 
-			function _push(callback) {
-				_id += 1;
-				var callbackID = "om_" + _id;
-				_store[callbackID] = callback;
-				return callbackID;
+			function _register(callback) {
+				var id = "om_" + (_callbackID++);
+				_callbacks[id] = callback;
+				return id;
 			}
 
-			function _pop(callbackID) {
-				var callback = _store[callbackID];
-				_store[callbackID] = null;
-				return callback;
-			}
+            // 执行一个 callback , 并删除 callback 。
+            function _execute(callbackID) {
+			    if (!callbackID) { return; }
+                var callback = _callbacks[callbackID];
+                if (!callback) { return; }
+                var params = [];
+                for (var i = 1; i < arguments.length; i++) {
+                    params.push(arguments[i]);
+                }
+                callback.apply(window, params);
+            }
 
-			var _callbackManagerObject = {};
-			Object.defineProperties(_callbackManagerObject, {
-				push: { get: function() { return _push; } },
-				pop:  { get: function() { return _pop;  } }
+			var _managerObject = {};
+			Object.defineProperties(_managerObject, {
+				register: { get: function() { return _register; } },
+				execute:  { get: function() { return _execute;  } }
 			});
-			return _callbackManagerObject;
+			return _managerObject;
 		})();
+        Object.defineProperty(_omAppObject, 'manager', { get: function() { return _manager; }});
 
 		// _OMAppMessage 定义了所有消息类型。
 		var _OMAppMessage = {
@@ -166,11 +172,14 @@ if (!window.omApp) {
 			open: 				"open",
 			login: 				"login",
 			currentTheme: 		"currentTheme".toLowerCase(),
-			http: 				"http",
+			http: 				"http", //
 			alert: 				"alert",
 			analytics: {
 				track: "analytics.track"
-			}			
+			},
+            networking: {
+			    http: "networking.http"
+            }
 		};
 
 		// 将 Object 序列化成 URLQuery 部分，返回值可能是 null。
@@ -201,7 +210,7 @@ if (!window.omApp) {
 	        var query = null; // ? 以后的部分，不包括 ?
 	        var callbackID = null;
 	        if (callback) {
-	        	callbackID = _callbackManager.push(callback);
+	        	callbackID = _manager.register(callback);
 		        query = "callbackID=" + callbackID;
 	        }
 
@@ -272,7 +281,6 @@ if (!window.omApp) {
 	 	Object.defineProperty(_omAppObject, 'documentIsReady', { get: function() { return _documentIsReady; }});
 
 
-
 		// 1.1 HTML 调用原生的登录。
 		function _login(callback) {
 			if (!_isApp) {
@@ -285,10 +293,7 @@ if (!window.omApp) {
 
 		// 1.2 原生通知JS登录已完成。
 		function _didFinishLogin(callbackID, success) {
-		 	var callback = _callbackManager.pop(callbackID);
-		 	if (callback) {
-		 		callback(success);
-		 	}
+		    _manager.execute(callbackID, success);
 		}
 	 	Object.defineProperty(_omAppObject, 'didFinishLogin', { get: function() { return _didFinishLogin; }});
 
@@ -494,10 +499,7 @@ if (!window.omApp) {
 
 		// 8.2
 		function _didSelectAlertActionAtIndex(callbackID, index) {
-			var callback = _callbackManager.pop(callbackID);
-			if (callback) {
-				callback(index);
-			}
+			_manager.execute(callbackID, index);
 		}
 	 	Object.defineProperty(_omAppObject, 'didSelectAlertActionAtIndex', {
 	 	    get: function() {
@@ -506,23 +508,31 @@ if (!window.omApp) {
 	 	});
 
 	 	// 9. 网络状态
-	 	var _network = (function() {
+	 	var _networking = (function() {
 	 		var _type = _configuration.network.type;
 	 	 	var _ajaxSettings = _configuration.network.ajaxSettings;
 
+	 	 	// 回调函数为 response 对象。
 	 		var _ajax =	function(request, callback) {
 	 	    	var xhr = new XMLHttpRequest();
+
 				xhr.onreadystatechange = function() {
 					if (xhr.readyState !== 4) {
 						return;
 					}
-					var contentType = xhr.getResponseHeader("Content-Type");
-					var success = (xhr.status === 200);
-					var result = xhr.responseText;
-					if (result) {
-						result = encodeURIComponent(result);
-					}
-					callback(success, result, contentType);
+					var response = {};
+					response.contentType = xhr.getResponseHeader("Content-Type");
+					response.code = (xhr.status === 200 ? 0 : xhr.status);
+					response.message = xhr.statusText;
+
+                    if (/application\/json/i.test(response.contentType)) {
+                        response.data = JSON.parse(xhr.responseText);
+                    } else if (/text\/xml/i.test(response.contentType)) {
+                        response.data = xhr.responseXML;
+                    } else {
+                        response.data = xhr.responseText;
+                    }
+					callback(response);
 				};
 				xhr.open(request.method, request.url, true);
 
@@ -539,7 +549,7 @@ if (!window.omApp) {
 				setXHRHeadersFromObject(request.headers);
 
 				if(request.method === "POST"){
-					xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded; charset=UTF-8");
+					xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded; charset=UTF-8");
 				}
 
 				// 合并两个对象的属性值。如果其中某个对象为空，则不合并，直接返回另一个对象，否则创建新对象。
@@ -563,36 +573,24 @@ if (!window.omApp) {
 				xhr.send(data);
 	 		};
 
-            // 7.2 HTTP 回调 （回调函数ID，是否成功，数据（Base64字符串），数据类型）
-            function _didFinishHTTPRequest(callbackID, success, result, contentType) {
-                var callback = _callbackManager.pop(callbackID);
-                if (!callback) { return; }
-                if (result) {
-                    result = decodeURIComponent(result);
-                    if (/json/.test(contentType)) {
-                        result = JSON.parse(result);
-                    }
-                }
-                callback(success, result);
+            // 7.2 HTTP 回调
+            function _didFinishHTTPRequest(callbackID, response) {
+                _manager.execute(callbackID, response);
             }
 
 	 		function _http(request, callback) {
-				if (request["params"] && !request.data) {
-					_deprecate("omApp.http 参数字段 request.params", "request.data");
-					request.data = request["params"];
-				}
 				if (!_isApp) {
-					var callbackID = _callbackManager.push(callback);
-					_ajax(request, function(success, result, contentType) {
-						_didFinishHTTPRequest(callbackID, success, result, contentType);
+					var callbackID = _manager.push(callback);
+					_ajax(request, function(response) {
+						_didFinishHTTPRequest(callbackID, response);
 					});
 					return;
 				}
-		        return _OMAppMessageSend(_OMAppMessage.http, {"request": request}, callback);
+		        return _OMAppMessageSend(_OMAppMessage.networking.http, {"request": request}, callback);
 			}
 
-            var _networkObject = {};
-	 		Object.defineProperties(_networkObject, {
+            var _networkingObject = {};
+	 		Object.defineProperties(_networkingObject, {
 				type: {
 					get: function() { return _type; },
 		 			set: function(newValue) { _type = newValue; }
@@ -616,17 +614,40 @@ if (!window.omApp) {
 				    get: function () { return _didFinishHTTPRequest; }
                 }
 			});
-	 		return _networkObject;
+	 		return _networkingObject;
 	 	})();
-	 	Object.defineProperty(_omAppObject, 'network', { get: function() { return _network; }});
+	 	Object.defineProperty(_omAppObject, 'networking', { get: function() { return _networking; }});
 
 
-        // 7.1 HTTP
-        Object.defineProperty(_omAppObject, 'http', { get: function() { return _network.http; }});
-        Object.defineProperty(_omAppObject, 'didFinishHTTPRequest', {
-            get: function() {
-                return _network.didFinishHTTPRequest;
+        // 7.2 HTTP 回调 （回调函数ID，是否成功，数据（Base64字符串），数据类型）
+        function _didFinishHTTPRequest(callbackID, success, result, contentType) {
+            if (result) {
+                result = decodeURIComponent(result);
+                if (/json/.test(contentType)) {
+                    result = JSON.parse(result);
+                }
             }
+            _manager.execute(callbackID, success, result, contentType);
+        }
+
+        // 7.1 方法将要废弃
+        function _http(request, callback) {
+            if (request["params"] && !request.data) {
+                _deprecate("omApp.http 参数字段 request.params", "request.data");
+                request.data = request["params"];
+            }
+            if (!_isApp) {
+                var callbackID = _manager.push(callback);
+                _networking.ajax(request, function (response) {
+                    _didFinishHTTPRequest(callbackID, response.code === 0, response.data, response.contentType);
+                });
+                return;
+            }
+            return _OMAppMessageSend(_OMAppMessage.http, {"request": request}, callback);
+        }
+        Object.defineProperty(_omAppObject, 'http', { get: function() { return _http; }});
+        Object.defineProperty(_omAppObject, 'didFinishHTTPRequest', {
+            get: function() { return _didFinishHTTPRequest; }
         });
 
 

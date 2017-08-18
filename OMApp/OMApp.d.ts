@@ -28,16 +28,16 @@ interface OMAppTheme_Instance { }
 declare var OMAppTheme: OMAppTheme_Static;
 
 
-interface OMAppNetworkType_Static {
-	none: 		OMAppNetworkType_Instance;
-	WiFi: 		OMAppNetworkType_Instance;
-	WWan2G: 	OMAppNetworkType_Instance;
-	WWan3G: 	OMAppNetworkType_Instance;
-	WWan4G: 	OMAppNetworkType_Instance;
-	unknown: 	OMAppNetworkType_Instance;
+interface OMAppNetworkingType_Static {
+	none: 		OMAppNetworkingType_Instance;
+	WiFi: 		OMAppNetworkingType_Instance;
+	WWan2G: 	OMAppNetworkingType_Instance;
+	WWan3G: 	OMAppNetworkingType_Instance;
+	WWan4G: 	OMAppNetworkingType_Instance;
+	other: 	    OMAppNetworkingType_Instance;
 }
-interface OMAppNetworkType_Instance { }
-declare var OMAppNetworkType: OMAppNetworkType_Static;
+interface OMAppNetworkingType_Instance { }
+declare var OMAppNetworkType: OMAppNetworkingType_Static;
 
 interface OMAppNavigationBar {
     isHidden: boolean;
@@ -49,7 +49,7 @@ interface OMAppNavigationBar {
 interface OMAppNavigation {
     push(url: string, animated?: boolean): void;
     pop(animated?: boolean): void;
-    popTo(index: int, animated?: boolean): void;
+    popTo(index: number, animated?: boolean): void;
     bar: OMAppNavigationBar;
 }
 
@@ -78,10 +78,10 @@ interface OMAppAlertMessage {
     actions: Array;
 }
 
-interface OMAppNetwork {
+interface OMAppNetworking {
     isReachable: boolean;
     isViaWiFi: boolean;
-    type: OMAppNetworkType_Instance;
+    type: OMAppNetworkingType_Instance;
 }
 
 interface OMAppDebugConfiguration {
@@ -113,7 +113,7 @@ interface OMApp {
 
     alert(message: OMAppAlertMessage, callback: (index: number) => void): void;
 
-    network: OMAppNetwork;
+    networking: OMAppNetworking;
 
     debug(configuration?: OMAppDebugConfiguration): void;
 }

@@ -390,7 +390,7 @@ omApp.debug({
         | success      | Bool   | 登录是否成功 |
 
 
-#### 4.7 network
+#### 4.7 networking
 
 - 接口说明：
 
@@ -402,41 +402,65 @@ omApp.debug({
     | :-------------- | :-------------- | :-------------- |
     | isReachable     | Bool            | 只读。是否能联网。  |
     | isViaWiFi       | Bool            | 只读。是否是 WiFi 。  |
-    | type            | OMAppNetworkType   | 只读。见 [OMAppNetworkType枚举](#OMAppNetworkType)  |
+    | type            | OMAppNetworkingType | 只读。OMAppNetworkingType 枚举。 |
+    <!-- | http            | Function        | 只读。网络请求。 |
+
+    - `http` 函数参数：
+    
+        | **Name**        | **Type**        | **Description** |
+        | :-------------- | :-------------- | :-------------- |
+        | request         | Object          | 网络请求  |
+        | callback        | Function        | 回调  |
+
+        - `callback` 函数参数：
+        
+        | **Name**        | **Type**        | **Description** |
+        | :-------------- | :-------------- | :-------------- |
+        | response        | Object          | 封装了请求结果的对象  |
+
+        - `response` 属性：
+        
+        | **Name**        | **Type**        | **Description** |
+        | :-------------- | :-------------- | :-------------- |
+        | code            | Object          | 网络请求  |
+        | message         | String          | 网络请求  |
+        | contentType     | String          | 数据类型  |
+        | data            | Any             | 网络请求  | -->
 
 
-- <a name="OMAppNetworkType">***OMAppNetworkType*枚举**</a>
+- <a name="OMAppNetworkingType">***OMAppNetworkingType*枚举**</a>
 
-    | **Name**                       | **Type**    | **Description** |
-    | :----------------------------- | :---------- | :-------------- |
-    | *OMAppNetworkType.**none***    | String      | 无网络           |
-    | *OMAppNetworkType.**WiFi***    | String      | WiFi            |
-    | *OMAppNetworkType.WWan**2G***  | String      | 蜂窝网 2G        |
-    | *OMAppNetworkType.WWan**3G***  | String      | 蜂窝网 3G        |
-    | *OMAppNetworkType.WWan**4G***  | String      | 蜂窝网 4G      |
-    | *OMAppNetworkType.**unknown*** | String      | 未知的联网方式  |
+    | **Name**                          | **Type**    | **Description** |
+    | :-------------------------------- | :---------- | :-------------- |
+    | *OMAppNetworkingType.**none***    | String      | 无网络           |
+    | *OMAppNetworkingType.**WiFi***    | String      | WiFi            |
+    | *OMAppNetworkingType.WWan**2G***  | String      | 蜂窝网 2G        |
+    | *OMAppNetworkingType.WWan**3G***  | String      | 蜂窝网 3G        |
+    | *OMAppNetworkingType.WWan**4G***  | String      | 蜂窝网 4G        |
+    | *OMAppNetworkingType.**other***   | String      | 未知的联网方式    |
+
 
 
 - 代码示例：
 
     ```
     // 判断是否联网
-    if (omApp.network.isReachable) {
+    if (omApp.networking.isReachable) {
         // 已联网
     } else {
         // 未联网
     }
     // 判断是否 WiFi
-    if (omApp.network.isViaWiFi) {
+    if (omApp.networking.isViaWiFi) {
         // 正通过 Wi-Fi 上网
     }
     // 显示网络类型
-    document.getElementById("app_network_type").innerHTML = omApp.network.type;
+    document.getElementById("networking").innerHTML = omApp.networking.type;
     ```
 
 - 交互说明：
     
-    - App 需在 ready 消息中初始化 `omApp.network.type` 的值。
+    - App 需在 ready 消息中初始化 `omApp.networking.type` 的值。
     - 后期考虑加入网络变化 `change` 事件，暂不支持。
 
 
@@ -453,7 +477,7 @@ omApp.debug({
     | request        | Object      | 必选。网络请求         |
     | callback       | Function    | 可选。网络请求的回调    |
 
-    - requestObject 对象属性：
+    - `request` 对象属性：
     
     | **Name**       | **Type**    | **Description** |
     | :------------- | :---------- | :-------------- |
