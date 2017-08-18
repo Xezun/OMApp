@@ -1958,7 +1958,7 @@ document.getElementById(&quot;networking&quot;).innerHTML = omApp.networking.typ
 </em> 2017-06-29： params -&gt; data，目前 SDK 对此改变保持兼容。<br />
 </font></p>
 <ul>
-<li>callback 函数参数：</li>
+<li><code>callback</code> 函数参数（version 2.0.1）：</li>
 </ul>
 <table>
 <thead>
@@ -1982,14 +1982,44 @@ document.getElementById(&quot;networking&quot;).innerHTML = omApp.networking.typ
 </tbody>
 </table>
 <p><font size="2" color="gray"><em>如果请求结果是 JSON 数据，则 result 是解析后的 JSON 对象，否则 result 将是一个 String 。</em></font></p>
+<ul>
+<li><code>callback</code> 函数参数（version 2.0.2）：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th><strong>Name</strong></th>
+<th><strong>Type</strong></th>
+<th><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>response</td>
+<td>Object</td>
+<td>网络请求是否成功</td>
+</tr>
+</tbody>
+</table>
+<pre><code>- `response` 属性：
+
+    | **Name**       | **Type**    | **Description** |
+    | :------------- | :---------- | :-------------- |
+    | code           | Int         | 错误码。0 表示没有错误。   |
+    | message        | String      | 错误信息。   |
+    | data           | Any         | 请求的数据。   |
+    | contentType    | String      | Header 中的 “Content-Type” 。 |
+</code></pre>
 </li>
 <li>
 <p>代码示例：</p>
-<pre><code>var request = {
+<pre><code>
+var request = {
     url: &quot;http://api.onemena.com/&quot;,
     method: &quot;GET&quot;,
     params: {&quot;name&quot;: &quot;John&quot;}
 };
+// version 2.0.1
 omApp.http(request, function(success, result) {
     if (!success) {
         // do something when failed.
@@ -1997,14 +2027,20 @@ omApp.http(request, function(success, result) {
     }
     // do suceess actions.
 });
+// version 2.0.2
+omApp.http(request, function(response) {
+    if (response.code != 0) { alert(response.message); return; }
+    // do somethiong if success
+});
 </code></pre>
 
 </li>
 <li>
 <p>基于 URL 的交互方式：</p>
 <ul>
+<li>URL（2.0.1）： <code>app://http/?callbackID=...&amp;request={url: ..., method: ...}</code></li>
 <li>
-<p>URL： <code>app://http/?callbackID=...&amp;request={url: ..., method: ...}</code></p>
+<p>URL（2.0.1）： <code>app://networking.http/?callbackID=...&amp;request={url: ..., method: ...}</code></p>
 </li>
 <li>
 <p>回调： <code>omApp.didFinishHTTPRequest(callbackID, success, result, contentType)</code></p>

@@ -1,5 +1,5 @@
 // OMApp
-// Version: 2.0.2
+// Version: 2.0.0
 
 function _OMAppDefine(name, value) {
     if ("function" === typeof define && define.amd) {

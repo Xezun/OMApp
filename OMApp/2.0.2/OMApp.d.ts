@@ -72,6 +72,13 @@ interface OMAppHTTPRequest {
     headers?: Object;
 }
 
+interface OMAppHTTPResponse {
+    code: number;
+    message: string;
+    contentType: string;
+    data?: Object;
+}
+
 interface OMAppAlertMessage {
     title: string;
     body: string;
@@ -109,7 +116,7 @@ interface OMApp {
 
     currentUser: OMAppUser;
 
-	http(request: OMAppHTTPRequest, callback: (success: boolean, result?: Object|string) => void): void;
+	http(request: OMAppHTTPRequest, callback: (response: OMAppHTTPResponse) => void): void;
 
     alert(message: OMAppAlertMessage, callback: (index: number) => void): void;
 

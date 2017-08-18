@@ -495,7 +495,7 @@ omApp.debug({
     * 2017-06-29： params -> data，目前 SDK 对此改变保持兼容。
     </font>
 
-    - callback 函数参数：
+    - `callback` 函数参数（version 2.0.1）：
     
     | **Name**       | **Type**    | **Description** |
     | :------------- | :---------- | :-------------- |
@@ -503,15 +503,33 @@ omApp.debug({
     | result         | Any         | 网络请求返回的数据（如果有） |
 
     <font size="2" color="gray">*如果请求结果是 JSON 数据，则 result 是解析后的 JSON 对象，否则 result 将是一个 String 。*</font>
+
+    - `callback` 函数参数（version 2.0.2）：
+    
+    | **Name**       | **Type**    | **Description** |
+    | :------------- | :---------- | :-------------- |
+    | response       | Object      | 网络请求是否成功   |
+
+        - `response` 属性：
+        
+            | **Name**       | **Type**    | **Description** |
+            | :------------- | :---------- | :-------------- |
+            | code           | Int         | 错误码。0 表示没有错误。   |
+            | message        | String      | 错误信息。   |
+            | data           | Any         | 请求的数据。   |
+            | contentType    | String      | Header 中的 “Content-Type” 。 |
+    
     
 - 代码示例：
 
     ```
+    
     var request = {
         url: "http://api.onemena.com/",
         method: "GET",
         params: {"name": "John"}
     };
+    // version 2.0.1
     omApp.http(request, function(success, result) {
         if (!success) {
             // do something when failed.
@@ -519,13 +537,18 @@ omApp.debug({
         }
         // do suceess actions.
     });
+    // version 2.0.2
+    omApp.http(request, function(response) {
+        if (response.code != 0) { alert(response.message); return; }
+        // do somethiong if success
+    });
     ```
 
 - 基于 URL 的交互方式：
     
-    - URL： `app://http/?callbackID=...&request={url: ..., method: ...}`
 
-    - 回调： `omApp.didFinishHTTPRequest(callbackID, success, result, contentType)`
+    - URL（2.0.1）： `app://http/?callbackID=...&request={url: ..., method: ...}`
+    - 回调（2.0.1）： `omApp.didFinishHTTPRequest(callbackID, success, result, contentType)`
 
         | Name        | Type    | Description |
         | :---------- | :------ | :------------------ |
@@ -533,6 +556,9 @@ omApp.debug({
         | success     | Bool    | http 请求是否成功     |
         | result      | String  | URL 编码后的 HTTP 请求结果     |
         | contentType | String  | result 的数据类型，决定数据是否需要解析 |
+
+    - URL（2.0.2）： `app://networking.http/?callbackID=...&request={url: ..., method: ...}`
+    - 回调（2.0.2）： `omApp.didFinishHTTPRequest(callbackID, response)`
 
     - 代码示例：
 
