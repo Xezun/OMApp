@@ -403,7 +403,10 @@ omApp.debug({
     | isReachable     | Bool            | 只读。是否能联网。  |
     | isViaWiFi       | Bool            | 只读。是否是 WiFi 。  |
     | type            | OMAppNetworkingType | 只读。OMAppNetworkingType 枚举。 |
-    <!-- | http            | Function        | 只读。网络请求。 |
+
+    <div style="display: none;">
+    
+    | http            | Function        | 只读。网络请求。 |
 
     - `http` 函数参数：
     
@@ -425,7 +428,8 @@ omApp.debug({
         | code            | Object          | 网络请求  |
         | message         | String          | 网络请求  |
         | contentType     | String          | 数据类型  |
-        | data            | Any             | 网络请求  | -->
+        | data            | Any             | 网络请求  | 
+        </div>
 
 
 - <a name="OMAppNetworkingType">***OMAppNetworkingType*枚举**</a>
