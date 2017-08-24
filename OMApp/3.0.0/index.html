@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="OMApp.js"></script>
+    <script src="jquery-3.1.1.min.js"></script>
+</head>
+<body>
+
+<script>
+    // 查看 OMApp 当前版本。
+    console.log("OMApp Version: " + OMApp.version);
+
+    // 在桌面浏览器开发时，通过此方法初始化 OMApp 的初始属性。
+    omApp.config({
+        currentUser: {
+            name: "John"
+        },
+        currentTheme: OMApp.Theme.night,
+        navigation: {
+            bar: {
+                title: "Onemena",
+                titleColor: "#FF0000",
+                backgroundColor: "#e3e3e3",
+                isHidden: false
+            }
+        }
+    });
+
+    // 在桌面浏览器开发时，自定义事件行为。
+    // 例如：自定义 HTTP 行为。
+    // 注意：在桌面浏览器环境中，默认的通过 delegate.setAjaxSettings 方法设置 headers／data 。
+    omApp.delegate.networkingHTTP = function (request, callback) {
+        $.ajax({
+            url: request.url,
+            method: request.method,
+            data: request.data,
+            headers: {
+                "access-token": "Test",
+                "user-token": "Test"
+            }
+        }).then(function( data, textStatus, jqXHR ) {
+            callback({
+                code: 0,
+                message: "success",
+                contentType: jqXHR.getResponseHeader("Content-Type"),
+                data: data
+            });
+        }, function( jqXHR, textStatus, errorThrown ) {
+            callback({
+                code: 0,
+                message: "failed",
+                contentType: jqXHR.getResponseHeader("Content-Type")
+            });
+        });
+    };
+
+    // 将操作放在 ready 方法中。
+    omApp.ready(function () {
+
+        console.log('The omApp is Ready.');
+
+        omApp.login(function (isSuccess) {
+            console.log("Login Result: "+ isSuccess);
+        });
+
+        omApp.open(OMApp.Page.mall, {"id": "0"});
+
+        omApp.present("http://www.baidu.com", true, function () {
+            console.log("Did Present Baidu.com");
+        });
+
+        omApp.http({
+            url: "http://localhost:63342/OMApp/index.html?_ijt=q9htt6v4snbat62sshonoocsas",
+            method: "GET"
+        }, function (response) {
+            console.log(response.data);
+        });
+
+
+    });
+
+
+
+
+</script>
+
+</body>
+</html>

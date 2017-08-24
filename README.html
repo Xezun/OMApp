@@ -1179,8 +1179,9 @@ omApp.debug({
 </code></pre>
 <ul>
 <li>
-<p>接口说明：<br />
-    为了保证 <code>omApp</code> 对象在使用时已完成初始化，请将所有用到 <code>omApp</code> 方法或属性的代码，放在此方法中进行。该方法可以调用多次，且所有代码会在初始化完成时，按次序执行。</p>
+<p>接口说明：</p>
+<p>为了保证 <code>omApp</code> 对象在使用时已完成初始化，请将所有用到 <code>omApp</code> 方法或属性的代码，放在此方法中进行。该方法可以调用多次，且所有代码会在初始化完成时，按次序执行。<br />
+注意：此方法若不调用，App 不会对 <code>omApp</code> 执行初始化操作。</p>
 </li>
 <li>
 <p>参数说明：</p>
@@ -1204,7 +1205,8 @@ omApp.debug({
 <li>
 <p>代码示例：</p>
 <ul>
-<li>常规用法。<br />
+<li>常规用法。</li>
+</ul>
 <pre><code>// 本方法类似但不能替代 JQuery.ready 方法。
 // 在基于URL拦截的交互方式中，该方法监听的是 DOMContentLoaded 事件，与 JQuery 一样。
 // 在基于对象注入的交互方式中，调用该方法时，回调可能被立即执行。
@@ -1212,8 +1214,11 @@ omApp.ready(function() {
     // 基于 omApp 对象的业务逻辑代码。比如：获取 App 的主题设置。
     console.log(omApp.currentTheme);
 });
-</code></pre></li>
-<li>与第三方框架一起使用。<br />
+</code></pre>
+
+<ul>
+<li>与第三方框架一起使用。</li>
+</ul>
 <pre><code>// 因为基于 omApp 的业务逻辑需要在 ready 方法中执行，
 // 但是往往第三方框架有自己的执行机制，所以需要设置第三方框架延迟执行。
 // 例如 angular 的延迟执行步骤如下：
@@ -1234,8 +1239,8 @@ omApp.ready(function () {
         angular.bootstrap(document, ['moduleName']);
     });
 });
-</code></pre></li>
-</ul>
+</code></pre>
+
 </li>
 <li>
 <p>交互说明：</p>
@@ -2040,10 +2045,7 @@ omApp.http(request, function(response) {
 <ul>
 <li>URL（2.0.1）： <code>app://http/?callbackID=...&amp;request={url: ..., method: ...}</code></li>
 <li>
-<p>URL（2.0.1）： <code>app://networking.http/?callbackID=...&amp;request={url: ..., method: ...}</code></p>
-</li>
-<li>
-<p>回调： <code>omApp.didFinishHTTPRequest(callbackID, success, result, contentType)</code></p>
+<p>回调（2.0.1）： <code>omApp.didFinishHTTPRequest(callbackID, success, result, contentType)</code></p>
 <table>
 <thead>
 <tr>
@@ -2075,6 +2077,12 @@ omApp.http(request, function(response) {
 </tr>
 </tbody>
 </table>
+</li>
+<li>
+<p>URL（2.0.2）： <code>app://networking.http/?callbackID=...&amp;request={url: ..., method: ...}</code></p>
+</li>
+<li>
+<p>回调（2.0.2）： <code>omApp.didFinishHTTPRequest(callbackID, response)</code></p>
 </li>
 <li>
 <p>代码示例：</p>
