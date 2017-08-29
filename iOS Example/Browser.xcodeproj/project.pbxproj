@@ -22,8 +22,6 @@
 		DDC104B81EEA46F90075C41F /* LoginTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC104B41EEA46F90075C41F /* LoginTableViewController.swift */; };
 		DDC104B91EEA46F90075C41F /* OpenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC104B51EEA46F90075C41F /* OpenViewController.swift */; };
 		DDC104BB1EEA46F90075C41F /* OnemenaBrowser.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC104B71EEA46F90075C41F /* OnemenaBrowser.swift */; };
-		DDCE368D1F3C524B00EC6FF8 /* OMApp.html in Resources */ = {isa = PBXBuildFile; fileRef = DDCE368B1F3C524B00EC6FF8 /* OMApp.html */; };
-		DDCE368E1F3C524B00EC6FF8 /* OMApp.js in Resources */ = {isa = PBXBuildFile; fileRef = DDCE368C1F3C524B00EC6FF8 /* OMApp.js */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -47,8 +45,6 @@
 		DDC104B41EEA46F90075C41F /* LoginTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginTableViewController.swift; sourceTree = "<group>"; };
 		DDC104B51EEA46F90075C41F /* OpenViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenViewController.swift; sourceTree = "<group>"; };
 		DDC104B71EEA46F90075C41F /* OnemenaBrowser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnemenaBrowser.swift; sourceTree = "<group>"; };
-		DDCE368B1F3C524B00EC6FF8 /* OMApp.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = OMApp.html; path = OMApp/OMApp.html; sourceTree = SOURCE_ROOT; };
-		DDCE368C1F3C524B00EC6FF8 /* OMApp.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = OMApp.js; path = OMApp/OMApp.js; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,8 +109,6 @@
 		DDB7A3131EF1103C00BA986F /* OMApp */ = {
 			isa = PBXGroup;
 			children = (
-				DDCE368B1F3C524B00EC6FF8 /* OMApp.html */,
-				DDCE368C1F3C524B00EC6FF8 /* OMApp.js */,
 			);
 			path = OMApp;
 			sourceTree = "<group>";
@@ -222,8 +216,6 @@
 			files = (
 				DDC104A41EEA44F00075C41F /* LaunchScreen.storyboard in Resources */,
 				DDC104A11EEA44F00075C41F /* Assets.xcassets in Resources */,
-				DDCE368E1F3C524B00EC6FF8 /* OMApp.js in Resources */,
-				DDCE368D1F3C524B00EC6FF8 /* OMApp.html in Resources */,
 				DDC1049F1EEA44F00075C41F /* Main.storyboard in Resources */,
 				DD10F9FC1EF78524005E0FE1 /* LogsTableViewCell.xib in Resources */,
 			);

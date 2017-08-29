@@ -30,7 +30,9 @@ class OnemenaBrowser: UIViewController, NavigationBarCustomizable, NavigationGes
         appExport = export
         appExport?.delegate = self
         
-        webView.loadRequest(URLRequest(url: url))
+        var request = URLRequest(url: url);
+        request.cachePolicy = .reloadIgnoringCacheData;
+        webView.loadRequest(request)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -42,13 +44,18 @@ class OnemenaBrowser: UIViewController, NavigationBarCustomizable, NavigationGes
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.dataf.dateFormat = "yyyy-MM-dd hh:mm:ss"
+    
+
         
-        webView.frame               = view.bounds
+        webView.frame               = view.bounds.offsetBy(dx: 0, dy: -10).insetBy(dx: 0, dy: -10);
         webView.delegate            = self
         webView.autoresizingMask    = [.flexibleWidth, .flexibleHeight]
         view.addSubview(webView)
         
+        // Web 元素可以自动获取焦点。
+        webView.keyboardDisplayRequiresUserAction = false;
+        
+        customNavigationBar.isHidden = true;
         customNavigationBar.barTintColor = UIColor(rgb: 0x3e84e0)
         customNavigationBar.infoButton.setImage(#imageLiteral(resourceName: "btn_nav_more_white"), for: .normal)
         customNavigationBar.infoButton.addTarget(self, action: #selector(console(_:)), for: .touchUpInside)
@@ -143,7 +150,7 @@ extension OnemenaBrowser: HTTPViewControllerDelegate {
 
 extension OnemenaBrowser: AppExportDelegate {
     
-    func appExport(_ appExport: AppExport, analyticsTrack event: String, parameters: [String : Any]) {
+    func appExport(_ appExport: AppExport, analyticsTrack event: String, parameters: [String : Any]?) {
         print("Event: \(event) \nParameters: \(parameters)")
     }
 

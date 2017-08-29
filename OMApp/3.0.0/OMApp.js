@@ -1,76 +1,24 @@
 // OMApp.js 3.0.0
 
-(function() {
-    if (typeof omApp !== 'undefined') {
-        return omApp;
+/********************************************************
+ *                                                      *
+ *                    XZExtendable                      *
+ *                                                      *
+ ********************************************************/
+
+(function () {
+    // 可拓展属性的对象基类。
+    function _defineProperty(name, callback) {
+        if (!callback || typeof callback !== 'function') { return; }
+        var descriptor = callback.call(this, this);
+        Object.defineProperty(this, name, descriptor);
     }
-    
-    /********************************************************
-     *                                                      *
-     *                     OMApp Class                      *
-     *                                                      *
-     ********************************************************/
-    
-    function _OMApp(_isInApp) {
-        
-        var _system = new (function () {
-            var _userAgent = window.navigator.userAgent;
-            var _isAndroid = /Android/i.test(_userAgent);
-            var _isiOS     = /\(i[^;]+;( U;)? CPU.+Mac OS X/.test(_userAgent);
-            Object.defineProperties(this, {
-                isAndroid: {
-                    get:function () {
-                        return _isAndroid;
-                    }
-                },
-                isiOS: {
-                    get: function () {
-                        return _isiOS;
-                    }
-                }
-            });
-        });
-        
-        Object.defineProperties(this, {
-            isInApp: {
-                get: function () {
-                    return _isInApp;
-                }
-            },
-            system: {
-                get: function () {
-                    return _system;
-                }
-            }
-        });
-    
-        // App Name. 交互时的协议头，必须全小写字母。
-        var _name = "app";
-        Object.defineProperty(this, 'name', {
-            get: function () {
-                return _name;
-            },
-            set: function (newValue) {
-                if (/[^a-z]/.test(newValue)) {
-                    return;
-                }
-                _name = newValue;
-            }
-        });
-        
-        // 拓展 OMApp 对象的属性。
-        function _defineProperty(name, callback) {
-            if (!callback || typeof callback !== 'function') { return; }
-            var descriptor = callback.call(this);
-            Object.defineProperty(this, name, descriptor);
-        }
-    
-        function _defineProperties(callback) {
-            if (!callback || typeof callback !== 'function') { return; }
-            var descriptor = callback.call(this);
-            Object.defineProperties(this, descriptor);
-        }
-    
+    function _defineProperties(callback) {
+        if (!callback || typeof callback !== 'function') { return; }
+        var descriptor = callback.call(this, this);
+        Object.defineProperties(this, descriptor);
+    }
+    function _XZExtendable() {
         Object.defineProperties(this, {
             defineProperty: {
                 get: function () {
@@ -84,61 +32,93 @@
             }
         });
     }
-    
-    // 定义 OMApp 类。
-    Object.defineProperty(window, 'OMApp', { get: function () { return _OMApp;  } });
-    
-    // 全局函数
-    Object.defineProperties(window.OMApp, {
-        // 版本
-        version: {
-            get: function () {
-                return "3.0.0";
-            }
-        },
+    Object.defineProperties(_XZExtendable, {
         defineProperty: {
             get: function () {
-                function _defineProperty(name, callback) {
-                    var descriptor = callback.apply(window.OMApp);
-                    Object.defineProperty(window.OMApp, name, descriptor);
-                }
                 return _defineProperty;
             }
         },
         defineProperties: {
             get: function () {
-                function _defineProperties(callback) {
-                    var descriptor = callback.apply(window.OMApp);
-                    Object.defineProperties(window.OMApp, descriptor);
-                }
                 return _defineProperties;
             }
         }
     });
+    Object.defineProperty(window, 'XZExtendable', { get: function () { return _XZExtendable; } });
+})();
+
+
+/********************************************************
+ *                                                      *
+ *                   OMApp & omApp                      *
+ *                                                      *
+ ********************************************************/
+
+(function () {
+    if (typeof omApp !== 'undefined') {
+        return omApp;
+    }
     
+    Object.defineProperty(window, "OMApp", { get: function () {
+        return window.XZExtendable;
+    }});
     
-    /********************************************************
-     *                                                      *
-     *                  omApp Object                        *
-     *                                                      *
-     ********************************************************/
-     
-    // 创建 OMApp.current 对象。
-    var _omApp = new OMApp(/Onemena/i.test(window.navigator.userAgent));
-    
+    var _omApp = new OMApp();
     // 定义全局 OMApp.current 属性。
-    Object.defineProperties(OMApp, {
-        current: {
-            get: function () {
-                return _omApp;
-            }
-        }
-    });
-    
+    Object.defineProperties(OMApp, { current: { get: function () { return _omApp; } } });
     // 定义全局 window.omApp 属性。
-    Object.defineProperty(window, 'omApp', { get: function () { return OMApp.current; } });
+    Object.defineProperty(window, 'omApp', { get: function () { return _omApp; } });
+})();
+
+// OMApp.Version
+OMApp.defineProperty('version', function () {
+    return {
+        get: function () {
+            return "3.0.0";
+        }
+    }
+});
+
+// OMApp.current.name, OMApp.current.system, OMApp.current.isInApp.
+OMApp.current.defineProperties(function () {
+    var _name = "app";
+    var _system = new (function () {
+        var _userAgent = window.navigator.userAgent;
+        var _isAndroid = /Android/i.test(_userAgent);
+        var _isiOS     = /\(i[^;]+;( U;)? CPU.+Mac OS X/.test(_userAgent);
+        Object.defineProperties(this, {
+            isAndroid: {
+                get:function () {
+                    return _isAndroid;
+                }
+            },
+            isiOS: {
+                get: function () {
+                    return _isiOS;
+                }
+            }
+        });
+    });
+    var _isInApp = /Onemena/i.test(window.navigator.userAgent);
     
-}).call(window);
+    function _setName(newValue) {
+        if (/[^a-z]/.test(newValue)) {
+            console.log("[OMApp] omApp.name 必须只能为全小写字母。");
+            return;
+        }
+        _name = newValue;
+    }
+    
+    return {
+        name: {
+            get: function () { return _name; },
+            set: _setName
+        },
+        isInApp: { get: function () { return _isInApp; } },
+        system: { get: function () { return _system; } }
+    }
+});
+
 
 
 
@@ -147,6 +127,17 @@
  *                  Static Methods                      *
  *                                                      *
  ********************************************************/
+
+// OMApp.Method
+OMApp.defineProperty("Method", function () {
+    var _Method = {};
+    return {
+        get: function () {
+            return _Method;
+        }
+    }
+});
+
 
 OMApp.defineProperties(function() {
     // 将任意 Object 序列化成 URLQuery 部分。
@@ -199,20 +190,11 @@ OMApp.defineProperties(function() {
         console.log("[OMApp] " + oldMethod + " 已废弃，请使用 " + newMethod + " 代替！");
     }
     
-    // 存储已注册的 Method 。
-    var _Method = {};
-    Object.defineProperty(_Method, 'register', {
-        get: function () {
-            return _register;
-        },
-        configurable: false
-    });
-    
     // 在 OMApp 中注册一个方法。
     // - 如果第二个参数为空，则方法的名称与方法相同。
     // - 第二个参数可以是一个 Object 。
     // - 允许的字符：大小写字母和下划线。
-    function _register(method, name) {
+    function _registerMethod(method, name) {
         if (!name) { name = method; }
         
         // 检查 method.name 。
@@ -246,12 +228,12 @@ OMApp.defineProperties(function() {
             return false;
         }
         
-        if (!!_Method[name]) {
+        if (!!this.Method[name]) {
             console.log("[OMApp] 注册失败，方法名 "+ name +" 已存在。");
             return false;
         }
         
-        Object.defineProperty(_Method, name, {
+        Object.defineProperty(this.Method, name, {
             get: function () {
                 return method;
             }
@@ -271,15 +253,18 @@ OMApp.defineProperties(function() {
                 return _deprecate;
             }
         },
-        Method: {
+        registerMethod: {
             get: function () {
-                return _Method;
+                return _registerMethod;
             }
         }
     };
     
     
 });
+
+
+
 
 
 
@@ -337,7 +322,7 @@ OMApp.current.defineProperties(function () {
                 return;
             }
             var _arguments = [];
-            if ( OMApp.current.isInApp && OMApp.current.system.isAndroid ) {
+            if ( this.isInApp && this.system.isAndroid ) {
                 // 安卓平台的需要将参数转换成基本数据类型。
                 if (Array.isArray(parameters)) {
                     for (var i = 0; i < parameters.length; i += 1) {
@@ -432,7 +417,7 @@ OMApp.current.defineProperties(function () {
         } else {
             object[key] = value;
         }
-        console.log("[OMAp] 应用配置: " + keyPath + "." + key + " = " + value + " 。");
+        console.log("[OMAp] 应用配置: " + keyPath + "." + key + " = " + JSON.stringify(value) + " 。");
     }
     
     // 对象属性深复制。
@@ -487,7 +472,7 @@ OMApp.current.defineProperties(function () {
  *                                                      *
  ********************************************************/
 
-OMApp.Method.register("documentIsReady");
+OMApp.registerMethod("documentIsReady");
 
 OMApp.current.defineProperties(function () {
     // 标识 omApp 是否初始化完成
@@ -584,7 +569,7 @@ OMApp.defineProperty("Theme", function () {
     }
 });
 
-OMApp.Method.register('currentTheme');
+OMApp.registerMethod('currentTheme');
 
 OMApp.current.defineProperties(function () {
     var _currentTheme = OMApp.Theme.day;
@@ -620,7 +605,7 @@ OMApp.current.defineProperties(function () {
  *                                                      *
  ********************************************************/
 
-OMApp.Method.register("login");
+OMApp.registerMethod("login");
 
 OMApp.current.defineProperty("login", function () {
     // 1.1 HTML 调用原生的登录。
@@ -720,11 +705,11 @@ OMApp.defineProperty('Page', function () {
 });
 
 OMApp.current.defineProperty('open', function () {
-    OMApp.Method.register('open');
+    OMApp.registerMethod('open');
     function _open(page, parameters) {
-        var param = [page];
-        if (parameters) { param.push(parameters); }
-        return this.perform(OMApp.Method.open, param);
+        var _arguments = [page];
+        if (parameters) { _arguments.push(parameters); }
+        return this.perform(OMApp.Method.open, _arguments);
     }
     return {
         get: function () {
@@ -739,7 +724,7 @@ OMApp.current.defineProperty('open', function () {
  *                                                      *
  ********************************************************/
 
-OMApp.Method.register({
+OMApp.registerMethod({
     push: 'navigationPush',
     pop: 'navigationPop',
     popTo: 'navigationPopTo',
@@ -779,7 +764,7 @@ OMApp.current.defineProperty('navigation', function () {
             if (typeof animated !== 'boolean') {
                 animated = true;
             }
-            return OMApp.current.perform(OMApp.Method.navigation.popTo, {"index": index, "animated": animated});
+            return OMApp.current.perform(OMApp.Method.navigation.popTo, [index, animated]);
         }
         
         // 3.4 Bar
@@ -867,11 +852,19 @@ OMApp.current.defineProperty('navigation', function () {
  *                                                      *
  ********************************************************/
 
-OMApp.Method.register("present");
+OMApp.registerMethod("present");
 
 OMApp.current.defineProperty("present", function () {
     
-    function _present(url, animated, completion) {
+    function _present(url, arg1, arg2) {
+        var animated = true;
+        var completion = null;
+        if ( typeof arg1 === 'boolean' ) {
+            animated = arg1;
+            completion = arg2;
+        } else if (typeof arg1 === 'function') {
+            completion = arg1;
+        }
         OMApp.current.perform(OMApp.Method.present, [url, animated], completion);
     }
     
@@ -909,7 +902,7 @@ OMApp.defineProperty('NetworkingType', function () {
     }
 });
 
-OMApp.Method.register({
+OMApp.registerMethod({
     http: "networkingHTTP"
 }, "networking");
 
@@ -960,7 +953,7 @@ OMApp.current.defineProperty('http', function () {
  *                                                      *
  ********************************************************/
 
-OMApp.Method.register({
+OMApp.registerMethod({
     track: "analyticsTrack"
 }, 'analytics');
 
@@ -982,7 +975,7 @@ OMApp.current.defineProperty("analytics", function () {
  *                                                      *
  ********************************************************/
 
-OMApp.Method.register("alert");
+OMApp.registerMethod("alert");
 
 OMApp.current.defineProperty('alert', function () {
     function _alert(message, callback) {
@@ -1001,7 +994,7 @@ OMApp.current.defineProperty('alert', function () {
  *                                                      *
  ********************************************************/
 
-OMApp.Method.register({
+OMApp.registerMethod({
     data: {
         fetchNumberOfRowsInListInDocument: "dataServiceFetchNumberOfRowsInListInDocument",
         fetchDataForRowAtIndexInListInDocument: "dataServiceFetchDataForRowAtIndexInListInDocument",
@@ -1016,82 +1009,90 @@ OMApp.Method.register({
 
 OMApp.current.defineProperty('service', function () {
     
-    var _data = new (function () {
-    
-        // 获取 list 的行数。
-        // - list: string
-        // - callback: (number)=>void
-        function _fetchNumberOfRowsInListInDocument(documentName, listName, callback) {
-            var method = OMApp.Method.service.data.fetchNumberOfRowsInListInDocument;
-            OMApp.current.perform(method, [documentName, listName], callback);
-        }
-    
-        // 加载数据
-        // - list: OMAppList
-        // - index: number
-        // - callback: (data)=>void
-        function _fetchDataForRowAtIndexInListInDocument(documentName, listName, index, callback) {
-            var method = OMApp.Method.service.data.fetchDataForRowAtIndexInListInDocument;
-            OMApp.current.perform(method, [documentName, listName, index], callback);
-        }
-        
-        // 获取缓存。
-        function _fetchCachedResourceForURL(url, automatic, callback) {
-            var method = OMApp.Method.service.data.fetchCachedResourceForURL;
-            OMApp.current.perform(method, [url, automatic], callback);
-        }
-        
-        Object.defineProperties(this, {
-            fetchNumberOfRowsInListInDocument: {
-                get: function () {
-                    return _fetchNumberOfRowsInListInDocument;
-                }
-            },
-            fetchDataForRowAtIndexInListForDocument: {
-                get: function () {
-                    return _fetchDataForRowAtIndexInListInDocument;
-                }
-            },
-            fetchCachedResourceForURL: {
-                get: function () {
-                    return _fetchCachedResourceForURL;
-                }
-            }
-        });
-        
-    });
-    
-    var _event = new (function () {
-        
-        // List 点击事件。
-        function _documentListDidSelectRowAtIndex(documentName, listName, index) {
-            var method = OMApp.Method.service.event.documentListDidSelectRowAtIndex;
-            OMApp.current.perform(method, [documentName, listName, index]);
-        }
-        
-        // 处理事件
-        function _documentElementWasClicked(documentName, elementName, parameters, callback) {
-            var method = OMApp.Method.service.event.documentElementWasClicked;
-            OMApp.current.perform(method, [documentName, elementName, parameters], callback);
-        }
-        
-        Object.defineProperties(this, {
-            didSelectRowOfListAtIndexInDocument: {
-                get: function () {
-                    return _documentListDidSelectRowAtIndex;
-                }
-            },
-            didClickOnElementInDocument: {
-                get: function () {
-                    return _documentElementWasClicked;
-                }
-            }
-        });
-        
-    });
-    
-    
     var _service = new (function () {
+    
+        var _data = new (function () {
+        
+            // 获取 list 的行数。
+            // - list: string
+            // - callback: (number)=>void
+            function _fetchNumberOfRowsInListInDocument(documentName, listName, callback) {
+                var method = OMApp.Method.service.data.fetchNumberOfRowsInListInDocument;
+                OMApp.current.perform(method, [documentName, listName], callback);
+            }
+        
+            // 加载数据
+            // - list: OMAppList
+            // - index: number
+            // - callback: (data)=>void
+            function _fetchDataForRowAtIndexInListInDocument(documentName, listName, index, callback) {
+                var method = OMApp.Method.service.data.fetchDataForRowAtIndexInListInDocument;
+                OMApp.current.perform(method, [documentName, listName, index], callback);
+            }
+        
+            // 获取缓存。
+            function _fetchCachedResourceForURL(url, arg1, arg2) {
+                var method = OMApp.Method.service.data.fetchCachedResourceForURL;
+                var callback = null;
+                var automatic = true;
+                if ( typeof arg1 === 'boolean' ) {
+                    automatic = arg1;
+                    callback = arg2;
+                } else if (typeof arg1 === 'function') {
+                    callback = arg1;
+                }
+                OMApp.current.perform(method, [url, automatic], callback);
+            }
+        
+            Object.defineProperties(this, {
+                fetchNumberOfRowsInListInDocument: {
+                    get: function () {
+                        return _fetchNumberOfRowsInListInDocument;
+                    }
+                },
+                fetchDataForRowAtIndexInListInDocument: {
+                    get: function () {
+                        return _fetchDataForRowAtIndexInListInDocument;
+                    }
+                },
+                fetchCachedResourceForURL: {
+                    get: function () {
+                        return _fetchCachedResourceForURL;
+                    }
+                }
+            });
+        
+        });
+    
+        var _event = new (function () {
+        
+            // List 点击事件。
+            function _documentListDidSelectRowAtIndex(documentName, listName, index) {
+                var method = OMApp.Method.service.event.documentListDidSelectRowAtIndex;
+                OMApp.current.perform(method, [documentName, listName, index]);
+            }
+        
+            // 处理事件
+            function _documentElementWasClicked(documentName, elementName, data, callback) {
+                var method = OMApp.Method.service.event.documentElementWasClicked;
+                OMApp.current.perform(method, [documentName, elementName, data], callback);
+            }
+        
+            Object.defineProperties(this, {
+                documentListDidSelectRowAtIndex: {
+                    get: function () {
+                        return _documentListDidSelectRowAtIndex;
+                    }
+                },
+                documentElementWasClicked: {
+                    get: function () {
+                        return _documentElementWasClicked;
+                    }
+                }
+            });
+        
+        });
+        
         Object.defineProperties(this, {
             data: {
                 get: function () {
@@ -1104,7 +1105,7 @@ OMApp.current.defineProperty('service', function () {
                 }
             }
         });
-    });
+    })();
 
     return {
         get: function () {
@@ -1330,21 +1331,27 @@ function _OMAppDelegate() {
         _ajax(request, callback)
     };
     
-    this.dataServiceFetchNumberOfRowsInListForDocument = function () {
+    this.dataServiceFetchNumberOfRowsInListInDocument = function () {
         console.log(arguments);
     };
-    this.dataServiceFetchDataForRowAtIndexInListForDocument = function () {
+    
+    this.dataServiceFetchDataForRowAtIndexInListInDocument = function () {
         console.log(arguments);
     };
+    
     this.dataServiceFetchCachedResourceForURL = function () {
         console.log(arguments);
     };
-    this.eventServiceDidSelectRowOfListAtIndexInDocument = function () {
+    
+    this.eventServiceDocumentListDidSelectRowAtIndex = function () {
         console.log(arguments);
     };
-    this.eventServiceDidClickOnElementInDocument = function () {
+    
+    this.eventServiceDocumentElementWasClicked = function () {
         console.log(arguments);
     };
+    
+
 }
 
 if (!OMApp.current.isInApp) {

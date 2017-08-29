@@ -7,67 +7,59 @@
 module OMApp {
 
     const version: string;
-
     const defineProperty: (propertyName, descriptor: () => object) => void;
     const defineProperties: (descriptor: () => object) => void;
 
-    const current: omApp;
-
-    const URLQueryStringFromObject :(anObject: object) => string;
+    const URLQueryStringFromObject: (anObject: object) => string;
     const deprecate: (oldMethod: string, newMethod: string) => void;
 
+    const registerMethod: (method: any, name?: string) => boolean;
+
+    interface current {
+        isInApp: boolean;
+        system: OMApp.System;
+
+        name: string;
+        defineProperty: (propertyName, descriptor: () => object) => void;
+        defineProperties: (descriptor: () => object) => void;
+
+        // OM.Basic
+        delegate: OMApp.Delegate;
+        dispatch: (callbackID: string, arg1?: any, arg2?: any, arg3?: any, arg4?: any, arg5?: any) => any;
+        perform: (method: OMApp.Method, parameters?: [any], callback?: () => void) => string;
+
+        // config
+        isDebug: boolean;
+        config: (configuration: object) => void;
+
+        // OM.ready
+        isReady: boolean;
+        documentIsReady: () => void;
+        ready: (callback: () => void) => void;
+
+        currentTheme: OMApp.Theme;
+        setCurrentTheme: (theme: OMApp.Theme, needs?: boolean) => void;
+
+        // OM.login
+        login: (callback: (isSuccess: boolean) => void) => void;
+
+        currentUser: OMApp.User;
+
+        open: (page: OMApp.Page, parameters?: object) => void;
+
+        navigation: OMApp.Navigation;
+
+        present: (url: string, animated: boolean, completion: () => void) => void;
+
+        networking: OMApp.Networking;
+        http: (request: OMApp.HTTPRequest, callback: (response: OMApp.HTTPResponse) => void) => void;
+
+        service: OMApp.Service;
+    }
 }
 
+declare const omApp: OMApp.current;
 
-
-
-
-
-
-module omApp {
-
-    // Basic
-    const isInApp: boolean;
-    const system: OMApp.System;
-
-    var name: string;
-    const defineProperty: (propertyName, descriptor: () => object) => void;
-    const defineProperties: (descriptor: () => object) => void;
-
-    // OM.Basic
-    var delegate: OMApp.Delegate;
-    const dispatch: (callbackID: string, arg1?: any, arg2?: any, arg3?: any, arg4?: any, arg5?: any) => any;
-    const perform: (method: OMApp.Method, parameters?: [any], callback?: () => void) => string;
-
-    // config
-    var isDebug: boolean;
-    const config: (configuration: object) => void;
-
-    // OM.ready
-    const isReady: boolean;
-    const documentIsReady: () => void;
-    const ready: (callback: () => void) => void;
-
-    var currentTheme: OMApp.Theme;
-    const setCurrentTheme: (theme: OMApp.Theme, needs?: boolean) => void;
-
-    // OM.login
-    const login: (callback: (isSuccess: boolean) => void) => void;
-
-    const currentUser: OMApp.User;
-
-    const open: (page: OMApp.Page, parameters?: object) => void;
-
-    const navigation: OMApp.Navigation;
-
-    const present: (url: string, animated: boolean, completion: () => void) => void;
-
-    const networking: OMApp.Networking;
-    const http: (request: OMApp.HTTPRequest, callback: (response: OMApp.HTTPResponse) => void) => void;
-
-    const service: OMApp.Service;
-
-}
 
 
 // *************
@@ -99,7 +91,7 @@ module OMApp {
         push(url: string, animated?: boolean): void;
         pop(animated?: boolean): void;
         popTo(index: number, animated?: boolean): void;
-        bar: OMAppNavigationBar;
+        bar: OMApp.NavigationBar;
     }
 
     interface System {
@@ -137,12 +129,12 @@ module OMApp {
     interface ServiceData {
         fetchNumberOfRowsInListInDocument(documentName: string, listName: string, callback: (count: number) => void): void;
         fetchDataForRowAtIndexInListInDocument(documentName: string, listName: string, index: number, callback: (data: any) => void): void;
-        fetchCachedResourceForURL(url: string, automaticallyDownload: boolean, callback: (filePath: string) => voi): void;
+        fetchCachedResourceForURL(url: string, downloadIfNotExists?: boolean, callback?: (sourcePath: string) => void): void;
     }
 
     interface ServiceEvent {
-        documentListDidSelectRowAtIndex(documentName: string, listName: string, index: number): void;
-        documentElementWasClicked(documentName: string, elementName: string, parameters: any, callback: (isSelected: boolean) => void): void;
+        documentListDidSelectRowAtIndex(documentName: string, listName: string, index: number, completion?: () => void): void;
+        documentElementWasClicked(documentName: string, elementName: string, data?: any, callback?: (isSelected: boolean) => void): void;
     }
 
 }
@@ -172,8 +164,6 @@ module OMApp {
         alert: Method;
 
         service: MethodService;
-
-        register(method: any, name?: string): boolean;
     }
 
     interface MethodNavigation {
@@ -276,7 +266,7 @@ module  OMApp {
 
         open: (page: OMApp.Page, parameters?: any) => void;
 
-        present: (url: string, animated: boolean, completion: () => void) => void;
+        present: (url: string, animated?: boolean, completion?: () => void) => void;
 
         navigationPush: (url: string, animated?: boolean) => void;
 
@@ -302,10 +292,10 @@ module  OMApp {
 
         dataServiceFetchNumberOfRowsInListInDocument: (documentName: string, listName: string, callback: (count: number) => void) => void;
         dataServiceFetchDataForRowAtIndexInListInDocument: (documentName: string, listName: string, index: number, callback: (data: any) => void) => void;
-        dataServiceFetchCachedResourceForURL: (url: string, automaticallyDownload: boolean, callback: (filePath: string) => voi) => void;
+        dataServiceFetchCachedResourceForURL: (url: string, automaticallyDownload: boolean, callback: (filePath: string) => void) => void;
 
-        eventServiceDocumentListDidSelectRowAtIndex: (documentName: string, listName: string, index: number) => void;
-        eventServiceDocumentElementWasClicked: (documentName: string, elementName: string, parameters: any, callback: (isSelected: boolean) => void) => void;
+        eventServiceDocumentListDidSelectRowAtIndex: (documentName: string, listName: string, index: number, completion?: () => void) => void;
+        eventServiceDocumentElementWasClicked: (documentName: string, elementName: string, data: any, callback: (isSelected: boolean) => void) => void;
 
     }
 }
