@@ -29,7 +29,7 @@
     });
 
     // 在桌面浏览器开发时，自定义事件行为。
-    // 例如：自定义 HTTP 行为。
+    // 例如：自定义 omApp.http 方法的执行过程。
     // 注意：在桌面浏览器环境中，默认的通过 delegate.setAjaxSettings 方法设置 headers／data 。
     omApp.delegate.networkingHTTP = function (request, callback) {
         $.ajax({

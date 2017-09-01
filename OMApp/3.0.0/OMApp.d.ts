@@ -34,7 +34,6 @@ module OMApp {
 
         // OM.ready
         isReady: boolean;
-        documentIsReady: () => void;
         ready: (callback: () => void) => void;
 
         currentTheme: OMApp.Theme;
@@ -123,19 +122,27 @@ module OMApp {
 
     interface Service {
         data: ServiceData;
-        event: ServiceEvent
+        event: ServiceEvent;
+        analytics: ServiceAnalytics;
     }
 
     interface ServiceData {
-        fetchNumberOfRowsInListInDocument(documentName: string, listName: string, callback: (count: number) => void): void;
-        fetchDataForRowAtIndexInListInDocument(documentName: string, listName: string, index: number, callback: (data: any) => void): void;
-        fetchCachedResourceForURL(url: string, downloadIfNotExists?: boolean, callback?: (sourcePath: string) => void): void;
+        numberOfRows(documentName: string, listName: string, callback: (count: number) => void): void;
+        dataForRowAtIndex(documentName: string, listName: string, index: number, callback: (data: any) => void): void;
+        cachedResourceForURL(url: string, downloadIfNotExists?: boolean, callback?: (sourcePath: string) => void): void;
     }
 
     interface ServiceEvent {
-        documentListDidSelectRowAtIndex(documentName: string, listName: string, index: number, completion?: () => void): void;
-        documentElementWasClicked(documentName: string, elementName: string, data?: any, callback?: (isSelected: boolean) => void): void;
+        didSelectRowAtIndex(documentName: string, listName: string, index: number, completion?: () => void): void;
+        wasClicked(documentName: string, elementName: string, data?: any, callback?: (isSelected: boolean) => void): void;
     }
+
+    interface ServiceAnalytics {
+        track(event: string, parameters?: object): void;
+    }
+
+
+
 
 }
 
@@ -150,9 +157,9 @@ module OMApp {
     interface Method {
         login: Method;
         open: Method;
-        documentIsReady: Method;
+        ready: Method;
 
-        currentTheme: Method;
+        setCurrentTheme: Method;
 
         navigation: MethodNavigation
         present: Method;
@@ -174,10 +181,10 @@ module OMApp {
     }
 
     interface MethodNavigationBar {
-        isHidden: Method;
-        title: Method;
-        titleColor: Method;
-        backgroundColor: Method;
+        setHidden: Method;
+        setTitle: Method;
+        setTitleColor: Method;
+        setBackgroundColor: Method;
     }
 
     interface MethodNetworking {
@@ -191,18 +198,25 @@ module OMApp {
     interface MethodService {
         data: MethodServiceData;
         event: MethodServiceEvent;
+        analytics: MethodServiceAnalytics;
     }
 
     interface MethodServiceEvent {
-        documentListDidSelectRowAtIndex: Method;
-        documentElementWasClicked: Method;
+        didSelectRowAtIndex: Method;
+        wasClicked: Method;
     }
 
     interface MethodServiceData {
-        fetchNumberOfRowsInListInDocument: Method;
-        fetchDataForRowAtIndexInListInDocument: Method;
-        fetchCachedResourceForURL: Method;
+        numberOfRows: Method;
+        dataForRowAtIndex: Method;
+        cachedResourceForURL: Method;
     }
+
+    interface MethodServiceAnalytics {
+        track: Method;
+    }
+
+
 
 }
 
@@ -258,44 +272,45 @@ module  OMApp {
 
     interface Delegate {
 
-        documentIsReady: (callback: () => void) => void;
+        ready: (callback: () => void) => void;
 
-        currentTheme: (newValue: OMApp.Theme) => void;
+        setCurrentTheme: (newValue: OMApp.Theme) => void;
 
         login: (callback: (success: boolean) => void) => void;
 
-        open: (page: OMApp.Page, parameters?: any) => void;
+        open: (page: OMApp.Page, parameters?: object) => void;
 
         present: (url: string, animated?: boolean, completion?: () => void) => void;
 
-        navigationPush: (url: string, animated?: boolean) => void;
+        push: (url: string, animated?: boolean) => void;
 
-        navigationPop: (animated?: boolean) => void;
+        pop: (animated?: boolean) => void;
 
-        navigationPopTo: (index: number, animated?: boolean) => void;
+        popTo: (index: number, animated?: boolean) => void;
 
-        navigationBarIsHidden: (newValue: boolean) => void;
+        setNavigationBarHidden: (newValue: boolean) => void;
 
-        navigationBarTitle: (newValue: string) => void;
+        setNavigationBarTitle: (newValue: string) => void;
 
-        navigationBarTitleColor: (newValue: string) => void;
+        setNavigationBarTitleColor: (newValue: string) => void;
 
-        navigationBarBackgroundColor: (newValue: string) => void;
+        setNavigationBarBackgroundColor: (newValue: string) => void;
 
+        analyticsTrack: (event: string, parameters?: object) => void;
+
+        // Debug
         ajaxSettings: AJAXSettings;
-
         setAjaxSettings: (newValue: AJAXSettings) => void;
-
         ajax: (request: HTTPRequest, callback: (response: HTTPResponse) => void) => void;
 
-        networkingHTTP: (request: HTTPRequest, callback: (response: HTTPResponse) => void) => void;
+        http: (request: HTTPRequest, callback: (response: HTTPResponse) => void) => void;
 
-        dataServiceFetchNumberOfRowsInListInDocument: (documentName: string, listName: string, callback: (count: number) => void) => void;
-        dataServiceFetchDataForRowAtIndexInListInDocument: (documentName: string, listName: string, index: number, callback: (data: any) => void) => void;
-        dataServiceFetchCachedResourceForURL: (url: string, automaticallyDownload: boolean, callback: (filePath: string) => void) => void;
+        numberOfRows: (documentName: string, listName: string, callback: (count: number) => void) => void;
+        dataForRowAtIndex: (documentName: string, listName: string, index: number, callback: (data: any) => void) => void;
+        cachedResourceForURL: (url: string, automaticallyDownload: boolean, callback: (filePath: string) => void) => void;
 
-        eventServiceDocumentListDidSelectRowAtIndex: (documentName: string, listName: string, index: number, completion?: () => void) => void;
-        eventServiceDocumentElementWasClicked: (documentName: string, elementName: string, data: any, callback: (isSelected: boolean) => void) => void;
+        didSelectRowAtIndex: (documentName: string, listName: string, index: number, completion?: () => void) => void;
+        wasClicked: (documentName: string, elementName: string, data: any, callback: (isSelected: boolean) => void) => void;
 
     }
 }
