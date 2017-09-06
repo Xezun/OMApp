@@ -48,10 +48,13 @@ module OMApp {
 
         navigation: OMApp.Navigation;
 
-        present: (url: string, animated: boolean, completion: () => void) => void;
+        present: (url: string, animated: boolean, completion?: () => void) => void;
+        dismiss: (animated: boolean) => void;
 
         networking: OMApp.Networking;
         http: (request: OMApp.HTTPRequest, callback: (response: OMApp.HTTPResponse) => void) => void;
+
+        alert(message: AlertMessage, callback?: (index: number) => void): void;
 
         services: OMApp.Services;
     }
@@ -80,16 +83,16 @@ module OMApp {
         titleColor: string;
         backgroundColor: string;
 
-        setHidden(isHidden: boolean, animated?: boolean): void;
+        setHidden(isHidden: boolean, animated: boolean): void;
         setTitle(title: string): void;
         setTitleColor(titleColor: string): void;
         setBackgroundColor(backgroundColor: string): void;
     }
 
     interface Navigation {
-        push(url: string, animated?: boolean): void;
-        pop(animated?: boolean): void;
-        popTo(index: number, animated?: boolean): void;
+        push(url: string, animated: boolean): void;
+        pop(animated: boolean): void;
+        popTo(index: number, animated: boolean): void;
         bar: OMApp.NavigationBar;
     }
 
@@ -120,7 +123,11 @@ module OMApp {
         http(request: HTTPRequest, callback: (response: HTTPResponse) => void): void;
     }
 
-
+    interface AlertMessage {
+        title: string;
+        body: string;
+        actions?: [string]
+    }
 
     // Services
 
@@ -318,6 +325,7 @@ module  OMApp {
         setAjaxSettings: (newValue: AJAXSettings) => void;
         ajax: (request: HTTPRequest, callback: (response: HTTPResponse) => void) => void;
 
+        alert(message, parameters)
         // 网络请求。
         http: (request: HTTPRequest, callback: (response: HTTPResponse) => void) => void;
 

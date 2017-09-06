@@ -47,7 +47,7 @@
                 contentType: jqXHR.getResponseHeader("Content-Type"),
                 data: data
             });
-        }, function( jqXHR, textStatus, errorThrown ) {
+        }, function( jqXHR/*, textStatus, errorThrown*/ ) {
             callback({
                 code: 0,
                 message: "failed",
@@ -72,13 +72,21 @@
         });
 
         omApp.http({
-            url: "http://localhost:63342/OMApp/index.html?_ijt=q9htt6v4snbat62sshonoocsas",
+            url: "http://localhost/~mlibai/",
             method: "GET"
         }, function (response) {
             console.log(response.data);
         });
 
+        omApp.alert({
+            title: "Alert Title",
+            body: "Alert Body",
+            actions: ["OK", "Cancel"]
+        }, function (index) {
+            console.log(index);
+        });
     });
+
 
 
 

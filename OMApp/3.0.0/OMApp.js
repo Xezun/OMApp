@@ -456,9 +456,8 @@ OMApp.current.defineProperties(function () {
             set: function (newValue) {
                 if (_delegate !== newValue) {
                     _delegate = newValue;
-                    if (OMApp.current.isReady) {
-                        setTimeout()
-                    }
+                    // 如果重新设置了代理是否需要重新发送 ready 事件？
+                    // 不。代理需要在 ready 事件前设置。如果使用者在 ready 之后或不确定的时机设置，则需要开发者自己去判断当前状态。
                 }
             }
         },
@@ -655,8 +654,12 @@ OMApp.current.defineProperties(function () {
     var _currentTheme = OMApp.Theme.day;
     
     function _setCurrentTheme(newValue, needs) {
+        if (typeof newValue !== 'string') {
+            console.log("[OMApp] The currentTheme must be a OMApp.Theme value.");
+            return;
+        }
         _currentTheme = newValue;
-        if (needs && typeof newValue === 'string') {
+        if (needs) {
             OMApp.current.perform(OMApp.Method.setCurrentTheme, [newValue], null);
         }
     }
@@ -792,7 +795,7 @@ OMApp.current.defineProperty('open', function () {
     OMApp.registerMethod('open');
     function _open(page, parameters) {
         if (typeof page !== 'string') {
-            console.log("[OMApp] Method `open` can not be called without page parameter.");
+            console.log("[OMApp] Method `open`'s page parameter must be a OMApp.Page value.");
             return;
         }
         var _arguments = [page];
@@ -993,9 +996,7 @@ OMApp.current.defineProperties(function () {
             animated = true;
             completion = arg1;
         }
-        if (typeof animated !== 'boolean') {
-            animated = true;
-        }
+        if (typeof animated !== 'boolean') { animated = true; }
         OMApp.current.perform(OMApp.Method.dismiss, [animated], completion);
     }
     
@@ -1023,7 +1024,7 @@ OMApp.defineProperty('NetworkingType', function () {
         WWan2G: 		{ get: function() { return "2G";			} },
         WWan3G: 		{ get: function() { return "3G";			} },
         WWan4G: 		{ get: function() { return "4G";			} },
-        other: 		    { get: function() { return "other";		} }
+        other: 		    { get: function() { return "other";		    } }
     });
     return {
         get: function () {
@@ -1376,61 +1377,58 @@ OMApp.current.defineProperty('services', function () {
 function _OMAppDelegate() {
     
     this.ready = function (callback) {
+        console.log("[OMApp] omApp.ready is called by default handler.");
         callback();
     };
     
     this.setCurrentTheme = function (newValue) {
-        console.log("设置 App 主题：" + newValue);
+        console.log("[OMApp] omApp.setCurrentTheme = " + newValue + ".");
     };
     
     this.login = function (callback) {
+        console.log("[OMApp] omApp.login is called with a confirm handler.");
         callback(confirm('点击按钮确定登陆！ \n[确定] -> 登录成功 \n[取消] -> 登录失败'));
     };
     
     this.open = function (page, parameters) {
-        console.log("Open Page: "+ page +", parameters: "+ JSON.stringify(parameters));
-        // window.open(page + "[" + parameters + "]");
+        console.log("[OMApp] omApp.open is called with {page: "+ page +", parameters: "+ JSON.stringify(parameters) + "}.");
     };
     
     this.present = function (url, animated, completion) {
-        console.log("[omApp] present: "+ url + ", animated: "+ animated);
+        console.log("[OMApp] omApp.present is called with {url: "+ url + ", animated: "+ animated +"} and default handler.");
         setTimeout(completion);
     };
     
     this.push = function (url, animated) {
-        console.log("Navigation Push: "+ url +", animated: "+ animated);
-        // window.location.href = url;
+        console.log("[OMApp] omApp.navigation.push is called with {url: "+ url +", animated: "+ animated +"}.");
     };
     
     this.pop = function (animated) {
-        console.log("Navigation Pop animated: "+ animated);
-        // window.history.back();
+        console.log("[OMApp] omApp.navigation.pop is called with {animated: "+ animated + "}.");
     };
     
     this.popTo = function (index, animated) {
-        console.log("Navigation Pop To: "+ index +", animated: "+ animated);
-        var i = index - window.history.length + 1;
-        window.history.go(i);
+        console.log("[OMApp] omApp.navigation.popTo is called with {index: "+ index +", animated: "+ animated +"}.");
     };
     
     this.setNavigationBarHidden = function (newValue) {
-        console.log("Set Navigation Bar Hidden: "+ newValue);
+        console.log("[OMApp] omApp.navigation.bar.isHidden = " + newValue + ".");
     };
     
     this.setNavigationBarTitle = function (newValue) {
-        console.log("Set Navigation Bar Title: "+ newValue);
+        console.log("[OMApp] omApp.navigation.bar.title = " + newValue + ".");
     };
     
     this.setNavigationBarTitleColor = function (newValue) {
-        console.log("Set Navigation Bar Title Color: "+ newValue);
+        console.log("[OMApp] omApp.navigation.bar.titleColor = " + newValue + ".");
     };
     
     this.setNavigationBarBackgroundColor = function (newValue) {
-        console.log("Set Navigation Bar Background Color: "+ newValue);
+        console.log("[OMApp] omApp.navigation.bar.backgroundColor = " + newValue + ".");
     };
     
     this.track = function (event, parameters) {
-        console.log("Analytics track "+ event + " with " + JSON.stringify(parameters));
+        console.log("[OMApp] omApp.analytics.track is called with {event: "+ event + ", parameters: " + JSON.stringify(parameters) + "}.");
     };
     
     var _ajaxSettings = {};
@@ -1521,34 +1519,46 @@ function _OMAppDelegate() {
         }
     });
     
-    this.http = function (request, callback) {
-        _ajax(request, callback)
-    };
-    
     this.alert = function (message, callback) {
-        console.log("Method ");
+        console.log("[OMApp] omApp.alert is called with {message: "+ JSON.stringify(message) +" } and default handler(-1).");
+        callback(-1);
     };
     
-    this.numberOfRowsInList = function () {
-        console.log(arguments);
+    this.http = function (request, callback) {
+        _ajax(request, callback);
+        console.log("[OMApp] omApp.http is call with default handler (ajax).");
     };
     
-    this.dataForRowAtIndex = function () {
-        console.log(arguments);
+    this.numberOfRowsInList = function (documentName, listName, callback) {
+        console.log("[OMApp] omApp.services.data.numberOfRowsInList is called with {document: " + documentName + ", list: " + listName + "} and default handler(4).");
+        setTimeout(function() {
+            callback(4);
+        }, Math.random() * 10000);
     };
     
-    this.cachedResourceForURL = function () {
-        console.log(arguments);
+    this.dataForRowAtIndex = function (documentName, listName, index, callback) {
+        console.log("[OMApp] omApp.services.data.dataForRowAtIndex: " + documentName + ", " + listName + ", " + index + ".");
+        setTimeout(function () {
+            callback({});
+        }, Math.random() * 10000);
     };
     
-    this.didSelectRowAtIndex = function () {
-        console.log(arguments);
+    this.cachedResourceForURL = function (url, resourceType, automatic, callback) {
+        console.log("[OMApp] omApp.services.data.cachedResourceForURL is called with {url: " + url + ", resourceType: " + resourceType + ", download:" + automatic + "}.");
+        if (callback) { callback(url); }
     };
     
-    this.elementWasClicked = function () {
-        console.log(arguments);
+    this.didSelectRowAtIndex = function (documentName, listName, index, callback) {
+        console.log("[OMApp] omApp.services.event.didSelectRowAtIndex is called with {document: " + documentName + ", list: " + listName + ", index: " + index + "}.");
+        if (callback) { callback(); }
     };
     
+    this.elementWasClicked = function (documentName, elementName, data, callback) {
+        console.log("[OMApp] omApp.services.event.dataForRowAtIndex is called with {document: " + documentName + ", element: " + elementName + ", data: " + data + "}.");
+        if (typeof data === 'boolean' && typeof callback === 'function') {
+            callback(!data);
+        }
+    };
 
 }
 
