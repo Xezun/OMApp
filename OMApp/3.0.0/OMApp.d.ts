@@ -7,11 +7,11 @@
 module OMApp {
 
     const version: string;
+
     const defineProperty: (propertyName, descriptor: () => object) => void;
     const defineProperties: (descriptor: () => object) => void;
 
     const URLQueryStringFromObject: (anObject: object) => string;
-    const deprecate: (oldMethod: string, newMethod: string) => void;
 
     const registerMethod: (method: any, name?: string) => boolean;
 
@@ -37,7 +37,7 @@ module OMApp {
         ready: (callback: () => void) => void;
 
         currentTheme: OMApp.Theme;
-        setCurrentTheme: (theme: OMApp.Theme, needs?: boolean) => void;
+        setCurrentTheme: (theme: OMApp.Theme) => void;
 
         // OM.login
         login: (callback: (isSuccess: boolean) => void) => void;
@@ -53,7 +53,7 @@ module OMApp {
         networking: OMApp.Networking;
         http: (request: OMApp.HTTPRequest, callback: (response: OMApp.HTTPResponse) => void) => void;
 
-        service: OMApp.Service;
+        services: OMApp.Services;
     }
 }
 
@@ -80,10 +80,10 @@ module OMApp {
         titleColor: string;
         backgroundColor: string;
 
-        _setIsHidden(isHidden: boolean, needs?: boolean): void;
-        _setTitle(title: string, needs?: boolean): void;
-        _setTitleColor(titleColor: string, needs?: boolean): void;
-        _setBackgroundColor(backgroundColor: string, needs?: boolean): void;
+        setHidden(isHidden: boolean, animated?: boolean): void;
+        setTitle(title: string): void;
+        setTitleColor(titleColor: string): void;
+        setBackgroundColor(backgroundColor: string): void;
     }
 
     interface Navigation {
@@ -120,29 +120,30 @@ module OMApp {
         http(request: HTTPRequest, callback: (response: HTTPResponse) => void): void;
     }
 
-    interface Service {
-        data: ServiceData;
-        event: ServiceEvent;
-        analytics: ServiceAnalytics;
+
+
+    // Services
+
+    interface Services {
+        data:       DataService;
+        event:      EventService;
+        analytics:  AnalyticsService;
     }
 
-    interface ServiceData {
-        numberOfRows(documentName: string, listName: string, callback: (count: number) => void): void;
+    interface DataService {
+        numberOfRowsInList(documentName: string, listName: string, callback: (count: number) => void): void;
         dataForRowAtIndex(documentName: string, listName: string, index: number, callback: (data: any) => void): void;
-        cachedResourceForURL(url: string, downloadIfNotExists?: boolean, callback?: (sourcePath: string) => void): void;
+        cachedResourceForURL(url: string, resourceType?: OMApp.ResourceType, downloadIfNotExists?: boolean, callback?: (sourcePath: string) => void): void;
     }
 
-    interface ServiceEvent {
+    interface EventService {
         didSelectRowAtIndex(documentName: string, listName: string, index: number, completion?: () => void): void;
-        wasClicked(documentName: string, elementName: string, data?: any, callback?: (isSelected: boolean) => void): void;
+        elementWasClicked(documentName: string, elementName: string, data?: any, callback?: (isSelected: boolean) => void): void;
     }
 
-    interface ServiceAnalytics {
+    interface AnalyticsService {
         track(event: string, parameters?: object): void;
     }
-
-
-
 
 }
 
@@ -162,7 +163,9 @@ module OMApp {
         setCurrentTheme: Method;
 
         navigation: MethodNavigation
+
         present: Method;
+        dismiss: Method;
 
         networking: MethodNetworking
 
@@ -170,7 +173,7 @@ module OMApp {
 
         alert: Method;
 
-        service: MethodService;
+        services: MethodService;
     }
 
     interface MethodNavigation {
@@ -203,11 +206,11 @@ module OMApp {
 
     interface MethodServiceEvent {
         didSelectRowAtIndex: Method;
-        wasClicked: Method;
+        elementWasClicked: Method;
     }
 
     interface MethodServiceData {
-        numberOfRows: Method;
+        numberOfRowsInList: Method;
         dataForRowAtIndex: Method;
         cachedResourceForURL: Method;
     }
@@ -216,6 +219,9 @@ module OMApp {
         track: Method;
     }
 
+    interface ResourceType {
+        image: ResourceType
+    }
 
 
 }
@@ -272,15 +278,23 @@ module  OMApp {
 
     interface Delegate {
 
+        // 当 HTML 页面完成初始化时，此方法会被调用。
+        // App 应该在此方法中初始化 omApp 对象属性的初始值。
         ready: (callback: () => void) => void;
 
+        // 切换主题。
+        // 如果 HTML 页面可以切换 App 主题，此方法将被调用。
         setCurrentTheme: (newValue: OMApp.Theme) => void;
 
+        // 当 HTML 页面需要用户登录时，此方法会被调用。
+        // App 需在此方法中执行用户登录的逻辑。
         login: (callback: (success: boolean) => void) => void;
 
+        // 当 HTML 要打开新的页面时。
         open: (page: OMApp.Page, parameters?: object) => void;
 
-        present: (url: string, animated?: boolean, completion?: () => void) => void;
+        present: (url: string, animated: boolean, completion: () => void) => void;
+        dismiss: (animated: boolean, completion?: () => void) => void;
 
         push: (url: string, animated?: boolean) => void;
 
@@ -296,21 +310,28 @@ module  OMApp {
 
         setNavigationBarBackgroundColor: (newValue: string) => void;
 
-        analyticsTrack: (event: string, parameters?: object) => void;
+        // 统计分析事件。
+        track: (event: string, parameters?: object) => void;
 
-        // Debug
+        // Debug. App 不需要实现。
         ajaxSettings: AJAXSettings;
         setAjaxSettings: (newValue: AJAXSettings) => void;
         ajax: (request: HTTPRequest, callback: (response: HTTPResponse) => void) => void;
 
+        // 网络请求。
         http: (request: HTTPRequest, callback: (response: HTTPResponse) => void) => void;
 
-        numberOfRows: (documentName: string, listName: string, callback: (count: number) => void) => void;
+        // HTML 查询某一列表的行数。
+        numberOfRowsInList: (documentName: string, listName: string, callback: (count: number) => void) => void;
+        // HTML 获取某一列表行的数据。
         dataForRowAtIndex: (documentName: string, listName: string, index: number, callback: (data: any) => void) => void;
-        cachedResourceForURL: (url: string, automaticallyDownload: boolean, callback: (filePath: string) => void) => void;
+        // HTML 页面获取某一 URL 对应的资源。
+        cachedResourceForURL: (url: string, resourceType: OMApp.ResourceType, automaticallyDownload: boolean, callback?: (filePath: string) => void) => void;
 
+        // HTML 的某一列表行被点击事件。
         didSelectRowAtIndex: (documentName: string, listName: string, index: number, completion?: () => void) => void;
-        wasClicked: (documentName: string, elementName: string, data: any, callback: (isSelected: boolean) => void) => void;
+        // HTML 的某一元素被点击。
+        elementWasClicked: (documentName: string, elementName: string, data: any, callback: (isSelected: boolean) => void) => void;
 
     }
 }
