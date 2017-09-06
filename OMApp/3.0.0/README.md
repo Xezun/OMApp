@@ -517,12 +517,12 @@ if (!omApp.networking.isViaWiFi) {
 
 - 参数说明：
     
-    - `request`：object 。当前是否已联网。
+    - `request`：object，必选。当前是否已联网。
         - `url`： string。网络请求的 URL。
         - `method`： string。网络请求的方法。
         - `data`： object。请求参数。
         - `headers`： object。请求头参数设置。
-    - `callback`：function。参数如下：
+    - `callback`：function，可选。参数如下：
         - `response`：object。网络请求响应状态及结果，其属性为：
             - `code`：number。错误码，非 HTTP 状态码。0 表示没有错误。
             - `message`：string。错误消息。
