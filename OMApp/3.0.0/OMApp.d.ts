@@ -38,6 +38,7 @@ module OMApp {
 
         currentTheme: OMApp.Theme;
         setCurrentTheme: (theme: OMApp.Theme) => void;
+        onCurrentThemeChange: (currentTheme: OMApp.Theme) => void;
 
         // OM.login
         login: (callback: (isSuccess: boolean) => void) => void;

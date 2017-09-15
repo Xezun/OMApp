@@ -652,15 +652,35 @@ OMApp.registerMethod('setCurrentTheme');
 
 OMApp.current.defineProperties(function () {
     var _currentTheme = OMApp.Theme.day;
+    var _allThemeHandlers = [];
     
-    function _setCurrentTheme(newValue, needs) {
+    // 绑定主题发生改变函数。如果不传参数表示触发已绑定的函数。
+    function _onCurrentThemeChange(handler) {
+        if (typeof handler === 'undefined') {
+            for (var i = 0; i < _allThemeHandlers.length; i++) {
+                _allThemeHandlers[i].call(this, _currentTheme);
+            }
+            return;
+        }
+        if (typeof handler !== 'function') {
+            return;
+        }
+        _allThemeHandlers.push(handler);
+    }
+    
+    // 设置主题。通过第二个参数来确定是 App 更改了主题，还是 HTML 更改了主题。
+    // - true，表示是 HTML 更改了主题，则消息会发送到 App。
+    // - false，表示是 App 更改了主题，则会触发 currentTheme change 事件。
+    function _setCurrentTheme(newValue, isChangedByHTML) {
         if (typeof newValue !== 'string') {
             console.log("[OMApp] The currentTheme must be a OMApp.Theme value.");
             return;
         }
         _currentTheme = newValue;
-        if (needs) {
+        if (isChangedByHTML) {
             OMApp.current.perform(OMApp.Method.setCurrentTheme, [newValue], null);
+        } else {
+            _onCurrentThemeChange();
         }
     }
     
@@ -676,6 +696,11 @@ OMApp.current.defineProperties(function () {
         setCurrentTheme: {
             get: function () {
                 return _setCurrentTheme;
+            }
+        },
+        onCurrentThemeChange: {
+            get: function () {
+                return _onCurrentThemeChange;
             }
         }
     }
