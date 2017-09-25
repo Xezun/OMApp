@@ -549,12 +549,31 @@ interface OMAppAlertMessage {
 // ***************
 // OMApp 枚举值定义
 
+/**
+ * 枚举 OMApp.Theme.* 的类型。实际上是 string。
+ */
 interface OMAppTheme {}
+/**
+ * 枚举 OMApp.UserType.* 的类型。实际上是 string。
+ */
 interface OMAppUserType {}
+/**
+ * 枚举 OMApp.NetworkingType.* 的类型。实际上是 string。
+ */
 interface OMAppNetworkingType {}
+/**
+ * 枚举 OMApp.Method.* 的类型。实际上是 string。
+ */
 interface OMAppMethod {}
+/**
+ * 枚举 OMApp.Page.* 的类型。实际上是 string。
+ */
 interface OMAppPage {}
+/**
+ * 枚举 OMApp.CacheType.* 的类型。实际上是 string。
+ */
 interface OMAppCacheType {}
+
 
 interface OMAppStatic {
 
@@ -608,7 +627,9 @@ interface OMAppStatic {
         };
     };
 
-    // Page
+    /**
+     * OMApp.Page 列举了 App 的拥有的页面。
+     */
     Page: {
         mall:      OMAppPage;
         task:      OMAppPage;
@@ -617,13 +638,17 @@ interface OMAppStatic {
         web:       OMAppPage;
     }
 
-    // Page
+    /**
+     * OMApp.Theme 列举了 App 支持的主题。
+     */
     Theme: {
         day:      OMAppTheme;
         night:    OMAppTheme;
     }
 
-    // UserType
+    /**
+     * OMApp.UserType 列举了 App 已登录用户的类型。
+     */
     UserType: {
         visitor: 	OMAppUserType;
         google: 	OMAppUserType;
@@ -631,6 +656,10 @@ interface OMAppStatic {
         twitter: 	OMAppUserType;
     }
 
+
+    /**
+     * OMApp.NetworkingType 列举了 App 可能处于的网络类型。
+     */
     NetworkingType: {
         none: 		OMAppNetworkingType;
         WiFi: 		OMAppNetworkingType;
@@ -640,6 +669,9 @@ interface OMAppStatic {
         other: 	    OMAppNetworkingType;
     }
 
+    /**
+     * OMApp.CacheType 列举了 App 的缓存类型。
+     */
     CacheType: {
         image: OMAppCacheType;
     }
@@ -647,14 +679,8 @@ interface OMAppStatic {
 }
 
 
-
-interface OMAppAJAXSettings {
-    header?: object;
-    data?: object;
-}
-
 /**
- * OMApp 实例对象代理为函数时的参数对向。
+ * OMAppDelegateMessage 描述了 omApp.delegate 为函数时，该函数的参数模型。
  */
 interface OMAppDelegateMessage {
     method: OMAppMethod;
@@ -663,7 +689,15 @@ interface OMAppDelegateMessage {
 }
 
 /**
- * OMApp 实例对象事件代理对象接口。
+ * OMAppDelegateAJAXSettings 描述了 omApp.delegate 对象在非 App 环境中，创建的 delegate 对象的全局 ajax 配置。
+ */
+interface OMAppDelegateAJAXSettings {
+    header?: object;
+    data?: object;
+}
+
+/**
+ * OMAppDelegate 描述了 omApp 在非 App 环境中时的 delegate 对象。
  */
 interface OMAppDelegate {
 
@@ -822,7 +856,7 @@ interface OMAppDelegate {
     /**
      * 桌面浏览调试时，默认情况下，通过此来设置网络请求的全局参数。
      */
-    ajaxSettings: (newValue?: OMAppAJAXSettings) => OMAppAJAXSettings;
+    ajaxSettings: (newValue?: OMAppDelegateAJAXSettings) => OMAppDelegateAJAXSettings;
 
     /**
      * OMApp 提供的默认 Delegate 发送网络请求的方法。
