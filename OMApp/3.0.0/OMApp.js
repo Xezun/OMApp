@@ -1251,26 +1251,39 @@ OMApp.current.defineProperty('services', function () {
             }
         
             // 获取缓存。
-            function _cachedResourceForURL(url, resourceType, completion) {
+            function _cachedResourceForURL(url, cacheType, completion) {
+                // 检查 URL
                 if (typeof url !== 'string') {
                     console.log("[OMApp] Method `cachedResourceForURL` url parameter must be a string value.");
                     return;
                 }
-                var method = OMApp.Method.services.data.cachedResourceForURL;
-                switch (typeof resourceType) {
+                // 检查 cacheType
+                switch (typeof cacheType) {
                     case 'function':
-                        resourceType = OMApp.CacheType.image;
-                        completion = resourceType;
+                        completion = cacheType;
+                        cacheType = OMApp.CacheType.image;
                         break;
                     case 'string':
-                        if (typeof completion !== 'function') { return; }
+                        switch (cacheType) {
+                            case OMApp.CacheType.image:
+                                break;
+                            default:
+                                console.log("[OMApp] CacheType fot method `cachedResourceForURL` is not supported yet.");
+                                return;
+                        }
                         break;
                     default:
-                        if (typeof completion !== 'function') { return; }
-                        resourceType = OMApp.CacheType.image;
+                        
+                        cacheType = OMApp.CacheType.image;
                         break;
                 }
-                OMApp.current.perform(method, [url, resourceType], completion);
+                // 检查 handler
+                if (typeof completion !== 'function') {
+                    console.log("[OMApp] Method `cachedResourceForURL` must have a callback handler.");
+                    return;
+                }
+                var method = OMApp.Method.services.data.cachedResourceForURL;
+                OMApp.current.perform(method, [url, cacheType], completion);
             }
         
             Object.defineProperties(this, {
