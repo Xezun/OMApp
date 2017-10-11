@@ -4,8 +4,8 @@
 
 [TOC] 
 
-
 ## 说明
+
 
 OMApp 是一个 JavaScript 模块，在 HTML／App 交互过程中启桥梁作用，其本身不处理任何业务逻辑。
 

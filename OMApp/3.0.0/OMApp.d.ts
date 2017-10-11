@@ -188,7 +188,7 @@ interface OMAppInstance {
      * 注册一个监听主题发生改变的闭包函数。如果不传递参数则触发已注册的闭包函数。
      * @param {(currentTheme: OMAppTheme) => void} callback
      */
-    currentThemeChange(callback: (currentTheme?: OMAppTheme) => void);
+    onCurrentThemeChange(callback: (currentTheme: OMAppTheme) => void);
 
     // OM.login
 

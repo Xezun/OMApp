@@ -669,7 +669,7 @@ OMApp.current.defineProperties(function () {
     var _allThemeHandlers = [];
     
     // 绑定主题发生改变函数。如果不传参数表示触发已绑定的函数。
-    function _currentThemeChange(handler) {
+    function _onCurrentThemeChange(handler) {
         if (typeof handler === 'undefined') {
             for (var i = 0; i < _allThemeHandlers.length; i++) {
                 _allThemeHandlers[i].call(this, _currentTheme);
@@ -691,7 +691,7 @@ OMApp.current.defineProperties(function () {
         if (needsSyncToApp || typeof needsSyncToApp === 'undefined') {
             OMApp.current.perform(OMApp.Method.setCurrentTheme, [newValue], null);
         } else {
-            _currentThemeChange();
+            _onCurrentThemeChange();
         }
     }
     
@@ -709,9 +709,9 @@ OMApp.current.defineProperties(function () {
                 return _setCurrentTheme;
             }
         },
-        currentThemeChange: {
+        onCurrentThemeChange: {
             get: function () {
-                return _currentThemeChange;
+                return _onCurrentThemeChange;
             }
         }
     }
