@@ -1455,107 +1455,12 @@ OMApp.current.defineProperty('services', function () {
  *                                                      *
  ********************************************************/
 
-function _OMAppDelegate() {
+// 当处于非 App 环境时，设置默认代理。
+if (!OMApp.current.isInApp) {
     
-    this.ready = function (callback) {
-        console.log("[OMApp] omApp.ready is called by default handler.");
-        callback();
-    };
-    
-    this.setCurrentTheme = function (newValue) {
-        console.log("[OMApp] omApp.setCurrentTheme = " + newValue + ".");
-    };
-    
-    this.login = function (callback) {
-        console.log("[OMApp] omApp.login is called with a confirm handler.");
-        callback(confirm('点击按钮确定登陆！ \n[确定] -> 登录成功 \n[取消] -> 登录失败'));
-    };
-    
-    this.open = function (page, parameters) {
-        console.log("[OMApp] omApp.open is called with {page: "+ page +", parameters: "+ JSON.stringify(parameters) + "}.");
-    };
-    
-    this.present = function (url, animated, completion) {
-        console.log("[OMApp] omApp.present is called with {url: "+ url + ", animated: "+ animated +"} and default handler.");
-        setTimeout(completion);
-    };
-    
-    this.push = function (url, animated) {
-        console.log("[OMApp] omApp.navigation.push is called with {url: "+ url +", animated: "+ animated +"}.");
-    };
-    
-    this.pop = function (animated) {
-        console.log("[OMApp] omApp.navigation.pop is called with {animated: "+ animated + "}.");
-    };
-    
-    this.popTo = function (index, animated) {
-        console.log("[OMApp] omApp.navigation.popTo is called with {index: "+ index +", animated: "+ animated +"}.");
-    };
-    
-    this.setNavigationBarHidden = function (newValue) {
-        console.log("[OMApp] omApp.navigation.bar.isHidden = " + newValue + ".");
-    };
-    
-    this.setNavigationBarTitle = function (newValue) {
-        console.log("[OMApp] omApp.navigation.bar.title = " + newValue + ".");
-    };
-    
-    this.setNavigationBarTitleColor = function (newValue) {
-        console.log("[OMApp] omApp.navigation.bar.titleColor = " + newValue + ".");
-    };
-    
-    this.setNavigationBarBackgroundColor = function (newValue) {
-        console.log("[OMApp] omApp.navigation.bar.backgroundColor = " + newValue + ".");
-    };
-    
-    this.track = function (event, parameters) {
-        console.log("[OMApp] omApp.analytics.track is called with {event: "+ event + ", parameters: " + JSON.stringify(parameters) + "}.");
-    };
-    
-    this.alert = function (message, callback) {
-        console.log("[OMApp] omApp.alert is called with {message: "+ JSON.stringify(message) +" } and default handler(-1).");
-        callback(-1);
-    };
-    
-    this.http = function (request, callback) {
-        this.ajax(request, callback);
-        console.log("[OMApp] omApp.http is call with default handler (ajax).");
-    };
-    
-    this.numberOfRowsInList = function (documentName, listName, callback) {
-        console.log("[OMApp] omApp.services.data.numberOfRowsInList is called with {document: " + documentName + ", list: " + listName + "} and default handler(4).");
-        setTimeout(function() {
-            callback(4);
-        }, Math.random() * 10000);
-    };
-    
-    this.dataForRowAtIndex = function (documentName, listName, index, callback) {
-        console.log("[OMApp] omApp.services.data.dataForRowAtIndex: " + documentName + ", " + listName + ", " + index + ".");
-        setTimeout(function () {
-            callback({});
-        }, Math.random() * 10000);
-    };
-    
-    this.cachedResourceForURL = function (url, resourceType, callback) {
-        console.log("[OMApp] omApp.services.data.cachedResourceForURL is called with {url: " + url + ", resourceType: " + resourceType + "}.");
-        if (callback) { callback(url); }
-    };
-    
-    this.didSelectRowAtIndex = function (documentName, listName, index, callback) {
-        console.log("[OMApp] omApp.services.event.didSelectRowAtIndex is called with {document: " + documentName + ", list: " + listName + ", index: " + index + "}.");
-        if (callback) { callback(); }
-    };
-    
-    this.elementWasClicked = function (documentName, elementName, data, callback) {
-        console.log("[OMApp] omApp.services.event.dataForRowAtIndex is called with {document: " + documentName + ", element: " + elementName + ", data: " + data + "}.");
-        if (typeof data === 'boolean' && typeof callback === 'function') {
-            callback(!data);
-        }
-    };
-    
-    
-    
+    /// ajax 请求全局设置。
     var _ajaxSettings = {};
+    
     function _setAjaxSettings(newValue) {
         if (!newValue) { return; }
         if (typeof newValue !== 'object') { return; }
@@ -1565,8 +1470,8 @@ function _OMAppDelegate() {
         }
     }
     
-    // 回调函数为 response 对象。
-    this.ajax = function (request, callback) {
+    /// ajax 请求。
+    function _ajax(request, callback) {
         var xhr = new XMLHttpRequest();
         
         xhr.onreadystatechange = function() {
@@ -1624,22 +1529,117 @@ function _OMAppDelegate() {
         var dataObject = mergeObjectValueIfNeeded(_ajaxSettings.data, request.data);
         var data = OMApp.URLQueryStringFromObject(dataObject);
         xhr.send(data);
+    }
+    
+    // 代理
+    var _delegate = {};
+    
+    _delegate.ready = function(callback) {
+        console.log("[OMApp] omApp.ready is called by default handler.");
+        callback();
     };
     
-    this.ajaxSettings = function (newValue) {
+    _delegate.setCurrentTheme = function(newValue) {
+        console.log("[OMApp] omApp.setCurrentTheme = " + newValue + ".");
+    };
+    
+    _delegate.login = function(callback) {
+        console.log("[OMApp] omApp.login is called with a confirm handler.");
+        callback(confirm('点击按钮确定登陆！ \n[确定] -> 登录成功 \n[取消] -> 登录失败'));
+    };
+    
+    _delegate.open = function(page, parameters) {
+        console.log("[OMApp] omApp.open is called with {page: "+ page +", parameters: "+ JSON.stringify(parameters) + "}.");
+    };
+    
+    _delegate.present = function(url, animated, completion) {
+        console.log("[OMApp] omApp.present is called with {url: "+ url + ", animated: "+ animated +"} and default handler.");
+        setTimeout(completion);
+    };
+    
+    _delegate.push = function(url, animated) {
+        console.log("[OMApp] omApp.navigation.push is called with {url: "+ url +", animated: "+ animated +"}.");
+    };
+    
+    _delegate.pop = function(animated) {
+        console.log("[OMApp] omApp.navigation.pop is called with {animated: "+ animated + "}.");
+    };
+    
+    _delegate.popTo = function(index, animated) {
+        console.log("[OMApp] omApp.navigation.popTo is called with {index: "+ index +", animated: "+ animated +"}.");
+    };
+    
+    _delegate.setNavigationBarHidden = function(newValue) {
+        console.log("[OMApp] omApp.navigation.bar.isHidden = " + newValue + ".");
+    };
+    
+    _delegate.setNavigationBarTitle = function(newValue) {
+        console.log("[OMApp] omApp.navigation.bar.title = " + newValue + ".");
+    };
+    
+    _delegate.setNavigationBarTitleColor = function(newValue) {
+        console.log("[OMApp] omApp.navigation.bar.titleColor = " + newValue + ".");
+    };
+    
+    _delegate.setNavigationBarBackgroundColor = function(newValue) {
+        console.log("[OMApp] omApp.navigation.bar.backgroundColor = " + newValue + ".");
+    };
+    
+    _delegate.track = function(event, parameters) {
+        console.log("[OMApp] omApp.analytics.track is called with {event: "+ event + ", parameters: " + JSON.stringify(parameters) + "}.");
+    };
+    
+    _delegate.alert = function(message, callback) {
+        console.log("[OMApp] omApp.alert is called with {message: "+ JSON.stringify(message) +" } and default handler(-1).");
+        callback(-1);
+    };
+    
+    _delegate.http = function(request, callback) {
+        _ajax(request, callback);
+        console.log("[OMApp] omApp.http is call with default handler (ajax).");
+    };
+    
+    _delegate.numberOfRowsInList = function(documentName, listName, callback) {
+        console.log("[OMApp] omApp.services.data.numberOfRowsInList is called with {document: " + documentName + ", list: " + listName + "} and default handler(4).");
+        setTimeout(function() {
+            callback(4);
+        }, Math.random() * 10000);
+    };
+    
+    _delegate.dataForRowAtIndex = function(documentName, listName, index, callback) {
+        console.log("[OMApp] omApp.services.data.dataForRowAtIndex: " + documentName + ", " + listName + ", " + index + ".");
+        setTimeout(function () {
+            callback({});
+        }, Math.random() * 10000);
+    };
+    
+    _delegate.cachedResourceForURL = function(url, resourceType, callback) {
+        console.log("[OMApp] omApp.services.data.cachedResourceForURL is called with {url: " + url + ", resourceType: " + resourceType + "}.");
+        if (callback) { callback(url); }
+    };
+    
+    _delegate.didSelectRowAtIndex = function(documentName, listName, index, callback) {
+        console.log("[OMApp] omApp.services.event.didSelectRowAtIndex is called with {document: " + documentName + ", list: " + listName + ", index: " + index + "}.");
+        if (callback) { callback(); }
+    };
+    
+    _delegate.elementWasClicked = function(documentName, elementName, data, callback) {
+        console.log("[OMApp] omApp.services.event.dataForRowAtIndex is called with {document: " + documentName + ", element: " + elementName + ", data: " + data + "}.");
+        if (typeof data === 'boolean' && typeof callback === 'function') {
+            callback(!data);
+        }
+    };
+    
+    _delegate.ajaxSettings = function (newValue) {
         if (newValue) {
             _setAjaxSettings(newValue);
         }
         return _ajaxSettings;
     };
-    
-}
 
-if (!OMApp.current.isInApp) {
+    _delegate.ajax = _ajax;
     
-    // 当处于非 App 环境时，设置默认代理。
-    OMApp.current.delegate = new _OMAppDelegate();
-    
+    OMApp.current.delegate = _delegate;
 }
 
 

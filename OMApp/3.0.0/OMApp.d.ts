@@ -851,6 +851,8 @@ interface OMAppDelegate {
      */
     elementWasClicked: (documentName: string, elementName: string, data: any, callback: (isSelected: boolean) => void) => void;
 
+
+
     // 以下 App 不需要实现，仅供桌面浏览器调试使用。
 
     /**
