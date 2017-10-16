@@ -17,6 +17,14 @@ declare const omApp: OMAppInstance;
 interface OMAppStatic {
 
     /**
+     * OMApp 实例对象的构造方法。
+     *
+     * @param {boolean} isInApp 是否处于 App 中
+     * @return {OMAppInstance}
+     */
+    constructor(isInApp: boolean): OMAppInstance;
+
+    /**
      * 只读。标识当前 OMApp 版本，如 3.0.0 。
      */
     version: string;
@@ -42,13 +50,13 @@ interface OMAppStatic {
      * 将一个 Object 格式化成 URL query 字符串。根据 anObject 类型的不同分别进行以下处理：
      * - Array：直接转换成 JSON 串，返回该串的 encodeURIComponent 值。
      * - String：直接返回该串的 encodeURIComponent 。
-     * - Object：遍历所有属性Key和值Value，对属性名和值（值如果不是字符串，则进行 JSON.stringify）进行 encodeURIComponent，并拼接成 key1=vlaue1&key2=value2 的形式。
+     * - Object：遍历所有属性 Key 和值 Value，以 key1=vlaue1&key2=value2 的形式拼接。
      * - Null/Undefined: 返回字符串 null 。
      * - 其它值，对其 JSON.stringify 后返回其 encodeURIComponent 。
      *
      * @param anObject 键值对象
      */
-    URLQueryStringFromObject(anObject: object): string;
+    URLQuery(anObject: object): string;
 
     /**
      * 注册 OMApp.Method ，如果注册失败，请留意控制台输出。
@@ -71,12 +79,12 @@ interface OMAppStatic {
 interface OMAppInstance {
 
     /**
-     * 只读。标识当前环境是否处于 App 中。
+     * 只读。是否在 App 环境中，该属性不需要 omApp.ready 即可使用。
      */
     isInApp: boolean;
 
     /**
-     * 只读。当前 App 系统信息。
+     * 只读。当前 App 系统信息，该属性不需要 omApp.ready 即可使用。
      */
     system: {
         /**
@@ -91,12 +99,13 @@ interface OMAppInstance {
     };
 
     /**
-     * 只读。App 标识，被用作 HTML 与 App 交互的 scheme 。
+     * App 标识，被用作 HTML 与 App 交互的 scheme，该属性不需要 omApp.ready 即可使用。默认值 app 。
      */
     name: string;
 
     /**
      * 给 OMApp 实例对象拓展单个属性。构造属性的闭包函数必须返回与 Object.defineProperty 方法所需相同的参数。
+     * 该属性不需要 omApp.ready 即可使用。
      *
      * @param propertyName 属性名
      * @param {() => Object} descriptor 构造属性的闭包函数。
@@ -105,6 +114,7 @@ interface OMAppInstance {
 
     /**
      * 给 OMApp 实例对象拓展多个属性。构造属性的闭包函数必须返回与 Object.defineProperties 方法所需相同的参数。
+     * 该属性不需要 omApp.ready 即可使用。
      *
      * @param {() => Object} descriptor 属性构造闭包函数
      */
@@ -117,8 +127,9 @@ interface OMAppInstance {
      * - 在非 App 环境中，该属性初始化，方便开发者在桌面浏览器中测试。
      * - 一般情况下，这个属性是原生 App 对象，用于接收 HTML 的事件。
      * - 在桌面浏览器中，可以通过设置此属性，来模拟 App 在接收到事件时的行为。
+     * - 该属性不需要 omApp.ready 即可使用。
      */
-    delegate: OMAppDelegate|((message: OMAppDelegateMessage) => void)|any;
+    delegate: OMAppDelegate/*|((message: OMAppDelegateMessage) => void)|any*/;
 
     /**
      * 执行 App 的指定的已约定的方法。
@@ -692,7 +703,7 @@ interface OMAppDelegateMessage {
  * OMAppDelegateAJAXSettings 描述了 omApp.delegate 对象在非 App 环境中，创建的 delegate 对象的全局 ajax 配置。
  */
 interface OMAppDelegateAJAXSettings {
-    header?: object;
+    headers?: object;
     data?: object;
 }
 
@@ -862,6 +873,7 @@ interface OMAppDelegate {
 
     /**
      * OMApp 提供的默认 Delegate 发送网络请求的方法。
+     *
      * @param {OMApp.HTTPRequest} request
      * @param {(response: OMApp.HTTPResponse) => void} callback
      */

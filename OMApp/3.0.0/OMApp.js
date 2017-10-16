@@ -2,12 +2,11 @@
 
 /********************************************************
  *                                                      *
- *                    XZExtendable                      *
+ *                        OMApp                         *
  *                                                      *
  ********************************************************/
 
 (function () {
-   
     function _defineProperty(name, callback) {
         if (!callback || typeof callback !== 'function') { return; }
         var descriptor = callback.call(this, this);
@@ -20,7 +19,7 @@
         Object.defineProperties(this, descriptor);
     }
     
-    function _XZExtendable() {
+    function _OMApp(_isInApp) {
         Object.defineProperties(this, {
             defineProperty: {
                 get: function () {
@@ -31,11 +30,16 @@
                 get: function () {
                     return _defineProperties;
                 }
+            },
+            isInApp: {
+                get: function () {
+                    return _isInApp;
+                }
             }
         });
     }
     
-    Object.defineProperties(_XZExtendable, {
+    Object.defineProperties(_OMApp, {
         defineProperty: {
             get: function () {
                 return _defineProperty;
@@ -48,45 +52,53 @@
         }
     });
     
-    Object.defineProperty(window, 'XZExtendable', { get: function () { return _XZExtendable; } });
+    Object.defineProperty(window, 'OMApp', { get: function () { return _OMApp; } });
 })();
 
-
+// OMApp.version
+OMApp.defineProperties(function () {
+    
+    // Version
+    var _version = "3.0.0";
+    
+    return {
+        version: {
+            get: function () {
+                return _version;
+            }
+        }
+    }
+});
 
 
 
 /********************************************************
  *                                                      *
- *                   OMApp & omApp                      *
+ *                       omApp                          *
  *                                                      *
  ********************************************************/
 
 (function () {
-    if (typeof omApp !== 'undefined') {
-        return omApp;
-    }
+    var _omApp = new OMApp(/Onemena/i.test(window.navigator.userAgent));
     
-    Object.defineProperty(window, "OMApp", { get: function () {
-        return window.XZExtendable;
-    }});
-    
-    var _omApp = new OMApp();
     // 定义全局 OMApp.current 属性。
-    Object.defineProperties(OMApp, { current: { get: function () { return _omApp; } } });
+    Object.defineProperties(OMApp, {
+        current: { get: function () { return _omApp; } }
+    });
+    
     // 定义全局 window.omApp 属性。
-    Object.defineProperty(window, 'omApp', { get: function () { return _omApp; } });
+    if (typeof omApp !== 'undefined') {
+        console.log("[OMApp] `omApp` 已被定义，无法将其作为 OMApp.current 的直接访问方式。");
+    } else {
+        Object.defineProperty(window, 'omApp', {
+            get: function () { return _omApp; }
+        });
+    }
 })();
 
-// OMApp.Version
-OMApp.defineProperty('version', function () {
-    return {
-        get: function () {
-            return "3.0.0";
-        }
-    }
-});
 
-// OMApp.current.name, OMApp.current.system, OMApp.current.isInApp.
+
+// OMApp.current.name, OMApp.current.system.
 OMApp.current.defineProperties(function () {
     // name 将被用作 URL 交互的协议。
     var _name = "app";
@@ -109,23 +121,19 @@ OMApp.current.defineProperties(function () {
         });
     });
     
-    // 标识当前环境是否是 App
-    var _isInApp = /Onemena/i.test(window.navigator.userAgent);
-    
-    function _setName(newValue) {
-        if (/[^a-z]/.test(newValue)) {
-            console.log("[OMApp] omApp.name 必须只能为全小写字母。");
-            return;
-        }
-        _name = newValue;
-    }
-    
     return {
         name: {
-            get: function () { return _name; },
-            set: _setName
+            get: function() {
+                return _name;
+            },
+            set: function(newValue) {
+                if (/[^a-z]/.test(newValue)) {
+                    console.log("[OMApp] omApp.name 必须只能为全小写字母。");
+                    return;
+                }
+                _name = newValue;
+            }
         },
-        isInApp: { get: function () { return _isInApp; } },
         system: { get: function () { return _system; } }
     }
 });
@@ -157,7 +165,7 @@ OMApp.defineProperties(function() {
     // - null/undefined 返回 null 。
     // - 如果 JSON 序列化成功，返回 URL 编码后的 JSON 串；NaN JSON序列化后是 null 。
     // - 默认返回空字符串。
-    function _URLQueryStringFromObject(anObject) {
+    function _URLQuery(anObject) {
         // 1. 数组直接 JSON
         if (Array.isArray(anObject)) {
             return encodeURIComponent(JSON.stringify(anObject));
@@ -230,7 +238,6 @@ OMApp.defineProperties(function() {
             console.log("[OMApp] 注册失败。参数 "+ method +" 不合法，必须只能包含是字母、下划线的字符串。");
             return false;
         }
-        
         if (!!this.Method[name]) {
             console.log("[OMApp] 注册失败，方法名 "+ name +" 已存在。");
             return false;
@@ -305,9 +312,9 @@ OMApp.defineProperties(function() {
     }
     
     return {
-        URLQueryStringFromObject: {
+        URLQuery: {
             get: function () {
-                return _URLQueryStringFromObject;
+                return _URLQuery;
             }
         },
         registerMethod: {
@@ -439,7 +446,7 @@ OMApp.current.defineProperties(function () {
             }
         }
         
-        var queryString = OMApp.URLQueryStringFromObject(parameters);
+        var queryString = OMApp.URLQuery(parameters);
         if (queryString) { url += ("?arguments=" + queryString); }
         
         var iframe = document.createElement('iframe');
@@ -1527,7 +1534,7 @@ if (!OMApp.current.isInApp) {
         }
         
         var dataObject = mergeObjectValueIfNeeded(_ajaxSettings.data, request.data);
-        var data = OMApp.URLQueryStringFromObject(dataObject);
+        var data = OMApp.URLQuery(dataObject);
         xhr.send(data);
     }
     

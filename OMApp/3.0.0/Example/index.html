@@ -32,33 +32,8 @@
         console.log(currentTheme);
     });
 
-    // 在桌面浏览器开发时，自定义事件行为。
-    // 例如：自定义 omApp.http 方法的执行过程。
-    // 注意：在桌面浏览器环境中，默认的通过 delegate.setAjaxSettings 方法设置 headers／data 。
-//    omApp.delegate.http = function (request, callback) {
-//        $.ajax({
-//            url: request.url,
-//            method: request.method,
-//            data: request.data,
-//            headers: {
-//                "access-token": "Test",
-//                "user-token": "Test"
-//            }
-//        }).then(function( data, textStatus, jqXHR ) {
-//            callback({
-//                code: 0,
-//                message: "success",
-//                contentType: jqXHR.getResponseHeader("Content-Type"),
-//                data: data
-//            });
-//        }, function( jqXHR/*, textStatus, errorThrown*/ ) {
-//            callback({
-//                code: 0,
-//                message: "failed",
-//                contentType: jqXHR.getResponseHeader("Content-Type")
-//            });
-//        });
-//    };
+
+
 
     // 将操作放在 ready 方法中。
     omApp.ready(function () {
@@ -76,10 +51,14 @@
         });
 
         omApp.http({
-            url: "http://localhost/~mlibai/",
+            url: 'http://17.dev.arabsada.com/api/shop/shop_index',
             method: "GET"
         }, function (response) {
-            console.log(response.data);
+            if (response.code !== 0) {
+                console.log("[OMApp] 网络请求发送错误");
+            } else {
+                console.log("[OMApp] 网络请求结果：" + JSON.stringify(response.data));
+            }
         });
 
         omApp.alert({
@@ -89,10 +68,20 @@
         }, function (index) {
             console.log(index);
         });
+
     });
 
 
 
+    // 可以使用 omApp.isInApp 来判断是否处于开发调试状态。
+    if (!omApp.isInApp) {
+        omApp.delegate.ajaxSettings({
+            "headers": {
+                "access-token": "Test",
+                "user-token": "Test"
+            }
+        });
+    }
 
 
 </script>
