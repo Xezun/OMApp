@@ -652,6 +652,11 @@ OMApp.current.defineProperties(function () {
     }
     
     return {
+        isDebug: {
+            get: function () {
+                return _isDebug;
+            }
+        },
         isReady: {
             get: function () {
                 return _isReady;
