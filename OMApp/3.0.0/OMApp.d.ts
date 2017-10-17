@@ -3,8 +3,9 @@
 // 2017-08-24
 // Powered by mlibai.
 
-declare const OMApp: OMAppStatic;
-declare const omApp: OMAppInstance;
+
+declare const OMApp: OMApp_Static;
+declare const omApp: OMApp_Instance;
 
 /**
  * 在 HTML 与 App 的交互过程中，OMApp 在 JavaScript 环境中代表的就是 App，它模拟了 App 具有的属性和方法，将
@@ -14,69 +15,8 @@ declare const omApp: OMAppInstance;
  * - OMApp 是单纯的 JS 对象，它将 HTML 对其方法的调用转化成 "消息" 发送给 App 来实现 HTML 对 App 功能的访问；
  * - 因为 OMApp 的部分属性描述的是 App 的属性，因此 App 在状态更改时，需同步信息到 OMApp，在具体的接口中会有说明。
  */
-interface OMAppStatic {
 
-    /**
-     * OMApp 实例对象的构造方法。
-     *
-     * @param {boolean} isInApp 是否处于 App 中
-     * @return {OMAppInstance}
-     */
-    constructor(isInApp: boolean): OMAppInstance;
-
-    /**
-     * 只读。标识当前 OMApp 版本，如 3.0.0 。
-     */
-    version: string;
-
-    /**
-     * 为了方便对 OMApp 进行拓展升级，提供了一个通过闭包函数构造属性的方法。
-     * - 构造属性的闭包函数必须返回与 Object.defineProperty 方法所需相同的参数。
-     *
-     * @param propertyName 属性名
-     * @param descriptor 构造属性的闭包
-     */
-    defineProperty(propertyName, descriptor: () => object): void;
-
-    /**
-     * 为了方便对 OMApp 进行拓展升级，提供了一个通过闭包函数构造属性的方法。
-     * - 构造属性的闭包函数必须返回与 Object.defineProperties 方法所需相同的参数。
-     *
-     * @param descriptor 构造属性的闭包
-     */
-    defineProperties(descriptor: () => object): void;
-
-    /**
-     * 将一个 Object 格式化成 URL query 字符串。根据 anObject 类型的不同分别进行以下处理：
-     * - Array：直接转换成 JSON 串，返回该串的 encodeURIComponent 值。
-     * - String：直接返回该串的 encodeURIComponent 。
-     * - Object：遍历所有属性 Key 和值 Value，以 key1=vlaue1&key2=value2 的形式拼接。
-     * - Null/Undefined: 返回字符串 null 。
-     * - 其它值，对其 JSON.stringify 后返回其 encodeURIComponent 。
-     *
-     * @param anObject 键值对象
-     */
-    URLQuery(anObject: object): string;
-
-    /**
-     * 注册 OMApp.Method ，如果注册失败，请留意控制台输出。
-     * - 只有 string 或以 string 为键值的 Object 类型可以注册为 Method 。
-     *
-     * @param method 将作为 OMApp.Method 的属性值
-     * @param name 引用注册方法时调用 OMApp.Method 的属性名
-     * @return boolean 是否注册成功
-     */
-    registerMethod(method: any, name?: string): boolean;
-
-    /**
-     * 只读。当前 HTML 环境所处的与 App 对象。
-     * - OMApp.current 与 omApp 都可以获取对它的引用。
-     */
-    current: OMAppInstance;
-
-}
-
-interface OMAppInstance {
+interface OMApp_Instance {
 
     /**
      * 只读。是否在 App 环境中，该属性不需要 omApp.ready 即可使用。
@@ -419,22 +359,22 @@ interface OMAppInstance {
 
         /**
          * 发送网络请求。
-         * @param {OMApp.HTTPRequest} request 网络请求对象
-         * @param {(response: OMApp.HTTPResponse) => void} callback 网络请求回调
+         * @param {OMAppHTTPRequest} request 网络请求对象
+         * @param {(response: OMAppHTTPResponse) => void} callback 网络请求回调
          */
         http(request: OMAppHTTPRequest, callback: (response: OMAppHTTPResponse) => void): void;
     };
 
     /**
      * 调用 App 网络功能发送 HTTP 请求的快捷方法。
-     * @param {OMApp.HTTPRequest} request 包含网络请求的信息
-     * @param {(response: OMApp.HTTPResponse) => void} callback 网络请求后的回调
+     * @param {OMAppHTTPRequest} request 包含网络请求的信息
+     * @param {(response: OMAppHTTPResponse) => void} callback 网络请求后的回调
      */
     http(request: OMAppHTTPRequest, callback: (response: OMAppHTTPResponse) => void): void;
 
     /**
      * 调用 App 原生 alert 方法。
-     * @param {OMApp.AlertMessage} message 需要 alert 的消息内容
+     * @param {OMAppAlertMessage} message 需要 alert 的消息内容
      * @param {(index: number) => void} callback 按钮事件
      */
     alert(message: OMAppAlertMessage, callback?: (index: number) => void): void;
@@ -468,10 +408,10 @@ interface OMAppInstance {
             /**
              * 通过此接口让 App 缓存指定 URL 资源。
              * @param {string} url 资源的 URL
-             * @param {OMApp.ResourceType} resourceType 资源的类型
+             * @param {OMAppCacheType} cacheType 资源的类型
              * @param {(sourcePath: string) => void} callback 获取缓存资源的回调，获得缓存路径
              */
-            cachedResourceForURL(url: string, resourceType?: OMAppCacheType, callback?: (sourcePath: string) => void): void;
+            cachedResourceForURL(url: string, cacheType?: OMAppCacheType, callback?: (sourcePath: string) => void): void;
         };
 
         /**
@@ -511,6 +451,8 @@ interface OMAppInstance {
         };
     };
 }
+
+
 
 
 // *************
@@ -593,7 +535,67 @@ interface OMAppPage {}
 interface OMAppCacheType {}
 
 
-interface OMAppStatic {
+
+
+interface OMApp_Static {
+
+    /**
+     * OMApp 实例对象的构造方法。
+     *
+     * @param {boolean} isInApp 是否处于 App 中
+     * @return {OMApp_Instance}
+     */
+    constructor(isInApp: boolean): OMApp_Instance;
+
+    /**
+     * 只读。标识当前 OMApp 版本，如 3.0.0 。
+     */
+    version: string;
+
+    /**
+     * 为了方便对 OMApp 进行拓展升级，提供了一个通过闭包函数构造属性的方法。
+     * - 构造属性的闭包函数必须返回与 Object.defineProperty 方法所需相同的参数。
+     *
+     * @param propertyName 属性名
+     * @param descriptor 构造属性的闭包
+     */
+    defineProperty(propertyName, descriptor: () => object): void;
+
+    /**
+     * 为了方便对 OMApp 进行拓展升级，提供了一个通过闭包函数构造属性的方法。
+     * - 构造属性的闭包函数必须返回与 Object.defineProperties 方法所需相同的参数。
+     *
+     * @param descriptor 构造属性的闭包
+     */
+    defineProperties(descriptor: () => object): void;
+
+    /**
+     * 将一个 Object 格式化成 URL query 字符串。根据 anObject 类型的不同分别进行以下处理：
+     * - Array：直接转换成 JSON 串，返回该串的 encodeURIComponent 值。
+     * - String：直接返回该串的 encodeURIComponent 。
+     * - Object：遍历所有属性 Key 和值 Value，以 key1=vlaue1&key2=value2 的形式拼接。
+     * - Null/Undefined: 返回字符串 null 。
+     * - 其它值，对其 JSON.stringify 后返回其 encodeURIComponent 。
+     *
+     * @param anObject 键值对象
+     */
+    URLQuery(anObject: object): string;
+
+    /**
+     * 注册 OMApp.Method ，如果注册失败，请留意控制台输出。
+     * - 只有 string 或以 string 为键值的 Object 类型可以注册为 Method 。
+     *
+     * @param method 将作为 OMApp.Method 的属性值
+     * @param name 引用注册方法时调用 OMApp.Method 的属性名
+     * @return boolean 是否注册成功
+     */
+    registerMethod(method: any, name?: string): boolean;
+
+    /**
+     * 只读。当前 HTML 环境所处的与 App 对象。
+     * - OMApp.current 与 omApp 都可以获取对它的引用。
+     */
+    current: OMApp_Instance;
 
     /**
      * App 与 HTML 交互机制。
@@ -697,14 +699,6 @@ interface OMAppStatic {
 }
 
 
-/**
- * OMAppDelegateMessage 描述了 omApp.delegate 为函数时，该函数的参数模型。
- */
-interface OMAppDelegateMessage {
-    method: OMAppMethod;
-    parameters?: [any];
-    callbackID?: string;
-}
 
 /**
  * OMAppDelegateAJAXSettings 描述了 omApp.delegate 对象在非 App 环境中，创建的 delegate 对象的全局 ajax 配置。
@@ -820,8 +814,8 @@ interface OMAppDelegate {
 
     /**
      * HTML 发送 App 网络请求。
-     * @param {OMApp.HTTPRequest} request
-     * @param {(response: OMApp.HTTPResponse) => void} callback
+     * @param {OMAppHTTPRequest} request
+     * @param {(response: OMAppHTTPResponse) => void} callback
      */
     http?: (request: OMAppHTTPRequest, callback: (response: OMAppHTTPResponse) => void) => void;
 
@@ -845,7 +839,7 @@ interface OMAppDelegate {
     /**
      * HTML 页面获取某一 URL 对应的资源。
      * @param {string} url
-     * @param {OMApp.ResourceType} resourceType
+     * @param {OMAppCacheType} resourceType
      * @param {boolean} automaticallyDownload
      * @param {(filePath: string) => void} callback
      */
@@ -881,8 +875,8 @@ interface OMAppDelegate {
     /**
      * OMApp 提供的默认 Delegate 发送网络请求的方法。
      *
-     * @param {OMApp.HTTPRequest} request
-     * @param {(response: OMApp.HTTPResponse) => void} callback
+     * @param {OMAppHTTPRequest} request
+     * @param {(response: OMAppHTTPResponse) => void} callback
      */
     ajax?: (request: OMAppHTTPRequest, callback: (response: OMAppHTTPResponse) => void) => void;
 }
