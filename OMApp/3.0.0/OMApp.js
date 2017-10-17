@@ -2,7 +2,7 @@
 
 /********************************************************
  *                                                      *
- *                        OMApp                         *
+ *                     OMExtendable                     *
  *                                                      *
  ********************************************************/
 
@@ -19,7 +19,7 @@
         Object.defineProperties(this, descriptor);
     }
     
-    function _OMApp(_isInApp) {
+    function _OMExtendable() {
         Object.defineProperties(this, {
             defineProperty: {
                 get: function () {
@@ -30,16 +30,11 @@
                 get: function () {
                     return _defineProperties;
                 }
-            },
-            isInApp: {
-                get: function () {
-                    return _isInApp;
-                }
             }
         });
     }
     
-    Object.defineProperties(_OMApp, {
+    Object.defineProperties(_OMExtendable, {
         defineProperty: {
             get: function () {
                 return _defineProperty;
@@ -52,13 +47,23 @@
         }
     });
     
-    Object.defineProperty(window, 'OMApp', { get: function () { return _OMApp; } });
+    Object.defineProperty(window, 'OMExtendable', {
+        get: function () {
+            return _OMExtendable;
+        }
+    });
+    
+    // OMApp
+    Object.defineProperty(window, 'OMApp', {
+        get: function () {
+            return window.OMExtendable;
+        }
+    });
 })();
 
-// OMApp.version
+// OMApp, OMApp.version
 OMApp.defineProperties(function () {
     
-    // Version
     var _version = "3.0.0";
     
     return {
@@ -79,7 +84,7 @@ OMApp.defineProperties(function () {
  ********************************************************/
 
 (function () {
-    var _omApp = new OMApp(/Onemena/i.test(window.navigator.userAgent));
+    var _omApp = new OMApp();
     
     // 定义全局 OMApp.current 属性。
     Object.defineProperties(OMApp, {
@@ -100,8 +105,8 @@ OMApp.defineProperties(function () {
 
 // OMApp.current.name, OMApp.current.system.
 OMApp.current.defineProperties(function () {
-    // name 将被用作 URL 交互的协议。
-    var _name = "app";
+    var _isInApp = /Onemena/i.test(window.navigator.userAgent);
+    var _name = "app"; // name 将被用作 URL 交互的协议。
     // App 系统信息相关
     var _system = new (function () {
         var _userAgent = window.navigator.userAgent;
@@ -109,7 +114,7 @@ OMApp.current.defineProperties(function () {
         var _isiOS     = /\(i[^;]+;( U;)? CPU.+Mac OS X/.test(_userAgent);
         Object.defineProperties(this, {
             isAndroid: {
-                get:function () {
+                get: function () {
                     return _isAndroid;
                 }
             },
@@ -122,6 +127,11 @@ OMApp.current.defineProperties(function () {
     });
     
     return {
+        isInApp: {
+            get: function () {
+                return _isInApp;
+            }
+        },
         name: {
             get: function() {
                 return _name;
@@ -379,7 +389,6 @@ OMApp.current.defineProperties(function () {
     function _perform(method, parameters, callback) {
         // 检测 method
         if ( !method || (typeof method !== 'string') ) { return; }
-        
         var callbackID = null;
         if ( !!_delegate ) {
             // 1. iOS.WKWebView 直接通过 function 转发消息。
@@ -466,11 +475,10 @@ OMApp.current.defineProperties(function () {
                 return _delegate;
             },
             set: function (newValue) {
-                if (_delegate !== newValue) {
-                    _delegate = newValue;
-                    // 如果重新设置了代理是否需要重新发送 ready 事件？
-                    // 不。代理需要在 ready 事件前设置。如果使用者在 ready 之后或不确定的时机设置，则需要开发者自己去判断当前状态。
-                }
+                if (_delegate === newValue) { return; }
+                // 如果重新设置了代理是否需要重新发送 ready 事件？
+                // 不。代理需要在 ready 事件前设置。如果使用者在 ready 之后或不确定的时机设置，则需要开发者自己去判断当前状态。
+                _delegate = newValue;
             }
         },
         dispatch: {
@@ -585,12 +593,16 @@ OMApp.current.defineProperties(function () {
     // - omApp.isReady = true 后依次执行。
     var _readyHandlers = null;
     
-    function _didFinishLoading() {
+    // 是否调试模式
+    var _isDebug = true;
+    
+    function _didFinishLoading(isDebug) {
         if (!_readyHandlers) {
             console.log('[OMApp] 为了保证 omApp 在使用时已完成初始化，请将操作放在 \nomApp.ready(function() {\n\t/*代码*/\n}); \n中。');
             return;
         }
         _isReady = true;
+        _isDebug = !!isDebug;
         while (_readyHandlers.length > 0) {
             (_readyHandlers.shift()).apply(window);
         }
@@ -629,7 +641,9 @@ OMApp.current.defineProperties(function () {
             var _eventListener = function() {
                 document.removeEventListener("DOMContentLoaded", _eventListener);
                 window.removeEventListener("load", _eventListener);
-                _documentIsReady();
+                // 事件触发可能与页面加载在同一个进程里完成，造成 iOS.WKWebView 在文档末尾注入的 JS 晚于 ready 执行。
+                // 所以需要使用异步。
+                setTimeout(_documentIsReady);
             };
             // Listener 不会被重复添加。
             document.addEventListener("DOMContentLoaded", _eventListener, false);
@@ -1391,68 +1405,7 @@ OMApp.current.defineProperty('services', function () {
             return _services;
         }
     };
-    
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1462,9 +1415,9 @@ OMApp.current.defineProperty('services', function () {
  *                                                      *
  ********************************************************/
 
-// 当处于非 App 环境时，设置默认代理。
-if (!OMApp.current.isInApp) {
-    
+/// 当处于非 App 环境时，设置默认代理。
+(function () {
+    if (OMApp.current.isInApp) { return; }
     /// ajax 请求全局设置。
     var _ajaxSettings = {};
     
@@ -1542,96 +1495,96 @@ if (!OMApp.current.isInApp) {
     var _delegate = {};
     
     _delegate.ready = function(callback) {
-        console.log("[OMApp] omApp.ready is called by default handler.");
-        callback();
+        console.log("[OMApp] App 收到 omApp 的初始化请求。在非 App 环境下，omApp 为调试模式。");
+        callback(true);
     };
     
     _delegate.setCurrentTheme = function(newValue) {
-        console.log("[OMApp] omApp.setCurrentTheme = " + newValue + ".");
+        console.log("[OMApp] 设置 App 主题：" + newValue + "。");
     };
     
     _delegate.login = function(callback) {
-        console.log("[OMApp] omApp.login is called with a confirm handler.");
+        console.log("[OMApp] App 收到了 login 消息。在调试环境下，使用 confirm 对话框模拟。");
         callback(confirm('点击按钮确定登陆！ \n[确定] -> 登录成功 \n[取消] -> 登录失败'));
     };
     
     _delegate.open = function(page, parameters) {
-        console.log("[OMApp] omApp.open is called with {page: "+ page +", parameters: "+ JSON.stringify(parameters) + "}.");
+        console.log("[OMApp] 打开 App 原生页面："+ page +"，页面参数："+ JSON.stringify(parameters) + "。");
     };
     
     _delegate.present = function(url, animated, completion) {
-        console.log("[OMApp] omApp.present is called with {url: "+ url + ", animated: "+ animated +"} and default handler.");
+        console.log("[OMApp] 模态展示新页面："+ url + "，是否转场动画："+ animated +"。");
         setTimeout(completion);
     };
     
     _delegate.push = function(url, animated) {
-        console.log("[OMApp] omApp.navigation.push is called with {url: "+ url +", animated: "+ animated +"}.");
+        console.log("[OMApp] 导航到下级页面： "+ url +"，是否转场动画："+ animated +"。");
     };
     
     _delegate.pop = function(animated) {
-        console.log("[OMApp] omApp.navigation.pop is called with {animated: "+ animated + "}.");
+        console.log("[OMApp] 导航返回上级页面，是否转场动画："+ animated + "。");
     };
     
     _delegate.popTo = function(index, animated) {
-        console.log("[OMApp] omApp.navigation.popTo is called with {index: "+ index +", animated: "+ animated +"}.");
+        console.log("[OMApp] 导航返回指定页面："+ index +"，是否转场动画："+ animated +"。");
     };
     
     _delegate.setNavigationBarHidden = function(newValue) {
-        console.log("[OMApp] omApp.navigation.bar.isHidden = " + newValue + ".");
+        console.log("[OMApp] 设置是否隐藏导航条：" + newValue + "。");
     };
     
     _delegate.setNavigationBarTitle = function(newValue) {
-        console.log("[OMApp] omApp.navigation.bar.title = " + newValue + ".");
+        console.log("[OMApp] 设置导航条标题：" + newValue + "。");
     };
     
     _delegate.setNavigationBarTitleColor = function(newValue) {
-        console.log("[OMApp] omApp.navigation.bar.titleColor = " + newValue + ".");
+        console.log("[OMApp] 设置导航条标题文字颜色：" + newValue + "。");
     };
     
     _delegate.setNavigationBarBackgroundColor = function(newValue) {
-        console.log("[OMApp] omApp.navigation.bar.backgroundColor = " + newValue + ".");
+        console.log("[OMApp] 设置导航条背景色：" + newValue + "。");
     };
     
     _delegate.track = function(event, parameters) {
-        console.log("[OMApp] omApp.analytics.track is called with {event: "+ event + ", parameters: " + JSON.stringify(parameters) + "}.");
+        console.log("[OMApp] 统计分析："+ event + "，参数：" + JSON.stringify(parameters) + "。");
     };
     
     _delegate.alert = function(message, callback) {
-        console.log("[OMApp] omApp.alert is called with {message: "+ JSON.stringify(message) +" } and default handler(-1).");
+        console.log("[OMApp] 提示框："+ JSON.stringify(message) +"。调试环境下，回调返回选中按钮的排序为 -1 。");
         callback(-1);
     };
     
     _delegate.http = function(request, callback) {
         _ajax(request, callback);
-        console.log("[OMApp] omApp.http is call with default handler (ajax).");
+        console.log("[OMApp] App 接收到 http 消息。在调试环境下，该消息由 JavaScript 的 AJAX 模拟。");
     };
     
     _delegate.numberOfRowsInList = function(documentName, listName, callback) {
-        console.log("[OMApp] omApp.services.data.numberOfRowsInList is called with {document: " + documentName + ", list: " + listName + "} and default handler(4).");
+        console.log("[OMApp] 查询页面 " + documentName + " 中列表 " + listName + " 的数据行数。调试环境返回 4 。");
         setTimeout(function() {
             callback(4);
         }, Math.random() * 10000);
     };
     
     _delegate.dataForRowAtIndex = function(documentName, listName, index, callback) {
-        console.log("[OMApp] omApp.services.data.dataForRowAtIndex: " + documentName + ", " + listName + ", " + index + ".");
+        console.log("[OMApp] 请求查询页面 " + documentName + " 中的列表 " + listName + " 第 " + index + " 行数据。");
         setTimeout(function () {
             callback({});
         }, Math.random() * 10000);
     };
     
     _delegate.cachedResourceForURL = function(url, resourceType, callback) {
-        console.log("[OMApp] omApp.services.data.cachedResourceForURL is called with {url: " + url + ", resourceType: " + resourceType + "}.");
+        console.log("[OMApp] 获取资源的缓存：链接，" + url + "；类型，" + resourceType + " 。");
         if (callback) { callback(url); }
     };
     
     _delegate.didSelectRowAtIndex = function(documentName, listName, index, callback) {
-        console.log("[OMApp] omApp.services.event.didSelectRowAtIndex is called with {document: " + documentName + ", list: " + listName + ", index: " + index + "}.");
+        console.log("[OMApp] 页面 " + documentName + " 中的列表 " + listName + " 的第 " + index + " 行被选中。");
         if (callback) { callback(); }
     };
     
     _delegate.elementWasClicked = function(documentName, elementName, data, callback) {
-        console.log("[OMApp] omApp.services.event.dataForRowAtIndex is called with {document: " + documentName + ", element: " + elementName + ", data: " + data + "}.");
+        console.log("[OMApp] 页面 " + documentName + " 中的 " + elementName + " 元素被点击了：" + data + " 。");
         if (typeof data === 'boolean' && typeof callback === 'function') {
             callback(!data);
         }
@@ -1643,11 +1596,12 @@ if (!OMApp.current.isInApp) {
         }
         return _ajaxSettings;
     };
-
+    
     _delegate.ajax = _ajax;
     
     OMApp.current.delegate = _delegate;
-}
+})();
+
 
 
 

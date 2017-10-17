@@ -99,6 +99,13 @@ interface OMAppInstance {
     };
 
     /**
+     * App 是否是调试模式。
+     * - 在 omApp 完成初始化（ready）之前，此值为 true 。
+     * - App 在 ready 方法的回调函数中，返回 App 当前的模式。
+     */
+    isDebug: boolean;
+
+    /**
      * App 标识，被用作 HTML 与 App 交互的 scheme，该属性不需要 omApp.ready 即可使用。默认值 app 。
      */
     name: string;
@@ -717,26 +724,26 @@ interface OMAppDelegate {
      * - App 应该在此方法中初始化 omApp 对象属性的初始值。
      * @param {() => void} callback 完成初始化后应该执行的回调函数
      */
-    ready: (callback: () => void) => void;
+    ready?: (callback: (isDebug: boolean) => void) => void;
 
     /**
      * 当 HTML 更改了 App 主题时，此方法会被调用。
      * @param {OMApp.Theme} newValue
      */
-    setCurrentTheme: (newValue: OMAppTheme) => void;
+    setCurrentTheme?: (newValue: OMAppTheme) => void;
 
     /**
      * 当 HTML 调用 App 登录功能时，此方法会被调用。
      * @param {(success: boolean) => void} callback 登录结果的回调
      */
-    login: (callback: (success: boolean) => void) => void;
+    login?: (callback: (success: boolean) => void) => void;
 
     /**
      * 当 HTML 要打开新的页面时。
      * @param {OMApp.Page} page
      * @param {Object} parameters
      */
-    open: (page: OMAppPage, parameters?: object) => void;
+    open?: (page: OMAppPage, parameters?: object) => void;
 
     /**
      * 模态出新的 HTML 窗口。
@@ -744,79 +751,79 @@ interface OMAppDelegate {
      * @param {boolean} animated
      * @param {() => void} completion
      */
-    present: (url: string, animated: boolean, completion: () => void) => void;
+    present?: (url: string, animated: boolean, completion: () => void) => void;
 
     /**
      * 移除模态的 HTML 窗口。
      * @param {boolean} animated
      * @param {() => void} completion
      */
-    dismiss: (animated: boolean, completion?: () => void) => void;
+    dismiss?: (animated: boolean, completion?: () => void) => void;
 
     /**
      * 导航到下级页面。
      * @param {string} url
      * @param {boolean} animated
      */
-    push: (url: string, animated?: boolean) => void;
+    push?: (url: string, animated?: boolean) => void;
 
     /**
      * 导航到上级页面。
      * @param {boolean} animated
      */
-    pop: (animated?: boolean) => void;
+    pop?: (animated?: boolean) => void;
 
     /**
      * 跳转到导航历史中的指定页面。
      * @param {number} index
      * @param {boolean} animated
      */
-    popTo: (index: number, animated?: boolean) => void;
+    popTo?: (index: number, animated?: boolean) => void;
 
     /**
      * HTML 设置隐藏导航条。
      * @param {boolean} newValue
      */
-    setNavigationBarHidden: (newValue: boolean) => void;
+    setNavigationBarHidden?: (newValue: boolean) => void;
 
     /**
      * HTML 设置导航条标题。
      * @param {string} newValue
      */
-    setNavigationBarTitle: (newValue: string) => void;
+    setNavigationBarTitle?: (newValue: string) => void;
 
     /**
      * HTML 设置导航条标题文字颜色。
      * @param {string} newValue
      */
-    setNavigationBarTitleColor: (newValue: string) => void;
+    setNavigationBarTitleColor?: (newValue: string) => void;
 
     /**
      * HTML 设置导航条背景色。
      * @param {string} newValue
      */
-    setNavigationBarBackgroundColor: (newValue: string) => void;
+    setNavigationBarBackgroundColor?: (newValue: string) => void;
 
     /**
      * 统计分析。
      * @param {string} event
      * @param {Object} parameters
      */
-    track: (event: string, parameters?: object) => void;
+    track?: (event: string, parameters?: object) => void;
 
     /**
      * 展示 alert 。
      * @param message
      * @param parameters
      */
-    alert(message, parameters)
+    alert?:(message, parameters)=>void;
 
     /**
      * HTML 发送 App 网络请求。
      * @param {OMApp.HTTPRequest} request
      * @param {(response: OMApp.HTTPResponse) => void} callback
      */
-    http: (request: OMAppHTTPRequest, callback: (response: OMAppHTTPResponse) => void) => void;
+    http?: (request: OMAppHTTPRequest, callback: (response: OMAppHTTPResponse) => void) => void;
 
     /**
      * HTML 查询某一列表的行数。
@@ -824,7 +831,7 @@ interface OMAppDelegate {
      * @param {string} listName
      * @param {(count: number) => void} callback
      */
-    numberOfRowsInList: (documentName: string, listName: string, callback: (count: number) => void) => void;
+    numberOfRowsInList?: (documentName: string, listName: string, callback: (count: number) => void) => void;
 
     /**
      * HTML 获取某一列表行的数据。
@@ -833,7 +840,7 @@ interface OMAppDelegate {
      * @param {number} index
      * @param {(data: any) => void} callback
      */
-    dataForRowAtIndex: (documentName: string, listName: string, index: number, callback: (data: any) => void) => void;
+    dataForRowAtIndex?: (documentName: string, listName: string, index: number, callback: (data: any) => void) => void;
 
     /**
      * HTML 页面获取某一 URL 对应的资源。
@@ -842,7 +849,7 @@ interface OMAppDelegate {
      * @param {boolean} automaticallyDownload
      * @param {(filePath: string) => void} callback
      */
-    cachedResourceForURL: (url: string, resourceType: OMAppCacheType, callback?: (filePath: string) => void) => void;
+    cachedResourceForURL?: (url: string, resourceType: OMAppCacheType, callback?: (filePath: string) => void) => void;
 
     /**
      * HTML 的某一列表行被点击事件。
@@ -851,7 +858,7 @@ interface OMAppDelegate {
      * @param {number} index
      * @param {() => void} completion
      */
-    didSelectRowAtIndex: (documentName: string, listName: string, index: number, completion?: () => void) => void;
+    didSelectRowAtIndex?: (documentName: string, listName: string, index: number, completion?: () => void) => void;
 
     /**
      * HTML 的某一元素被点击。
@@ -860,7 +867,7 @@ interface OMAppDelegate {
      * @param data
      * @param {(isSelected: boolean) => void} callback
      */
-    elementWasClicked: (documentName: string, elementName: string, data: any, callback: (isSelected: boolean) => void) => void;
+    elementWasClicked?: (documentName: string, elementName: string, data: any, callback: (isSelected: boolean) => void) => void;
 
 
 
@@ -869,7 +876,7 @@ interface OMAppDelegate {
     /**
      * 桌面浏览调试时，默认情况下，通过此来设置网络请求的全局参数。
      */
-    ajaxSettings: (newValue?: OMAppDelegateAJAXSettings) => OMAppDelegateAJAXSettings;
+    ajaxSettings?: (newValue?: OMAppDelegateAJAXSettings) => OMAppDelegateAJAXSettings;
 
     /**
      * OMApp 提供的默认 Delegate 发送网络请求的方法。
@@ -877,7 +884,7 @@ interface OMAppDelegate {
      * @param {OMApp.HTTPRequest} request
      * @param {(response: OMApp.HTTPResponse) => void} callback
      */
-    ajax: (request: OMAppHTTPRequest, callback: (response: OMAppHTTPResponse) => void) => void;
+    ajax?: (request: OMAppHTTPRequest, callback: (response: OMAppHTTPResponse) => void) => void;
 }
 
 
