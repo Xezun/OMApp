@@ -3,10 +3,6 @@
 // 2017-08-24
 // Powered by mlibai.
 
-
-declare const OMApp: OMApp_Static;
-declare const omApp: OMApp_Instance;
-
 /**
  * 在 HTML 与 App 的交互过程中，OMApp 在 JavaScript 环境中代表的就是 App，它模拟了 App 具有的属性和方法，将
  * HTML 对 App 的交互过程转简化为对 OMApp 对象属性和方法的访问。
@@ -16,7 +12,7 @@ declare const omApp: OMApp_Instance;
  * - 因为 OMApp 的部分属性描述的是 App 的属性，因此 App 在状态更改时，需同步信息到 OMApp，在具体的接口中会有说明。
  */
 
-interface OMApp_Instance {
+declare class OMApp {
 
     /**
      * 只读。是否在 App 环境中，该属性不需要 omApp.ready 即可使用。
@@ -51,25 +47,6 @@ interface OMApp_Instance {
     name: string;
 
     /**
-     * 给 OMApp 实例对象拓展单个属性。构造属性的闭包函数必须返回与 Object.defineProperty 方法所需相同的参数。
-     * 该属性不需要 omApp.ready 即可使用。
-     *
-     * @param propertyName 属性名
-     * @param {() => Object} descriptor 构造属性的闭包函数。
-     */
-    defineProperty(propertyName, descriptor: () => object): void;
-
-    /**
-     * 给 OMApp 实例对象拓展多个属性。构造属性的闭包函数必须返回与 Object.defineProperties 方法所需相同的参数。
-     * 该属性不需要 omApp.ready 即可使用。
-     *
-     * @param {() => Object} descriptor 属性构造闭包函数
-     */
-    defineProperties(descriptor: () => object): void;
-
-    // OM.Basic
-
-    /**
      * 可写。OMApp 事件代理。
      * - 在非 App 环境中，该属性初始化，方便开发者在桌面浏览器中测试。
      * - 一般情况下，这个属性是原生 App 对象，用于接收 HTML 的事件。
@@ -102,18 +79,6 @@ interface OMApp_Instance {
      * @return {any} 回调函数的返回值
      */
     dispatch(callbackID: string, ...args: any[]): any;
-
-
-    // Config
-
-    /**
-     * 用键值对象配置 OMApp 实例对象属性的初始值。
-     * - 该方法只有在非 App 环境中才会生效。
-     * @param {Object} configuration
-     */
-    config(configuration: object): void;
-
-    // OM.ready
 
     /**
      * 只读。标识当前 OMApp 是否已完成初始化。如果操作必须在 OMApp 完成初始化后进行，请在 ready 方法中执行。
@@ -450,124 +415,24 @@ interface OMApp_Instance {
             track(event: string, parameters?: object): void;
         };
     };
-}
 
 
+    defineProperty(propertyName, descriptor: () => object): void;
+    defineProperties(descriptor: () => object): void;
 
-
-// *************
-// OMApp 接口定义
-
-
-/**
- * 描述 App 网路请求信息的接口。
- */
-interface OMAppHTTPRequest {
-    url: string;
-    method: string;
-    data?: object;
-    headers?: object;
-}
-
-/**
- * 描述 App 网路请求结果信息的接口。
- */
-interface OMAppHTTPResponse {
-    code: number;
-    message: string;
-    contentType: string;
-    data?: any;
-}
-
-
-/**
- * 描述 alert 的接口。
- */
-interface OMAppAlertMessage {
-    /**
-     * alert 标题。
-     */
-    title: string;
-
-    /**
-     * alert 内容。
-     */
-    body: string;
-
-    /**
-     * 按钮文字。默认只有一个 确认 按钮。
-     */
-    actions?: [string]
-}
-
-
-
-
-
-
-
-// ***************
-// OMApp 枚举值定义
-
-/**
- * 枚举 OMApp.Theme.* 的类型。实际上是 string。
- */
-interface OMAppTheme {}
-/**
- * 枚举 OMApp.UserType.* 的类型。实际上是 string。
- */
-interface OMAppUserType {}
-/**
- * 枚举 OMApp.NetworkingType.* 的类型。实际上是 string。
- */
-interface OMAppNetworkingType {}
-/**
- * 枚举 OMApp.Method.* 的类型。实际上是 string。
- */
-interface OMAppMethod {}
-/**
- * 枚举 OMApp.Page.* 的类型。实际上是 string。
- */
-interface OMAppPage {}
-/**
- * 枚举 OMApp.CacheType.* 的类型。实际上是 string。
- */
-interface OMAppCacheType {}
-
-
-
-
-interface OMApp_Static {
+    static defineProperty(propertyName, descriptor: () => object): void;
+    static defineProperties(descriptor: () => object): void;
 
     /**
      * OMApp 实例对象的构造方法。
-     *
-     * @param {boolean} isInApp 是否处于 App 中
-     * @return {OMApp_Instance}
+     * @param {boolean} isInApp
      */
-    constructor(isInApp: boolean): OMApp_Instance;
+    constructor(isInApp: boolean)
 
     /**
      * 只读。标识当前 OMApp 版本，如 3.0.0 。
      */
-    version: string;
-
-    /**
-     * 为了方便对 OMApp 进行拓展升级，提供了一个通过闭包函数构造属性的方法。
-     * - 构造属性的闭包函数必须返回与 Object.defineProperty 方法所需相同的参数。
-     *
-     * @param propertyName 属性名
-     * @param descriptor 构造属性的闭包
-     */
-    defineProperty(propertyName, descriptor: () => object): void;
-
-    /**
-     * 为了方便对 OMApp 进行拓展升级，提供了一个通过闭包函数构造属性的方法。
-     * - 构造属性的闭包函数必须返回与 Object.defineProperties 方法所需相同的参数。
-     *
-     * @param descriptor 构造属性的闭包
-     */
-    defineProperties(descriptor: () => object): void;
+    static version: string;
 
     /**
      * 将一个 Object 格式化成 URL query 字符串。根据 anObject 类型的不同分别进行以下处理：
@@ -579,7 +444,7 @@ interface OMApp_Static {
      *
      * @param anObject 键值对象
      */
-    URLQuery(anObject: object): string;
+    static URLQuery(anObject: object): string;
 
     /**
      * 注册 OMApp.Method ，如果注册失败，请留意控制台输出。
@@ -595,7 +460,7 @@ interface OMApp_Static {
      * 只读。当前 HTML 环境所处的与 App 对象。
      * - OMApp.current 与 omApp 都可以获取对它的引用。
      */
-    current: OMApp_Instance;
+    static current: OMApp;
 
     /**
      * App 与 HTML 交互机制。
@@ -603,7 +468,7 @@ interface OMApp_Static {
      * - App 通过 JavaScript 传递的 OMApp.Method 值来区分 HTML 要调用 App 方法。
      * - 所有 OMApp.Method 都是事先约定好的字符串。
      */
-    Method: {
+    static Method: {
         login: OMAppMethod;
         open: OMAppMethod;
         ready: OMAppMethod;
@@ -650,7 +515,7 @@ interface OMApp_Static {
     /**
      * OMApp.Page 列举了 App 的拥有的页面。
      */
-    Page: {
+    static Page: {
         mall:      OMAppPage;
         task:      OMAppPage;
         news:      OMAppPage;
@@ -661,7 +526,7 @@ interface OMApp_Static {
     /**
      * OMApp.Theme 列举了 App 支持的主题。
      */
-    Theme: {
+    static Theme: {
         day:      OMAppTheme;
         night:    OMAppTheme;
     }
@@ -669,7 +534,7 @@ interface OMApp_Static {
     /**
      * OMApp.UserType 列举了 App 已登录用户的类型。
      */
-    UserType: {
+    static UserType: {
         visitor: 	OMAppUserType;
         google: 	OMAppUserType;
         facebook: 	OMAppUserType;
@@ -680,7 +545,7 @@ interface OMApp_Static {
     /**
      * OMApp.NetworkingType 列举了 App 可能处于的网络类型。
      */
-    NetworkingType: {
+    static NetworkingType: {
         none: 		OMAppNetworkingType;
         WiFi: 		OMAppNetworkingType;
         WWan2G: 	OMAppNetworkingType;
@@ -692,12 +557,97 @@ interface OMApp_Static {
     /**
      * OMApp.CacheType 列举了 App 的缓存类型。
      */
-    CacheType: {
+    static CacheType: {
         image: OMAppCacheType;
     }
+}
+
+declare const omApp: OMApp;
+
+
+/**
+ * 描述 App 网路请求信息的接口。
+ */
+interface OMAppHTTPRequest {
+    url: string;
+    method: string;
+    data?: object;
+    headers?: object;
+}
+
+/**
+ * 描述 App 网路请求结果信息的接口。
+ */
+interface OMAppHTTPResponse {
+    code: number;
+    message: string;
+    contentType: string;
+    data?: any;
+}
+
+
+/**
+ * 描述 alert 的接口。
+ */
+interface OMAppAlertMessage {
+    /**
+     * alert 标题。
+     */
+    title: string;
+
+    /**
+     * alert 内容。
+     */
+    body: string;
+
+    /**
+     * 按钮文字。默认只有一个 确认 按钮。
+     */
+    actions?: [string]
+}
+
+
+/**
+ * 枚举 OMApp.Theme.* 的类型。实际上是 string。
+ */
+interface OMAppTheme {
 
 }
 
+/**
+ * 枚举 OMApp.UserType.* 的类型。实际上是 string。
+ */
+interface OMAppUserType {
+
+}
+
+/**
+ * 枚举 OMApp.NetworkingType.* 的类型。实际上是 string。
+ */
+interface OMAppNetworkingType {
+
+}
+
+/**
+ * 枚举 OMApp.Method.* 的类型。实际上是 string。
+ */
+interface OMAppMethod {
+
+}
+
+/**
+ * 枚举 OMApp.Page.* 的类型。实际上是 string。
+ */
+interface OMAppPage {
+
+}
+
+/**
+ * 枚举 OMApp.CacheType.* 的类型。实际上是 string。
+ */
+interface OMAppCacheType {
+
+}
 
 
 /**

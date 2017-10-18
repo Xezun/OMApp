@@ -12,36 +12,66 @@
     // 查看 OMApp 当前版本。
     console.log("OMApp Version: " + OMApp.version);
 
-    // 在桌面浏览器开发时，通过此方法初始化 OMApp 的初始属性。
-    omApp.config({
-        currentUser: {
-            name: "John"
-        },
-        currentTheme: OMApp.Theme.night,
-        navigation: {
-            bar: {
-                title: "Onemena",
-                titleColor: "#FF0000",
-                backgroundColor: "#e3e3e3",
-                isHidden: false
+    // 测试 在不同时机设置 delegate 时，omApp 的行为是否符合预期。
+    var _delegate = omApp.delegate;
+    (function () {
+        omApp.delegate = null;
+        var _delay = Math.random() * 5000
+        setTimeout(function () {
+            omApp.delegate = _delegate;
+        }, _delay);
+        console.log("[HTML] 延时 "+ _delay +" 毫秒设置 omApp.delegate 。");
+    })();
+
+
+
+
+    // 非 App 环境，通过 delegate 模拟 App 的行为。
+    if (!omApp.isInApp) {
+
+        // 模拟 App 的 ready 方法。
+        _delegate.ready = function (callback) {
+            console.log("[HTML] 模拟 App 的初始化 omApp 对象的过程。");
+            window.omApp.currentUser.setName("John");
+            window.omApp.setCurrentTheme(OMApp.Theme.night, false);
+            window.omApp.navigation.bar.setTitle("Onemena", false);
+            window.omApp.navigation.bar.setBackgroundColor("#FF0000", false);
+            window.omApp.navigation.bar.setTitleColor("#FFFFFF", false);
+            window.omApp.navigation.bar.setHidden(false, false, false);
+            callback(true);
+        };
+
+        _delegate.login = function (callback) {
+            console.log("[HTML] 模拟 App 的登录过程。");
+            omApp.currentUser.setName("LoggedUser");
+            omApp.currentUser.setCoin(1000);
+            omApp.currentUser.setID("1001");
+            omApp.currentUser.setType(OMApp.UserType.facebook);
+            callback(false);
+        };
+
+        // 设置 HTTP 请求的全局配置
+        _delegate.ajaxSettings({
+            "headers": {
+                "access-token": "Test",
+                "user-token": "Test"
             }
-        }
-    });
+        });
+
+    }
 
     omApp.onCurrentThemeChange(function (currentTheme) {
-        console.log(currentTheme);
+        console.log("[HTML] 主题发生改变 "+ currentTheme +" 。");
     });
-
-
-
 
     // 将操作放在 ready 方法中。
     omApp.ready(function () {
 
-        console.log('The omApp is Ready.');
+        console.log('[HTML] The omApp is Ready.');
 
         omApp.login(function (isSuccess) {
-            console.log("Login Result: "+ isSuccess);
+            console.log("[HTML] 登录结果： "+ isSuccess + " , 用户："+ omApp.currentUser.name + "。");
+            $("div.login div.username").text(omApp.currentUser.name);
         });
 
         omApp.open(OMApp.Page.mall, {"id": "0"});
@@ -72,19 +102,12 @@
     });
 
 
-
-    // 可以使用 omApp.isInApp 来判断是否处于开发调试状态。
-    if (!omApp.isInApp) {
-        omApp.delegate.ajaxSettings({
-            "headers": {
-                "access-token": "Test",
-                "user-token": "Test"
-            }
-        });
-    }
-
-
 </script>
+
+<div class="login">
+    <div>当前用户：</div>
+    <div class="username"></div>
+</div>
 
 </body>
 </html>

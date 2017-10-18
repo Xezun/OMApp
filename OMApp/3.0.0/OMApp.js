@@ -2,7 +2,7 @@
 
 /********************************************************
  *                                                      *
- *                     OMExtendable                     *
+ *                         OMApp                        *
  *                                                      *
  ********************************************************/
 
@@ -19,7 +19,7 @@
         Object.defineProperties(this, descriptor);
     }
     
-    function _OMExtendable() {
+    function _OMApp(_isInApp) {
         Object.defineProperties(this, {
             defineProperty: {
                 get: function () {
@@ -30,11 +30,16 @@
                 get: function () {
                     return _defineProperties;
                 }
+            },
+            isInApp: {
+                get: function () {
+                    return _isInApp;
+                }
             }
         });
     }
     
-    Object.defineProperties(_OMExtendable, {
+    Object.defineProperties(_OMApp, {
         defineProperty: {
             get: function () {
                 return _defineProperty;
@@ -47,19 +52,14 @@
         }
     });
     
-    Object.defineProperty(window, 'OMExtendable', {
+    Object.defineProperty(window, 'OMApp', {
         get: function () {
-            return _OMExtendable;
+            return _OMApp;
         }
     });
     
-    // OMApp
-    Object.defineProperty(window, 'OMApp', {
-        get: function () {
-            return window.OMExtendable;
-        }
-    });
 })();
+
 
 // OMApp, OMApp.version
 OMApp.defineProperties(function () {
@@ -79,16 +79,20 @@ OMApp.defineProperties(function () {
 
 /********************************************************
  *                                                      *
- *                       omApp                          *
+ *               OMApp.current, omApp                   *
  *                                                      *
  ********************************************************/
 
 (function () {
-    var _omApp = new OMApp();
+    var _omApp = new OMApp(/Onemena/i.test(window.navigator.userAgent));
     
     // 定义全局 OMApp.current 属性。
-    Object.defineProperties(OMApp, {
-        current: { get: function () { return _omApp; } }
+    OMApp.defineProperties(function () {
+        return {
+            current: {
+                get: function () { return _omApp; }
+            }
+        }
     });
     
     // 定义全局 window.omApp 属性。
@@ -101,11 +105,8 @@ OMApp.defineProperties(function () {
     }
 })();
 
-
-
-// OMApp.current.name, OMApp.current.system.
+// OMApp.current.name, OMApp.current.system
 OMApp.current.defineProperties(function () {
-    var _isInApp = /Onemena/i.test(window.navigator.userAgent);
     var _name = "app"; // name 将被用作 URL 交互的协议。
     // App 系统信息相关
     var _system = new (function () {
@@ -127,11 +128,6 @@ OMApp.current.defineProperties(function () {
     });
     
     return {
-        isInApp: {
-            get: function () {
-                return _isInApp;
-            }
-        },
         name: {
             get: function() {
                 return _name;
@@ -348,16 +344,17 @@ OMApp.defineProperties(function() {
  *                                                      *
  ********************************************************/
 
-OMApp.current.defineProperties(function () {
-    // 提供一个接口，供原生注入对象，接替 load url。
-    var _delegate = null;
-    
-    var _uniqueNumber       = 100000;
-    var _allCallbacks 	    = {}; // 所有已保存的回调
+window.OMApp.registerMethod("ready");
+
+// omApp.delegate, omApp.dispatch, omApp.perform, omApp.ready
+window.OMApp.current.defineProperties(function () {
+    var _delegate       = null;
+    var _uniqueNumber   = 100000;
+    var _allCallbacks   = {};
     
     // 保存一个 callback ，并返回其 ID 。
     // 如果 callback 不合法，返回 null。
-    function _store(callback) {
+    function _save(callback) {
         if (!callback || (typeof callback !== 'function') ) {
             return null;
         }
@@ -387,33 +384,23 @@ OMApp.current.defineProperties(function () {
     // - 如果有 callback 的话，返回 callbackID 。
     // - parameters 为数组，分别对应接口参数。
     function _perform(method, parameters, callback) {
-        // 检测 method
         if ( !method || (typeof method !== 'string') ) { return; }
         var callbackID = null;
         if ( !!_delegate ) {
-            // 1. iOS.WKWebView 直接通过 function 转发消息。
             if (typeof _delegate === 'function') {
-                callbackID = _store(callback);
-                var message = {};
-                message.method = method;
-                if (parameters) { message.parameters = parameters; }
-                if (callbackID) { message.callbackID = callbackID; }
-                _delegate(message);
-                return;
+                callbackID = _save(callback);
+                _delegate(method, parameters, callbackID);
+                return callbackID;
             }
             
-            // 2. 直接调用对象的方法。
             if ( !_delegate.hasOwnProperty(method) || (typeof _delegate[method] !== 'function') ) {
                 console.log("[OMApp] omApp.delegate 没有实现方法 " + method + "，操作无法进行。");
-                return;
+                return null;
             }
-            
-            var _arguments = [];
-            
-            // 2.1 根据平台构造不同的参数
-            if ( this.isInApp && this.system.isAndroid) {
-                // 在 App 中时，安卓可以注入对象，但是只支持基本数据类型。
-                if (Array.isArray(parameters)) {
+    
+            function _makeArguments() {
+                if (!Array.isArray(parameters)) { parameters = []; }
+                if ( this.isInApp && this.system.isAndroid ) {
                     for (var i = 0; i < parameters.length; i += 1) {
                         var value = parameters[i];
                         switch (typeof value) {
@@ -422,31 +409,25 @@ OMApp.current.defineProperties(function () {
                             case 'boolean':
                                 break;
                             default:
-                                value = JSON.stringify(value);
+                                parameters.splice(i, 1, JSON.stringify(value));
                                 break;
                         }
-                        _arguments.push(value);
                     }
+                    callbackID = _save(callback);
+                    if (callbackID) { parameters.push(callbackID); }
+                } else if (callback) {
+                    parameters.push(callback);
                 }
-                callbackID = _store(callback);
-                if (callbackID) { _arguments.push(callbackID); }
-            } else {
-                // 其它可以注入对象，且支持复杂数据类型。
-                // 比如 iOS.UIWebView 或在浏览器调试环境中用 JS 对象。
-                if (callback) { _arguments.push(callback); }
-                if (parameters) { _arguments = parameters.concat(_arguments); }
+                return parameters;
             }
             
-            // 2.2 直接调用方法。
-            _delegate[method].apply(window, _arguments);
-            
+            _delegate[method].apply(window, _makeArguments());
             return callbackID;
         }
         
-        callbackID = _store(callback);
-        
         var url = OMApp.current.name + "://" + method;
         
+        callbackID = _save(callback);
         if (callbackID) {
             if (parameters) {
                 parameters.push(callbackID);
@@ -469,123 +450,6 @@ OMApp.current.defineProperties(function () {
         return callbackID;
     }
     
-    return {
-        delegate: {
-            get: function () {
-                return _delegate;
-            },
-            set: function (newValue) {
-                if (_delegate === newValue) { return; }
-                // 如果重新设置了代理是否需要重新发送 ready 事件？
-                // 不。代理需要在 ready 事件前设置。如果使用者在 ready 之后或不确定的时机设置，则需要开发者自己去判断当前状态。
-                _delegate = newValue;
-            }
-        },
-        dispatch: {
-            get: function () {
-                return _dispatch;
-            }
-        },
-        perform: {
-            get: function () {
-                return _perform;
-            }
-        }
-    };
-});
-
-
-/********************************************************
- *                                                      *
- *               OMApp.current.config                   *
- *                                                      *
- ********************************************************/
-
-OMApp.current.defineProperties(function () {
-    
-    /**
-     * 给对象的属性进行赋值。判断对象是否有 setter 方法，如果有则执行 setter 方法，否则属性直接赋值。
-     * @param object 要赋值的对象
-     * @param key    对象的属性名
-     * @param value  要赋值
-     * @param keyPath 当前对象在其它对象中的 keyPath
-     * @private
-     */
-    function _setKeyValue(object, key, value, keyPath) {
-        var setter = null;
-        if ( /^is[A-Z]/.test(key) ) {
-            // is 开头的的属性，变 is 为 set 。
-            setter = key.replace(/^is/, "set");
-        } else {
-            // 其它属性，添加前缀 set
-            setter = "set" + key.substring(0,1).toUpperCase() + key.substring(1);
-        }
-        // 判断对象是否有属性 set 方法，如果有适用 set 方法赋值。
-        if ( object.hasOwnProperty(setter) ) {
-            object[setter](value);
-        } else {
-            object[key] = value;
-        }
-        console.log("[OMAp] 应用配置: " + keyPath + "." + key + " = " + JSON.stringify(value) + " 。");
-    }
-    
-    /**
-     * 将一个对象的属性值，复制到另一个对象同名的属性上。
-     * @param sourceObject 要复制的对象
-     * @param targetObject 接收值的对象
-     * @param targetName 描述目标对象的名称
-     * @private
-     */
-    function _copyValueFromObject1ToObject2(sourceObject, targetObject, targetName) {
-        for (var key in sourceObject) { // 遍历复制源
-            if (!sourceObject.hasOwnProperty(key)) { continue; }
-            var  value = sourceObject[key];
-            if ( !value || (typeof value !== 'object') ) { // 值为非 object 时，直接赋值。
-                _setKeyValue(targetObject, key, value, targetName);
-            } else {
-                if (!!targetObject[key] && typeof targetObject[key] === 'object') {
-                    // 目标值存在且是 object ，执行深复制。
-                    _copyValueFromObject1ToObject2(value, targetObject[key], targetName + "." + key);
-                } else {
-                    _setKeyValue(targetObject, key, value, targetName);
-                }
-            }
-        }
-    }
-
-    /**
-     * 适用一个键值对象配置 omApp 对象的初始属性。
-     * @param configuration 键值对象
-     * @private
-     */
-    function _config(configuration) {
-        if (this.isInApp) { return; }
-        if (!configuration) { return; }
-        if (typeof configuration !== 'object') { return; }
-        
-        _copyValueFromObject1ToObject2(configuration, this, "omApp");
-    }
-
-    return {
-        config: {
-            get: function () {
-                return _config;
-            }
-        }
-    };
-});
-
-
-
-/********************************************************
- *                                                      *
- *               OMApp.current.ready                    *
- *                                                      *
- ********************************************************/
-
-OMApp.registerMethod("ready");
-
-OMApp.current.defineProperties(function () {
     // 标识 omApp 是否初始化完成
     var _isReady = false;
     
@@ -596,7 +460,8 @@ OMApp.current.defineProperties(function () {
     // 是否调试模式
     var _isDebug = true;
     
-    function _didFinishLoading(isDebug) {
+    // App 完成初始化 omApp 对象。触发回调。
+    function _didInitializeWithMode(isDebug) {
         if (!_readyHandlers) {
             console.log('[OMApp] 为了保证 omApp 在使用时已完成初始化，请将操作放在 \nomApp.ready(function() {\n\t/*代码*/\n}); \n中。');
             return;
@@ -613,7 +478,7 @@ OMApp.current.defineProperties(function () {
     // - 此函数有固定的回调函数，不需要额外传入。
     function _documentIsReady() {
         if (_isReady) { return; }
-        OMApp.current.perform(OMApp.Method.ready, null, _didFinishLoading);
+        OMApp.current.perform(OMApp.Method.ready, null, _didInitializeWithMode);
     }
     
     var _hasAddListener = false;
@@ -635,7 +500,7 @@ OMApp.current.defineProperties(function () {
         
         // 如果 document.isReady 发送 documentIsReady 事件。
         if (document.readyState === 'complete') {
-            setTimeout(_documentIsReady);
+        
         } else if (!_hasAddListener) {
             _hasAddListener = true;
             var _eventListener = function() {
@@ -652,6 +517,31 @@ OMApp.current.defineProperties(function () {
     }
     
     return {
+        delegate: {
+            get: function () {
+                return _delegate;
+            },
+            set: function (newValue) {
+                if (_delegate === newValue) { return; }
+                // 如果重新设置了代理是否需要重新发送 ready 事件？
+                // 不。代理需要在 ready 事件前设置。如果使用者在 ready 之后或不确定的时机设置，则需要开发者自己去判断当前状态。
+                _delegate = newValue;
+                // 如果文档已加载完成，但是 ready 状态并未改变，向代理发送 ready 事件。
+                if (!_isReady && document.readyState === 'complete') {
+                    setTimeout(_documentIsReady);
+                }
+            }
+        },
+        dispatch: {
+            get: function () {
+                return _dispatch;
+            }
+        },
+        perform: {
+            get: function () {
+                return _perform;
+            }
+        },
         isDebug: {
             get: function () {
                 return _isDebug;
@@ -667,7 +557,6 @@ OMApp.current.defineProperties(function () {
         }
     };
 });
-
 
 /********************************************************
  *                                                      *
