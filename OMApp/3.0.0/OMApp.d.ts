@@ -454,7 +454,7 @@ declare class OMApp {
      * @param name 引用注册方法时调用 OMApp.Method 的属性名
      * @return boolean 是否注册成功
      */
-    registerMethod(method: any, name?: string): boolean;
+    static registerMethod(method: any, name?: string): boolean;
 
     /**
      * 只读。当前 HTML 环境所处的与 App 对象。
@@ -521,7 +521,7 @@ declare class OMApp {
         news:      OMAppPage;
         video:     OMAppPage;
         web:       OMAppPage;
-    }
+    };
 
     /**
      * OMApp.Theme 列举了 App 支持的主题。
@@ -529,7 +529,7 @@ declare class OMApp {
     static Theme: {
         day:      OMAppTheme;
         night:    OMAppTheme;
-    }
+    };
 
     /**
      * OMApp.UserType 列举了 App 已登录用户的类型。
@@ -539,7 +539,7 @@ declare class OMApp {
         google: 	OMAppUserType;
         facebook: 	OMAppUserType;
         twitter: 	OMAppUserType;
-    }
+    };
 
 
     /**
@@ -552,14 +552,14 @@ declare class OMApp {
         WWan3G: 	OMAppNetworkingType;
         WWan4G: 	OMAppNetworkingType;
         other: 	    OMAppNetworkingType;
-    }
+    };
 
     /**
      * OMApp.CacheType 列举了 App 的缓存类型。
      */
     static CacheType: {
         image: OMAppCacheType;
-    }
+    };
 }
 
 declare const omApp: OMApp;
@@ -657,6 +657,8 @@ interface OMAppDelegateAJAXSettings {
     headers?: object;
     data?: object;
 }
+
+
 
 /**
  * OMAppDelegate 描述了 omApp 在非 App 环境中时的 delegate 对象。
@@ -760,7 +762,7 @@ interface OMAppDelegate {
      * @param message
      * @param parameters
      */
-    alert?:(message, parameters)=>void;
+    alert?:(message: OMAppAlertMessage)=>void;
 
     /**
      * HTML 发送 App 网络请求。

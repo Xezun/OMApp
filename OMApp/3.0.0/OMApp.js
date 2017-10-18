@@ -500,7 +500,7 @@ window.OMApp.current.defineProperties(function () {
         
         // 如果 document.isReady 发送 documentIsReady 事件。
         if (document.readyState === 'complete') {
-        
+            setTimeout(_documentIsReady);
         } else if (!_hasAddListener) {
             _hasAddListener = true;
             var _eventListener = function() {

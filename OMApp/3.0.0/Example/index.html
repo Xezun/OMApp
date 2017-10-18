@@ -43,11 +43,11 @@
 
         _delegate.login = function (callback) {
             console.log("[HTML] 模拟 App 的登录过程。");
-            omApp.currentUser.setName("LoggedUser");
+            omApp.currentUser.setName("Super Man");
             omApp.currentUser.setCoin(1000);
             omApp.currentUser.setID("1001");
             omApp.currentUser.setType(OMApp.UserType.facebook);
-            callback(false);
+            callback(true);
         };
 
         // 设置 HTTP 请求的全局配置
@@ -57,7 +57,6 @@
                 "user-token": "Test"
             }
         });
-
     }
 
     omApp.onCurrentThemeChange(function (currentTheme) {
