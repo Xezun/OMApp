@@ -87,7 +87,8 @@ declare class OMApp {
 
     /**
      * 当 OMApp 实例对象完成初始化时，通过此方法传递的闭包函数会被执行。
-     * - 请注意，若此方法不调用，omApp 对象可能不会进行初始化操作。
+     * - 若此方法不调用，omApp 对象不会进行初始化，所有 HTML 与 App 的交互操作都不会执行。
+     *
      * @param {() => void} callback 需在 OMApp 实例对象完成初始化后执行的闭包函数
      */
     ready(callback: () => void): void;
@@ -667,6 +668,7 @@ interface OMAppDelegate {
 
     /**
      * 当 HTML 页面完成初始化时，此方法会被调用。
+     *
      * - App 应该在此方法中初始化 omApp 对象属性的初始值。
      * @param {() => void} callback 完成初始化后应该执行的回调函数
      */
